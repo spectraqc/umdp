@@ -1,6 +1,6 @@
 # Code of Conduct
 
-UMDO follows the [Contributor Covenant 2.1](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).
+UMDP follows the [Contributor Covenant 2.1](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).
 
 ## Summary
 
@@ -10,7 +10,7 @@ We pledge to make participation a harassment-free experience for everyone — re
 
 - Show empathy and kindness toward other participants.
 - Disagree constructively. Critique ideas, not people.
-- Accept that broadcasters, studios, and vendors have differing real-world constraints. UMDO exists to encode those, not to litigate them.
+- Accept that broadcasters, studios, and vendors have differing real-world constraints. UMDP exists to encode those, not to litigate them.
 
 ## Unacceptable behaviour
 

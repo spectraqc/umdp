@@ -1,13 +1,13 @@
 # Changelog
 
-All notable changes to the UMDO schema are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/) and the project adheres to [Semantic Versioning](https://semver.org/).
+All notable changes to the UMDP schema are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/) and the project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [0.7.2] — `content_type` closed enum
 
 ### Added
 
 - Top-level `content_type` field with a closed enum: `program`, `commercial`, `promo`, `trailer`, `interstitial`, `music_video`. Drives per-content-type QC rules (loudness regime, caption requirements, PSE applicability, structure, peak limits).
-- News and sports deliberately excluded — pre-delivery QC of finished files of either is equivalent to `program`; the meaningful differences are all live-workflow concerns and live workflows are out of scope for UMDO.
+- News and sports deliberately excluded — pre-delivery QC of finished files of either is equivalent to `program`; the meaningful differences are all live-workflow concerns and live workflows are out of scope for UMDP.
 - Sub-genres of long-form (feature vs. episode vs. documentary) not modelled here — same delivery spec, belongs in separate metadata.
 - Aspect-ratio variants and technical artefact deliverables (slates, bars, test patterns) explicitly out of scope.
 - Example profiles updated: `clearcast_commercials` (`commercial`); `rte_hd`, `svt_hd`, `tg4_hd` (`program`). `rtl_smallitems_hd` left unmarked since the spec spans commercials/promos/trailers.
@@ -28,11 +28,11 @@ All notable changes to the UMDO schema are recorded here. The format follows [Ke
 ### Notes
 
 - Backwards compatible — existing profiles without the new fields continue to validate.
-- See the UMDO legal & contribution policy for the rationale behind the new fields.
+- See the UMDP legal & contribution policy for the rationale behind the new fields.
 
 ## [0.7.0] — Initial public release
 
-First public release of UMDO as a standalone project.
+First public release of UMDP as a standalone project.
 
 ### Added
 
@@ -51,4 +51,4 @@ First public release of UMDO as a standalone project.
 
 ### Notes
 
-- Every UMDO object is `additionalProperties: true`. Vendor extensions are valid; widely-used extensions are candidates for promotion in 0.8.x.
+- Every UMDP object is `additionalProperties: true`. Vendor extensions are valid; widely-used extensions are candidates for promotion in 0.8.x.

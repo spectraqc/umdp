@@ -1,6 +1,6 @@
 # Controlled vocabularies
 
-Recommended-but-not-required identifier lists for fields that benefit from interoperability across profiles. The main UMDO schema (`../umdo.schema.json`) does not enforce these — adopters may extend them — but using a known identifier where one exists makes profiles diff cleanly across vendors.
+Recommended-but-not-required identifier lists for fields that benefit from interoperability across profiles. The main UMDP schema (`../umdp.schema.json`) does not enforce these — adopters may extend them — but using a known identifier where one exists makes profiles diff cleanly across vendors.
 
 | File              | Covers                                                  |
 |-------------------|---------------------------------------------------------|

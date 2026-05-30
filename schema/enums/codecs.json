@@ -1,5 +1,5 @@
 {
-  "$comment": "Recommended codec identifiers used across UMDO profiles. Not enforced by the main schema; adopters may extend.",
+  "$comment": "Recommended codec identifiers used across UMDP profiles. Not enforced by the main schema; adopters may extend.",
   "video": [
     { "id": "xdcam_hd_422_50", "description": "Sony XDCAM HD 422, 50 Mbps, MPEG-2 4:2:2" },
     { "id": "prores_422", "description": "Apple ProRes 422" },

@@ -1,4 +1,4 @@
-<!-- Thanks for contributing to UMDO! -->
+<!-- Thanks for contributing to UMDP! -->
 
 ## What does this PR do?
 
@@ -19,7 +19,7 @@
 
 ## Schema changes
 
-<!-- Only if this PR modifies schema/umdo.schema.json -->
+<!-- Only if this PR modifies schema/umdp.schema.json -->
 
 - Linked proposal issue:
 - Migration impact (none / minor / breaking):
