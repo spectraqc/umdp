@@ -1,5 +1,5 @@
 name: Schema change proposal
-description: Propose adding, modifying, or removing a UMDO schema field.
+description: Propose adding, modifying, or removing a UMDP schema field.
 labels: ["schema"]
 body:
   - type: textarea

@@ -1,5 +1,5 @@
 name: New profile
-description: Encode a public delivery spec as a UMDO profile.
+description: Encode a public delivery spec as a UMDP profile.
 labels: ["profile"]
 body:
   - type: input
@@ -36,4 +36,4 @@ body:
     id: notes
     attributes:
       label: Anything unusual?
-      description: Are there fields in this spec UMDO doesn't currently model?
+      description: Are there fields in this spec UMDP doesn't currently model?

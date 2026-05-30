@@ -1,5 +1,5 @@
 {
-  "$comment": "Recommended container / wrapper identifiers used across UMDO profiles.",
+  "$comment": "Recommended container / wrapper identifiers used across UMDP profiles.",
   "containers": [
     { "id": "mxf", "description": "Material Exchange Format (SMPTE 377-1)" },
     { "id": "mxf_op1a", "description": "MXF Operational Pattern 1a" },

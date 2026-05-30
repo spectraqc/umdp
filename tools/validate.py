@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Validate one or more UMDO profile JSON files against the UMDO schema.
+Validate one or more UMDP profile JSON files against the UMDP schema.
 
 Usage:
     tools/validate.py                          # validate every file in profiles/
@@ -23,7 +23,7 @@ except ImportError:
     sys.exit(2)
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-SCHEMA_PATH = REPO_ROOT / "schema" / "umdo.schema.json"
+SCHEMA_PATH = REPO_ROOT / "schema" / "umdp.schema.json"
 
 
 def load_schema() -> dict:

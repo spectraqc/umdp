@@ -1,6 +1,6 @@
 # Maintainers
 
-UMDO is maintained by the community. Initial maintainers are listed below.
+UMDP is maintained by the community. Initial maintainers are listed below.
 
 | GitHub                                       | Role             |
 |----------------------------------------------|------------------|

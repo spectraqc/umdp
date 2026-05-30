@@ -1,6 +1,6 @@
-# UMDO field reference
+# UMDP field reference
 
-This is a high-level guide to the major UMDO sections. The authoritative definition is `schema/umdo.schema.json`.
+This is a high-level guide to the major UMDP sections. The authoritative definition is `schema/umdp.schema.json`.
 
 ## Top-level sections
 
@@ -64,4 +64,4 @@ Broadcast legal-signal limits. `luminance` and `rgb` each take `min`, `max`, and
 
 ## Extension fields
 
-Every UMDO object accepts unknown properties. If you need a field UMDO does not model, add it. If it proves broadly useful, propose it as a first-class field in a future minor release.
+Every UMDP object accepts unknown properties. If you need a field UMDP does not model, add it. If it proves broadly useful, propose it as a first-class field in a future minor release.

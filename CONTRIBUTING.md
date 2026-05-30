@@ -1,12 +1,12 @@
-# Contributing to UMDO
+# Contributing to UMDP
 
-Thanks for your interest. UMDO grows by community contribution — broadcasters, studios, distributors, post houses, and QC vendors all have specs worth encoding and gaps worth filling.
+Thanks for your interest. UMDP grows by community contribution — broadcasters, studios, distributors, post houses, and QC vendors all have specs worth encoding and gaps worth filling.
 
 ## Three kinds of contribution
 
 ### 1. Add a profile
 
-The easiest way to help. If your organisation publishes a delivery spec, encode it as a UMDO profile.
+The easiest way to help. If your organisation publishes a delivery spec, encode it as a UMDP profile.
 
 1. Fork this repo.
 2. Create `profiles/<brand>_<subbrand>_<region>_<format>.json`. See the [naming convention](README.md#profile-naming-convention).
@@ -15,15 +15,15 @@ The easiest way to help. If your organisation publishes a delivery spec, encode 
 5. Run `python tools/validate.py profiles/your_profile.json` and confirm it passes.
 6. Open a PR. CI will re-validate.
 
-UMDO encodes the **facts** of a delivery spec (codec lists, loudness targets, timecode rules), not the source document's wording. Profiles can be derived from public, portal-login, *or* contracted source documents — see `governance.sourceAccess` in the schema — but every profile must follow the original-wording rule and the contributor attestations below.
+UMDP encodes the **facts** of a delivery spec (codec lists, loudness targets, timecode rules), not the source document's wording. Profiles can be derived from public, portal-login, *or* contracted source documents — see `governance.sourceAccess` in the schema — but every profile must follow the original-wording rule and the contributor attestations below.
 
 ### 2. Propose a schema field
 
-If your spec needs a field UMDO does not have:
+If your spec needs a field UMDP does not have:
 
 1. Open an issue using the **Schema change proposal** template before opening a PR.
 2. Explain: which delivery spec needs it, what concept it captures, why existing fields can't represent it, what type/shape you propose.
-3. After discussion, open a PR that updates `schema/umdo.schema.json`, adds an example to `docs/`, and bumps `CHANGELOG.md`.
+3. After discussion, open a PR that updates `schema/umdp.schema.json`, adds an example to `docs/`, and bumps `CHANGELOG.md`.
 
 ### 3. Correct an existing profile
 
@@ -57,7 +57,7 @@ Schema changes are reviewed by the maintainers per [GOVERNANCE.md](GOVERNANCE.md
 
 When you open a PR adding or correcting a profile, you are attesting that:
 
-1. **The contribution encodes facts, not text.** The spec's actual wording, layout, tables, and prose remain copyright of the issuing organisation. You have re-expressed the technical *facts* (codec names, numeric thresholds, enum values, free-form notes you authored) in UMDO's structure.
+1. **The contribution encodes facts, not text.** The spec's actual wording, layout, tables, and prose remain copyright of the issuing organisation. You have re-expressed the technical *facts* (codec names, numeric thresholds, enum values, free-form notes you authored) in UMDP's structure.
 2. **You have legitimate access to the source.** You obtained the source spec through a route the issuing organisation permits — public publication, a free portal login you signed up for, or a contracted production agreement you are a party to. You are not encoding a profile derived from leaked, scraped, or third-party-circulated copies of a spec you don't have your own access to.
 3. **You have the right to share these facts.** Your relationship with the spec's issuing organisation does not contractually prohibit you from disclosing the encoded facts. If you're on an NDA that names the *spec document* but the *facts* are publicly knowable (e.g. the EBU R128 loudness target), encoding the facts is fine; if your NDA forbids disclosing the technical requirements themselves, do not encode them here.
 4. **You are not encoding a profile that has been requested for takedown.** Before opening the PR, check the takedown register linked in the README. If the issuing organisation has requested removal, do not re-submit.
@@ -90,7 +90,7 @@ PRs without sign-off on every commit will be asked to amend before merge.
 
 ## Takedown
 
-UMDO maintains a process for issuing organisations to request that a profile they originate be removed or that they take authoritative maintainership. See the [Takedown contact](README.md#takedown-contact) section of the README.
+UMDP maintains a process for issuing organisations to request that a profile they originate be removed or that they take authoritative maintainership. See the [Takedown contact](README.md#takedown-contact) section of the README.
 
 Contributors are asked to:
 

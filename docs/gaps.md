@@ -1,6 +1,6 @@
 # Known gaps and proposal queue
 
-This document tracks fields that real delivery specs need but UMDO does not yet model well, and extension fields used by individual profiles that may become first-class in a future release.
+This document tracks fields that real delivery specs need but UMDP does not yet model well, and extension fields used by individual profiles that may become first-class in a future release.
 
 ## Resolved in 0.7.0
 
@@ -22,7 +22,7 @@ Some platform specs describe HD and UHD variants in one document with different 
 
 ### IMF packaging detail
 
-OTT mezzanine specs encode packaging requirements (CPL structure, frame-count constraints, virtual track counts) under a sub-block of `assets`, while UMDO models packaging at the top level. We need to decide whether IMF-specific packaging belongs at the top level alongside generic packaging, or as a sub-block under `assets`.
+OTT mezzanine specs encode packaging requirements (CPL structure, frame-count constraints, virtual track counts) under a sub-block of `assets`, while UMDP models packaging at the top level. We need to decide whether IMF-specific packaging belongs at the top level alongside generic packaging, or as a sub-block under `assets`.
 
 ### Audio mastering / M&E mix detail
 
