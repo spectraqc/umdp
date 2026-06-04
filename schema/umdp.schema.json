@@ -1,10 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://umdp.org/schema/0.8.0/umdp.schema.json",
+  "$id": "https://umdp.org/schema/0.9.0/umdp.schema.json",
   "title": "Universal Media Delivery Profile",
   "description": "Machine-readable schema for broadcast, OTT, cinema and ad-delivery technical specifications. UMDP is extension-friendly: every object accepts additional properties so vendors and broadcasters can add their own fields and propose them upstream.",
   "type": "object",
-  "$comment": "UMDP 0.8.0 — schema version is independent of any individual profile's spec_version (governance.spec_version).",
+  "$comment": "UMDP 0.9.0 — schema version is independent of any individual profile's spec_version (governance.spec_version).",
   "required": ["id", "name", "delivery_paradigm"],
   "additionalProperties": true,
   "properties": {
@@ -29,6 +29,7 @@
     "variants": { "$ref": "#/$defs/variants" },
     "constraints": { "$ref": "#/$defs/constraints" },
     "segmentation": { "$ref": "#/$defs/segmentation" },
+    "test_signal": { "$ref": "#/$defs/test_signal" },
     "validation": { "$ref": "#/$defs/validation" },
     "workflow": { "$ref": "#/$defs/workflow" },
     "compliance": { "$ref": "#/$defs/compliance" },
@@ -83,6 +84,83 @@
             "type": "array",
             "items": { "type": "string" },
             "description": "Check keys mandated for this region type (engine-defined identifiers)."
+          }
+        }
+      }
+    },
+
+    "test_signal": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Conformance requirements for test-signal regions typed by segmentation (added in 0.9.0). Region typing (segmentation) selects WHICH checks run over a bars & tone / slate / clock region; this block says what those checks REQUIRE there — so a test signal is checked as a test signal, never silently skipped. Optional; when absent a test-signal region is checked only for presence.",
+      "properties": {
+        "bars": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "Colour-bars conformance.",
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "Required bar pattern, e.g. 'smpte_rp219_75', 'smpte_eg1_75', 'ebu_75', 'ebu_100', 'arib'. Open string — patterns vary by territory."
+            },
+            "duration_s": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Expected colour-bars duration in seconds."
+            },
+            "duration_tolerance_s": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Allowed deviation from duration_s, in seconds."
+            }
+          }
+        },
+        "tone": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "Line-up tone conformance (the audio that accompanies bars).",
+          "properties": {
+            "level_dbfs": {
+              "type": "number",
+              "description": "Required line-up tone alignment level in dBFS — commonly -18 (EBU) or -20 (SMPTE)."
+            },
+            "level_tolerance_db": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Allowed deviation from level_dbfs, in dB."
+            },
+            "frequency_hz": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Required line-up tone frequency in Hz — commonly 1000."
+            },
+            "channels": {
+              "type": "array",
+              "items": { "type": "integer", "minimum": 1 },
+              "description": "1-based audio channel indices that must carry the line-up tone (routing). Omit to require it on all channels."
+            }
+          }
+        },
+        "slate": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "Slate (ident card) conformance.",
+          "properties": {
+            "duration_s": { "type": "number", "minimum": 0 },
+            "duration_tolerance_s": { "type": "number", "minimum": 0 }
+          }
+        },
+        "clock": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "Countdown clock conformance.",
+          "properties": {
+            "countdown_required": {
+              "type": "boolean",
+              "description": "Whether a countdown clock/leader is required."
+            },
+            "duration_s": { "type": "number", "minimum": 0 },
+            "duration_tolerance_s": { "type": "number", "minimum": 0 }
           }
         }
       }

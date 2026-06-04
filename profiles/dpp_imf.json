@@ -52,5 +52,17 @@
       "bars_and_tone": ["video_colour_bars", "audio_quasi_peak"],
       "slate_clock": ["content_slate_fields"]
     }
+  },
+  "test_signal": {
+    "bars": {
+      "type": "ebu_100",
+      "duration_s": 30,
+      "duration_tolerance_s": 1
+    },
+    "tone": {
+      "level_dbfs": -18,
+      "level_tolerance_db": 1,
+      "frequency_hz": 1000
+    }
   }
 }

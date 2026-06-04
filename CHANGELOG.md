@@ -2,6 +2,22 @@
 
 All notable changes to the UMDP schema are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/) and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.9.0] — Test-signal conformance (`test_signal`)
+
+### Added
+
+- Top-level `test_signal` object: conformance requirements for the test-signal regions that `segmentation` (0.8.0) types. Region typing selects *which* checks run over a bars & tone / slate / clock region; `test_signal` says what those checks *require* there — so a test signal is checked as a test signal, never silently skipped.
+  - `test_signal.bars` — `type` (bar pattern, e.g. `ebu_100`, `smpte_rp219_75`), `duration_s`, `duration_tolerance_s`.
+  - `test_signal.tone` — line-up tone `level_dbfs` (e.g. -18 EBU / -20 SMPTE), `level_tolerance_db`, `frequency_hz` (e.g. 1000), `channels` (1-based routing).
+  - `test_signal.slate` — `duration_s`, `duration_tolerance_s`.
+  - `test_signal.clock` — `countdown_required`, `duration_s`, `duration_tolerance_s`.
+- Example profile `profiles/dpp_imf.json` extended with a `test_signal` block (EBU 100% bars + -18 dBFS / 1 kHz line-up tone).
+- `docs/field-reference.md`: `test_signal` documented.
+
+### Notes
+
+- Backwards compatible — `test_signal` and every sub-field is optional. A test-signal region with no `test_signal` block is checked only for presence. All existing profiles validate unchanged.
+
 ## [0.8.0] — Region-typed check routing (`segmentation`)
 
 ### Added
