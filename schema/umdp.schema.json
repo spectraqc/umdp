@@ -1,10 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://umdp.org/schema/0.7.2/umdp.schema.json",
+  "$id": "https://umdp.org/schema/0.8.0/umdp.schema.json",
   "title": "Universal Media Delivery Profile",
   "description": "Machine-readable schema for broadcast, OTT, cinema and ad-delivery technical specifications. UMDP is extension-friendly: every object accepts additional properties so vendors and broadcasters can add their own fields and propose them upstream.",
   "type": "object",
-  "$comment": "UMDP 0.7.2 — schema version is independent of any individual profile's spec_version (governance.spec_version).",
+  "$comment": "UMDP 0.8.0 — schema version is independent of any individual profile's spec_version (governance.spec_version).",
   "required": ["id", "name", "delivery_paradigm"],
   "additionalProperties": true,
   "properties": {
@@ -28,6 +28,7 @@
     "packaging": { "$ref": "#/$defs/packaging" },
     "variants": { "$ref": "#/$defs/variants" },
     "constraints": { "$ref": "#/$defs/constraints" },
+    "segmentation": { "$ref": "#/$defs/segmentation" },
     "validation": { "$ref": "#/$defs/validation" },
     "workflow": { "$ref": "#/$defs/workflow" },
     "compliance": { "$ref": "#/$defs/compliance" },
@@ -51,6 +52,41 @@
   },
 
   "$defs": {
+
+    "segmentation": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Region-typed check routing (added in 0.8.0). Declares how the asset's timeline is segmented into typed regions and which checks each region type mandates, so test-signal regions (bars & tone, slate/clock) are checked against the conformance set the spec requires there rather than against programme-content artefact tests. Absent ⇒ the engine treats the asset as a single 'programme' region and runs the full check set (backwards compatible). A spec can never be violated: a check listed as mandated for a region can never be suppressed by routing.",
+      "properties": {
+        "source": {
+          "type": "string",
+          "enum": ["cpl_markers", "heuristic", "none"],
+          "description": "How region boundaries are determined: 'cpl_markers' = authoritative IMF CPL markers (SMPTE ST 2067-3); 'heuristic' = best-effort content detection (bars/tone/slate) gated by min_confidence; 'none' = single programme region. Absent ⇒ 'none'."
+        },
+        "min_confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "For source='heuristic': the confidence floor below which a detected region is treated as 'unknown' and the full check set runs (fail-safe). When absent the engine applies its own conservative built-in floor."
+        },
+        "markers_conformance_bearing": {
+          "type": "boolean",
+          "description": "Whether segmentation markers are conformance-bearing for this spec — i.e. the spec mandates accurate markers (e.g. DPP IMF). When true, a marker that disagrees with the essence raises a conformance FAIL in addition to the routing fall-back to run-everything. When false or absent, a disagreement is WARN/INFO at most (it breaches no clause)."
+        },
+        "region_checks": {
+          "type": "object",
+          "description": "Per-region-type mandated check sets. For each region type the spec recognises, the array lists the check keys mandated there. 'Not listed for a region' = the check is legitimately not required in that region, so routing may suppress it. A region type absent from this map ⇒ the engine runs the full set there (fail-safe). Checks listed here can never be suppressed by routing.",
+          "propertyNames": {
+            "enum": ["programme", "bars_and_tone", "slate_clock", "black", "unknown"]
+          },
+          "additionalProperties": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Check keys mandated for this region type (engine-defined identifiers)."
+          }
+        }
+      }
+    },
 
     "governance": {
       "type": "object",
