@@ -4,7 +4,7 @@ UMDP is an open, machine-readable schema for broadcast, OTT, cinema, and ad-deli
 
 It lets a broadcaster, studio, post house, or QC vendor encode "what does this delivery need to look like" — codecs, containers, color, loudness, timecode, packaging, compliance — as a single JSON document that any tool can read.
 
-**Schema version:** `0.7.1`
+**Schema version:** `0.8.0`
 **Spec licence:** [CC BY 4.0](LICENSE) · **Tooling licence:** [MIT](LICENSE-MIT)
 
 ---
@@ -109,7 +109,7 @@ CI runs `tools/validate.py` on every PR. Profiles must validate against the publ
 
 ## Versioning
 
-UMDP follows semantic versioning of the schema document. The current version is **0.7.1**.
+UMDP follows semantic versioning of the schema document. The current version is **0.8.0**.
 
 - **Patch** — clarifications, doc fixes, new profiles. Always backwards-compatible.
 - **Minor** — new optional fields, new enum values, relaxed constraints.
@@ -121,7 +121,7 @@ A profile's own `governance.spec_version` is the version of the **delivery spec 
 
 ## Status
 
-UMDP 0.7.1 covers the fields needed by every public-broadcaster, OTT-mezzanine, and ad-clearance spec we have profiled so far. It is `additionalProperties: true` throughout — vendors can add their own extension fields and propose them upstream as the ecosystem stabilises.
+UMDP 0.8.0 covers the fields needed by every public-broadcaster, OTT-mezzanine, and ad-clearance spec we have profiled so far. It is `additionalProperties: true` throughout — vendors can add their own extension fields and propose them upstream as the ecosystem stabilises.
 
 See [docs/gaps.md](docs/gaps.md) for known limitations and the proposal queue.
 

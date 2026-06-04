@@ -2,6 +2,22 @@
 
 All notable changes to the UMDP schema are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/) and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.8.0] — Region-typed check routing (`segmentation`)
+
+### Added
+
+- Top-level `segmentation` object for region-typed check routing. Lets a spec declare that test-signal regions (bars & tone, slate/clock) are checked against the conformance set the spec mandates *there*, instead of against programme-content artefact tests that false-alarm on a static test signal.
+  - `segmentation.source` — how region boundaries are found: `cpl_markers` (authoritative IMF CPL markers, SMPTE ST 2067-3), `heuristic` (best-effort content detection gated by `min_confidence`), or `none` (single programme region).
+  - `segmentation.min_confidence` — `[0,1]` floor for `heuristic`; below it a detected region is treated as `unknown` and the full check set runs (fail-safe).
+  - `segmentation.markers_conformance_bearing` — when `true`, a marker that disagrees with the essence raises a conformance FAIL (the spec mandated accurate markers, e.g. DPP IMF) in addition to falling back to run-everything; when `false`/absent, a disagreement is WARN/INFO at most.
+  - `segmentation.region_checks` — per-region-type mandated check sets (region types `programme`, `bars_and_tone`, `slate_clock`, `black`, `unknown`). A check not listed for a region is legitimately not required there; a check that **is** listed can never be suppressed by routing — a spec can never be violated.
+- Example profile `profiles/dpp_imf.json` demonstrating `cpl_markers` + `markers_conformance_bearing: true` + per-region mandated sets.
+- `docs/field-reference.md`: `segmentation` documented under top-level sections and key sub-sections.
+
+### Notes
+
+- Backwards compatible — `segmentation` is optional and every sub-field is optional. Profiles without it are treated as a single `programme` region with the full check set, matching pre-0.8.0 behaviour. All existing profiles validate unchanged.
+
 ## [0.7.2] — `content_type` closed enum
 
 ### Added

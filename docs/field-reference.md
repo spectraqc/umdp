@@ -15,6 +15,7 @@ This is a high-level guide to the major UMDP sections. The authoritative definit
 | `packaging`          | How assets are bundled (IMF, DCP, MXF bundle, none). |
 | `variants`           | Multi-language or multi-version output requirements. |
 | `constraints`        | Cross-asset and signal-level rules (signal limits, duration matching, forbidden elements). |
+| `segmentation`       | Region-typed check routing: how the timeline is segmented and which checks each region type mandates (0.8.0). |
 | `validation`         | Optional explicit rule set with severities. |
 | `workflow`           | QC requirements, approval entities, preclearance. |
 | `compliance`         | Regulatory bodies, deadlines, contacts. |
@@ -61,6 +62,19 @@ Broadcast legal-signal limits. `luminance` and `rgb` each take `min`, `max`, and
 ### `structure.timeline`
 
 `timecode_start` follows SMPTE format `HH:MM:SS:FF` (or `HH:MM:SS;FF` for drop-frame). Most broadcasters use `10:00:00:00`; commercials clearance bodies often the same.
+
+### `segmentation`
+
+Region-typed check routing (0.8.0). Lets a spec say that test-signal regions (bars & tone, slate/clock) are checked against the conformance set the spec requires *there*, rather than against programme-content artefact tests that produce false alarms on a static test signal. Optional — a profile without `segmentation` is treated as a single `programme` region with the full check set (unchanged behaviour).
+
+| Field | Purpose |
+|-------|---------|
+| `source` | How region boundaries are found: `cpl_markers` (authoritative IMF CPL markers, SMPTE ST 2067-3), `heuristic` (best-effort content detection gated by `min_confidence`), or `none` (single programme region). Absent ⇒ `none`. |
+| `min_confidence` | `0–1`. For `heuristic`: the floor below which a detected region is treated as `unknown` and the full check set runs (fail-safe). |
+| `markers_conformance_bearing` | `true` when the spec mandates accurate markers (e.g. DPP IMF). A marker that disagrees with the essence then raises a conformance FAIL *and* falls back to run-everything. When `false`/absent a disagreement is WARN/INFO at most. |
+| `region_checks` | Map of region type → array of mandated check keys. Region types: `programme`, `bars_and_tone`, `slate_clock`, `black`, `unknown`. A check **not** listed for a region is legitimately not required there (routing may suppress it); a region type absent from the map runs the full set. **A check listed here can never be suppressed by routing — a spec can never be violated.** |
+
+See `profiles/dpp_imf.json` for a worked example (CPL markers, conformance-bearing, with `bars_and_tone`/`slate_clock` mandated sets).
 
 ## Extension fields
 
