@@ -21,6 +21,8 @@ UMDP follows semantic versioning at the schema level.
 
 A profile's `governance.spec_version` is the version of the **delivery spec it represents** (e.g. EBU R128 v4, an internal broadcaster PDF v5.1) — not the UMDP schema version.
 
+The schema version is declared once, in the `$id` of `schema/umdp.schema.json` — that is the single source of truth. The schema `$comment`, `README.md`, and `CHANGELOG.md` must agree with it; `tools/validate.py` fails CI on any drift.
+
 ## How a schema change is accepted
 
 1. **Issue first.** Open a *Schema change proposal* issue describing what spec requires the field and what shape you propose.

@@ -111,6 +111,8 @@ CI runs `tools/validate.py` on every PR. Profiles must validate against the publ
 
 UMDP follows semantic versioning of the schema document. The current version is **0.9.0**.
 
+The **single source of truth** for the schema version is the `$id` of [`schema/umdp.schema.json`](schema/umdp.schema.json). The schema `$comment`, the version strings in this README, and the top entry in [CHANGELOG.md](CHANGELOG.md) must all match it — `tools/validate.py` enforces this in CI, so the spots can't drift apart.
+
 - **Patch** — clarifications, doc fixes, new profiles. Always backwards-compatible.
 - **Minor** — new optional fields, new enum values, relaxed constraints.
 - **Major** — breaking changes (renamed/removed fields, tightened types). Major versions ship with a migration note.
