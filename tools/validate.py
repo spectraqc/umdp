@@ -1,16 +1,29 @@
 #!/usr/bin/env python3
 """
-Validate one or more UMDP profile JSON files against the UMDP schema.
+Validate the UMDP repository: profile JSON files plus repo-level invariants.
 
 Usage:
     tools/validate.py                          # validate every file in profiles/
     tools/validate.py path/to/profile.json     # validate a specific file
     tools/validate.py profiles/*.json
+
+Three classes of check run:
+
+  * JSON Schema   — every target validates against schema/umdp.schema.json.
+  * Convention    — every profile's top-level `id` equals its filename stem,
+                    and ids are unique across the set (SQC-1118 / SQC-87).
+  * Version       — the schema `$id` is the single source of truth for the
+                    schema version; `$comment`, README and CHANGELOG must
+                    agree with it (SQC-1117).
+
+Any failure prints a FAIL line and the script exits non-zero, so CI blocks
+the merge.
 """
 
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -24,6 +37,11 @@ except ImportError:
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SCHEMA_PATH = REPO_ROOT / "schema" / "umdp.schema.json"
+PROFILES_DIR = REPO_ROOT / "profiles"
+README_PATH = REPO_ROOT / "README.md"
+CHANGELOG_PATH = REPO_ROOT / "CHANGELOG.md"
+
+SEMVER = r"\d+\.\d+\.\d+"
 
 
 def load_schema() -> dict:
@@ -34,8 +52,43 @@ def load_schema() -> dict:
 def gather_targets(args: list[str]) -> list[Path]:
     if args:
         return [Path(a) for a in args]
-    profiles_dir = REPO_ROOT / "profiles"
-    return sorted(profiles_dir.glob("*.json"))
+    return sorted(PROFILES_DIR.glob("*.json"))
+
+
+def schema_version(schema: dict) -> str | None:
+    """Canonical schema version, parsed from the schema `$id` path."""
+    match = re.search(rf"/schema/({SEMVER})/", schema.get("$id", ""))
+    return match.group(1) if match else None
+
+
+def check_version_consistency(schema: dict) -> list[str]:
+    """The schema `$id` version is canonical; every other spot must match it."""
+    canonical = schema_version(schema)
+    if canonical is None:
+        return [f"schema $id does not contain a version: {schema.get('$id')!r}"]
+
+    errors: list[str] = []
+
+    def expect(label: str, source: str, pattern: str) -> None:
+        match = re.search(pattern, source)
+        if match is None:
+            errors.append(f"{label}: no version string found (expected {canonical})")
+        elif match.group(1) != canonical:
+            errors.append(
+                f"{label}: {match.group(1)} != schema $id {canonical}"
+            )
+
+    expect("schema $comment", schema.get("$comment", ""), rf"UMDP ({SEMVER})")
+
+    readme = README_PATH.read_text()
+    expect("README badge", readme, rf"\*\*Schema version:\*\*\s*`({SEMVER})`")
+    expect("README versioning", readme, rf"current version is \*\*({SEMVER})\*\*")
+    expect("README status", readme, rf"UMDP ({SEMVER}) covers")
+
+    changelog = CHANGELOG_PATH.read_text()
+    expect("CHANGELOG top entry", changelog, rf"(?m)^##\s*\[({SEMVER})\]")
+
+    return errors
 
 
 def validate_file(validator: Draft202012Validator, path: Path) -> list[str]:
@@ -51,20 +104,59 @@ def validate_file(validator: Draft202012Validator, path: Path) -> list[str]:
     ]
 
 
+def is_profile(path: Path) -> bool:
+    return path.resolve().parent == PROFILES_DIR
+
+
 def main() -> int:
     schema = load_schema()
     Draft202012Validator.check_schema(schema)
     validator = Draft202012Validator(schema)
 
+    failed = 0
+
+    version_errors = check_version_consistency(schema)
+    if version_errors:
+        failed += 1
+        print("FAIL version consistency")
+        for err in version_errors:
+            print(f"  - {err}")
+    else:
+        print(f"ok   version consistency ({schema_version(schema)})")
+
     targets = gather_targets(sys.argv[1:])
     if not targets:
         print("no profiles to validate")
-        return 0
+        return 1 if failed else 0
 
-    failed = 0
+    ids: dict[str, str] = {}  # id -> first filename that claimed it
     for path in targets:
-        rel = path.relative_to(REPO_ROOT) if path.is_absolute() else path
+        try:
+            rel = path.relative_to(REPO_ROOT)
+        except ValueError:
+            rel = path
         errs = validate_file(validator, path)
+
+        # Convention checks apply only to profiles/, and only if the file
+        # parsed cleanly enough to read its id.
+        if is_profile(path) and not any(e.startswith("invalid JSON") for e in errs):
+            with path.open() as fh:
+                data = json.load(fh)
+            profile_id = data.get("id")
+            if profile_id != path.stem:
+                errs.append(
+                    f"convention: id {profile_id!r} != filename stem {path.stem!r} "
+                    "(filename without .json must equal top-level id)"
+                )
+            if isinstance(profile_id, str):
+                if profile_id in ids:
+                    errs.append(
+                        f"convention: duplicate id {profile_id!r} "
+                        f"(also used by {ids[profile_id]})"
+                    )
+                else:
+                    ids[profile_id] = str(rel)
+
         if errs:
             failed += 1
             print(f"FAIL {rel}")
@@ -74,7 +166,7 @@ def main() -> int:
             print(f"ok   {rel}")
 
     if failed:
-        print(f"\n{failed} of {len(targets)} profile(s) failed validation")
+        print(f"\n{failed} check(s) failed")
         return 1
     print(f"\nall {len(targets)} profile(s) valid")
     return 0
