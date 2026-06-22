@@ -1,0 +1,229 @@
+{
+  "id": "dpp_uk_hd",
+  "name": "DPP UK HD — AS-11 air-ready master",
+  "delivery_paradigm": "file",
+  "content_type": "program",
+  "inputs": {
+    "constraints": {
+      "native_aspect_ratio_only": true,
+      "native_frame_rate_only": true,
+      "no_upconversion": true,
+      "no_upscaling": true
+    }
+  },
+  "assets": {
+    "video": {
+      "representation": "file",
+      "codec": {
+        "allowed": [
+          "AVC Intra"
+        ]
+      },
+      "container": {
+        "allowed": [
+          "MXF OP1a"
+        ]
+      },
+      "bitrate": {
+        "target": 100,
+        "mode": "constant"
+      },
+      "resolution": {
+        "allowed": [
+          "1920x1080"
+        ]
+      },
+      "aspect_ratio": {
+        "allowed": [
+          "16:9"
+        ]
+      },
+      "frame_rate": {
+        "mode": "fixed",
+        "allowed": [
+          "25"
+        ],
+        "tolerance": 0.01
+      },
+      "scan_type": [
+        "interlaced"
+      ],
+      "color": {
+        "primaries": [
+          "bt709"
+        ],
+        "transfer": [
+          "bt709"
+        ],
+        "matrix": [
+          "bt709"
+        ],
+        "range": [
+          "limited"
+        ]
+      },
+      "bit_depth": {
+        "allowed": [
+          10
+        ],
+        "min": 10
+      },
+      "chroma_subsampling": [
+        "4:2:2"
+      ],
+      "signal": {
+        "interlace_mode": [
+          "true_interlace"
+        ],
+        "field_order": [
+          "tff"
+        ]
+      },
+      "gop": {
+        "closed_required": true,
+        "max_length": 1
+      },
+      "quality": {
+        "blockiness_max_score": 20,
+        "colour_bars": {
+          "mode": "required_head",
+          "window_s": 20
+        },
+        "dead_pixel_max_count": 0,
+        "decode_error_max_count": 0,
+        "dropout_max_count": 0,
+        "dropped_frame_max_count": 0,
+        "blurriness_laplacian_min": 100,
+        "banding_max_score": 0.05,
+        "ghosting_max_correlation": 0.4,
+        "ringing_max_score": 50,
+        "mosquito_noise_max_score": 10,
+        "aliasing_max_hf_ratio": 0.15,
+        "image_tilt_max_degrees": 1.0,
+        "pulldown_judder_max": 0.3
+      },
+      "captions": {
+        "required": true
+      }
+    },
+    "audio": {
+      "codec": {
+        "allowed": [
+          "Linear PCM"
+        ],
+        "disallowed": [
+          "aac",
+          "mp3",
+          "ac3"
+        ]
+      },
+      "sample_rate": [
+        48000
+      ],
+      "bit_depth": {
+        "allowed": [
+          24
+        ],
+        "uniform_required": true
+      },
+      "track_count": {
+        "min": 4,
+        "max": 16
+      },
+      "layout": {
+        "channel_map_required": true,
+        "allowed_layouts": [
+          "L-R",
+          "Stereo",
+          "Dual Mono"
+        ]
+      },
+      "loudness": {
+        "standards": [
+          {
+            "name": "EBU R128",
+            "target": -23.0,
+            "tolerance": 0.5
+          }
+        ],
+        "true_peak_max": -1.0
+      },
+      "quality": {
+        "click_max_count": 5,
+        "dual_mono_max_pct": 90,
+        "min_phase_correlation": 0.3
+      },
+      "sync": {
+        "must_match_video_duration": true,
+        "max_drift_ms": 40
+      }
+    },
+    "metadata": {
+      "required": true,
+      "schemas": [
+        "AS-11 Core DM",
+        "AS-11 UKDPP DM"
+      ]
+    }
+  },
+  "constraints": {
+    "video": {
+      "signal_limits": {
+        "luminance": {
+          "min": 20,
+          "max": 984,
+          "tolerance_percent": 1,
+          "tolerance_note": "DPP011 v7.0 §1.3, 10-bit HD: expected 64–940; preferred/gamut band 20–984; total 4–1019 (clipped beyond). Out-of-gamut error only after exceeding 1% of integrated active-image area (EBU R103)."
+        },
+        "rgb": {
+          "min": 20,
+          "max": 984,
+          "tolerance_percent": 1
+        }
+      },
+      "pse_test_required": true,
+      "pse_standard": "ITU-R BT.1702-3"
+    },
+    "content": {
+      "slate": {
+        "enabled": true,
+        "window_s": 60,
+        "required_fields": [
+          "title",
+          "duration",
+          "frame_rate",
+          "audio_standard",
+          "resolution"
+        ]
+      }
+    },
+    "timing": {
+      "duration": {
+        "must_match": [
+          "video",
+          "audio"
+        ],
+        "tolerance_ms": 40
+      }
+    }
+  },
+  "structure": {
+    "type": "timeline",
+    "timeline": {
+      "timecode_start": "10:00:00:00",
+      "timecode_continuous": true
+    }
+  },
+  "packaging": {
+    "type": "MXF_bundle"
+  },
+  "governance": {
+    "spec_version": "1.0.1",
+    "effective_date": "2026-05-25",
+    "source": "AMWA AS-11 UK DPP HD (https://amwa-tv.github.io/AS-11_UK_DPP_HD/) — air-ready master, AVC-Intra Class 100, MXF OP1a, EBU R128, AS-11 Core DM + UKDPP DM static tracks. | Corrected per DPP011 v7.0 §1.3 (gamut band) and §3.1.3 (20s bars) — 2026-06-22.",
+    "jurisdiction": [
+      "GB"
+    ],
+    "notes": "Common air-ready HD master spec adopted by BBC, ITV, Channel 4, Channel 5, Sky, STV, TG4 via the DPP. AVC-Intra Class 100 at 1080i25 (50i), 10-bit 4:2:2, MXF OP1a, PCM 24-bit 48 kHz one-channel-per-track (track_count.min = 4 covers stereo programme + M&E), EBU R128 −23 LUFS, true-peak ≤ −1 dBTP, BT.709 SDR, TFF. PSE strict (ITU-R BT.1702) is mandatory. Start TC 10:00:00:00 follows UK broadcast convention. dual_mono_max_pct relaxed to 90% so the check only flags content that's actually mono-in-stereo rather than firing on normal centre-channel dialogue. Quality thresholds (mosquito/banding/ringing/etc.) inherited from test_profile_full_hd until SQC-835 hardening lands."
+  }
+}
