@@ -24,6 +24,10 @@ Some platform specs describe HD and UHD variants in one document with different 
 
 OTT mezzanine specs encode packaging requirements (CPL structure, frame-count constraints, virtual track counts) under a sub-block of `assets`, while UMDP models packaging at the top level. We need to decide whether IMF-specific packaging belongs at the top level alongside generic packaging, or as a sub-block under `assets`.
 
+### Audio sync offset (`assets.audio.sync.max_offset_ms`) is documented but unenforced
+
+`max_offset_ms` (a fixed lip-sync offset) is documented in the schema and set by some profiles (e.g. `tg4_hd`, `rte_hd` at 5 ms), but no QC check currently binds it — the engine enforces only sync **drift** (`max_drift_ms*`, added in 0.10.0), which is a different measurement. So a profile asserting `max_offset_ms` today gets no offset enforcement. Decision needed: either (a) implement a static-offset check that binds `max_offset_ms`, or (b) if drift coverage is deemed sufficient, retire `max_offset_ms` and migrate the profiles that set it. Until then it is effectively advisory.
+
 ### Audio mastering / M&E mix detail
 
 Mastering specifications (M&E mix structure, Atmos room minimums, downmix coefficients) are richer than what the current `assets.audio.loudness` captures. Candidate for a sibling block once we have more comparable shapes.

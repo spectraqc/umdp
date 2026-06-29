@@ -56,6 +56,8 @@ Codec, sample rate, bit depth, track count, language mode, channel layout, loudn
 
 `loudness.standards` is an array because some specs (rare) require both an integrated and a short-term measurement, or list a regional override.
 
+`sync` carries two *different* audio-to-video measurements. **Drift** — `max_drift_ms` (with optional `max_drift_ms_per_min` and `max_drift_ms_hard_fail_above`) — is progressive desync that accumulates over the timeline, and is what the A/V-sync-drift check enforces (typically 40 ms). **Offset** — `max_offset_ms` — is a single fixed lip-sync error; it is a distinct measurement (see [gaps.md](gaps.md) for its enforcement status). `must_match_video_duration` asserts the audio runs the full programme duration.
+
 ### `constraints.video.signal_limits`
 
 Broadcast legal-signal limits. `luminance` and `rgb` each take `min`, `max`, and `tolerance_percent`. Use `max: null` to indicate no ceiling is enforced (typical for OTT specs).

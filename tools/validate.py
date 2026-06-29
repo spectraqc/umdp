@@ -16,8 +16,15 @@ Three classes of check run:
                     schema version; `$comment`, README and CHANGELOG must
                     agree with it (SQC-1117).
 
+One advisory (non-failing) report also runs:
+
+  * Undocumented  — profile keys not declared in the schema's `properties`
+    keys           (allowed only by `additionalProperties: true`). Printed as
+                    `note` lines so near-miss key names surface in review;
+                    never fails CI (SQC-1395).
+
 Any failure prints a FAIL line and the script exits non-zero, so CI blocks
-the merge.
+the merge. Advisory `note` lines do not affect the exit code.
 """
 
 from __future__ import annotations
@@ -89,6 +96,52 @@ def check_version_consistency(schema: dict) -> list[str]:
     expect("CHANGELOG top entry", changelog, rf"(?m)^##\s*\[({SEMVER})\]")
 
     return errors
+
+
+def _resolve_ref(node: dict, root: dict) -> dict:
+    """Follow local ``$ref`` chains (``#/$defs/Name``) to the target subschema.
+    Non-local or unresolvable refs are returned unchanged."""
+    seen = 0
+    while isinstance(node, dict) and "$ref" in node and seen < 32:
+        ref = node["$ref"]
+        if not isinstance(ref, str) or not ref.startswith("#/"):
+            return node
+        target: object = root
+        for part in ref[2:].split("/"):
+            if not isinstance(target, dict):
+                return node
+            target = target.get(part, {})
+        node = target  # type: ignore[assignment]
+        seen += 1
+    return node
+
+
+def undocumented_keys(schema: dict, data: object, root: dict, path: str = "") -> list[str]:
+    """SQC-1395 — advisory walk: dotted paths of keys present in ``data`` but
+    not declared in the matching schema node's ``properties``. Because the
+    schema is ``additionalProperties: true`` throughout, jsonschema accepts
+    these silently; surfacing them catches near-miss key names (e.g.
+    ``max_drift_ms`` vs ``max_offset_ms``) in review. Only reports where the
+    schema documents a property set — free-form objects are left alone."""
+    schema = _resolve_ref(schema, root)
+    found: list[str] = []
+    if not isinstance(schema, dict):
+        return found
+    if isinstance(data, dict):
+        props = schema.get("properties")
+        if isinstance(props, dict):
+            for key, value in data.items():
+                child = f"{path}.{key}" if path else key
+                if key in props:
+                    found += undocumented_keys(props[key], value, root, child)
+                else:
+                    found.append(child)
+    elif isinstance(data, list):
+        items = schema.get("items")
+        if isinstance(items, dict):
+            for i, value in enumerate(data):
+                found += undocumented_keys(items, value, root, f"{path}[{i}]")
+    return found
 
 
 def validate_file(validator: Draft202012Validator, path: Path) -> list[str]:
@@ -164,6 +217,14 @@ def main() -> int:
                 print(f"  - {err}")
         else:
             print(f"ok   {rel}")
+
+        # SQC-1395 — advisory only: surface keys the schema doesn't document.
+        if is_profile(path) and not any(e.startswith("invalid JSON") for e in errs):
+            with path.open() as fh:
+                data = json.load(fh)
+            for key_path in undocumented_keys(schema, data, schema):
+                print(f"note {rel}: undocumented key {key_path!r} "
+                      "(allowed by additionalProperties; not in schema)")
 
     if failed:
         print(f"\n{failed} check(s) failed")

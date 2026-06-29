@@ -1,10 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:umdp:schema:0.9.0",
+  "$id": "urn:umdp:schema:0.10.0",
   "title": "Universal Media Delivery Profile",
   "description": "Machine-readable schema for broadcast, OTT, cinema and ad-delivery technical specifications. UMDP is extension-friendly: every object accepts additional properties so vendors and broadcasters can add their own fields and propose them upstream.",
   "type": "object",
-  "$comment": "UMDP 0.9.0 — schema version is independent of any individual profile's spec_version (governance.spec_version).",
+  "$comment": "UMDP 0.10.0 — schema version is independent of any individual profile's spec_version (governance.spec_version).",
   "required": ["id", "name", "delivery_paradigm"],
   "additionalProperties": true,
   "properties": {
@@ -494,8 +494,24 @@
         "sync": {
           "type": "object",
           "additionalProperties": true,
+          "$comment": "Audio-to-video sync. 'drift' (max_drift_ms*) is progressive desync that accumulates over the timeline — the measurement broadcast QC engines enforce via the A/V-sync-drift check. 'offset' (max_offset_ms) is a single fixed lip-sync error: a distinct measurement; see docs/gaps.md for its enforcement status.",
           "properties": {
-            "max_offset_ms": { "type": "number" },
+            "max_drift_ms": {
+              "type": "number",
+              "description": "Maximum tolerated A/V sync drift, in milliseconds, before the A/V-sync-drift check fails (typically 40 ms). The primary, engine-bound sync threshold."
+            },
+            "max_drift_ms_per_min": {
+              "type": "number",
+              "description": "Optional bound on the rate of progressive drift, in milliseconds per minute. Catches slowly-accumulating desync a single end-to-end drift figure can mask."
+            },
+            "max_drift_ms_hard_fail_above": {
+              "type": "number",
+              "description": "Optional hard-fail boundary: drift between max_drift_ms and this value is a warning; drift above it is an error. Defaults to max_drift_ms * 2 when unset."
+            },
+            "max_offset_ms": {
+              "type": "number",
+              "description": "Maximum tolerated fixed lip-sync offset, in milliseconds. Distinct from drift (see $comment); enforcement is tracked in docs/gaps.md."
+            },
             "must_match_video_duration": { "type": "boolean" }
           }
         }
