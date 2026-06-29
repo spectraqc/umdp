@@ -56,8 +56,8 @@ def gather_targets(args: list[str]) -> list[Path]:
 
 
 def schema_version(schema: dict) -> str | None:
-    """Canonical schema version, parsed from the schema `$id` path."""
-    match = re.search(rf"/schema/({SEMVER})/", schema.get("$id", ""))
+    """Canonical schema version, parsed from the schema `$id` URN."""
+    match = re.search(rf"urn:umdp:schema:({SEMVER})", schema.get("$id", ""))
     return match.group(1) if match else None
 
 

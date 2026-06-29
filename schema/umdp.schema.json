@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://umdp.org/schema/0.9.0/umdp.schema.json",
+  "$id": "urn:umdp:schema:0.9.0",
   "title": "Universal Media Delivery Profile",
   "description": "Machine-readable schema for broadcast, OTT, cinema and ad-delivery technical specifications. UMDP is extension-friendly: every object accepts additional properties so vendors and broadcasters can add their own fields and propose them upstream.",
   "type": "object",
