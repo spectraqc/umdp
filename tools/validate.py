@@ -18,10 +18,13 @@ Three classes of check run:
 
 One advisory (non-failing) report also runs:
 
-  * Undocumented  — profile keys not declared in the schema's `properties`
-    keys           (allowed only by `additionalProperties: true`). Printed as
-                    `note` lines so near-miss key names surface in review;
-                    never fails CI (SQC-1395).
+  * Undocumented  — profile keys not declared in the schema's `properties`.
+    keys           On *value* objects (signal_limits, loudness, sync, …) these
+                    now hard-fail via `additionalProperties: false` (0.11.0); on
+                    *container* objects, still `additionalProperties: true`, an
+                    unknown key is legal extension and is reported as a `note`
+                    so near-miss names surface in review (SQC-1395). Never fails
+                    CI on its own.
 
 Any failure prints a FAIL line and the script exits non-zero, so CI blocks
 the merge. Advisory `note` lines do not affect the exit code.
@@ -118,11 +121,13 @@ def _resolve_ref(node: dict, root: dict) -> dict:
 
 def undocumented_keys(schema: dict, data: object, root: dict, path: str = "") -> list[str]:
     """SQC-1395 — advisory walk: dotted paths of keys present in ``data`` but
-    not declared in the matching schema node's ``properties``. Because the
-    schema is ``additionalProperties: true`` throughout, jsonschema accepts
-    these silently; surfacing them catches near-miss key names (e.g.
-    ``max_drift_ms`` vs ``max_offset_ms``) in review. Only reports where the
-    schema documents a property set — free-form objects are left alone."""
+    not declared in the matching schema node's ``properties``. Container
+    objects are ``additionalProperties: true``, so jsonschema accepts extension
+    keys on them silently; surfacing them catches near-miss key names (e.g.
+    ``max_drift_ms`` vs ``max_offset_ms``) in review. Value objects are closed
+    (``additionalProperties: false``, 0.11.0) so jsonschema already hard-fails
+    their unknown keys; a note there is just a louder echo. Only reports where
+    the schema documents a property set — free-form objects are left alone."""
     schema = _resolve_ref(schema, root)
     found: list[str] = []
     if not isinstance(schema, dict):

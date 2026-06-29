@@ -1,10 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:umdp:schema:0.10.0",
+  "$id": "urn:umdp:schema:0.11.0",
   "title": "Universal Media Delivery Profile",
-  "description": "Machine-readable schema for broadcast, OTT, cinema and ad-delivery technical specifications. UMDP is extension-friendly: every object accepts additional properties so vendors and broadcasters can add their own fields and propose them upstream.",
+  "description": "Machine-readable schema for broadcast, OTT, cinema and ad-delivery technical specifications. UMDP is extension-friendly on its container objects (assets, constraints, packaging and the like accept additional properties so vendors and broadcasters can add fields and propose them upstream), while value objects that carry measurement thresholds (signal limits, loudness, sync, frame rate, …) are closed (additionalProperties: false) so a mistyped key cannot silently disable a constraint.",
   "type": "object",
-  "$comment": "UMDP 0.10.0 — schema version is independent of any individual profile's spec_version (governance.spec_version).",
+  "$comment": "UMDP 0.11.0 — schema version is independent of any individual profile's spec_version (governance.spec_version).",
   "required": ["id", "name", "delivery_paradigm"],
   "additionalProperties": true,
   "properties": {
@@ -96,7 +96,7 @@
       "properties": {
         "bars": {
           "type": "object",
-          "additionalProperties": true,
+          "additionalProperties": false,
           "description": "Colour-bars conformance.",
           "properties": {
             "type": {
@@ -117,7 +117,7 @@
         },
         "tone": {
           "type": "object",
-          "additionalProperties": true,
+          "additionalProperties": false,
           "description": "Line-up tone conformance (the audio that accompanies bars).",
           "properties": {
             "level_dbfs": {
@@ -143,7 +143,7 @@
         },
         "slate": {
           "type": "object",
-          "additionalProperties": true,
+          "additionalProperties": false,
           "description": "Slate (ident card) conformance.",
           "properties": {
             "duration_s": { "type": "number", "minimum": 0 },
@@ -152,7 +152,7 @@
         },
         "clock": {
           "type": "object",
-          "additionalProperties": true,
+          "additionalProperties": false,
           "description": "Countdown clock conformance.",
           "properties": {
             "countdown_required": {
@@ -263,7 +263,7 @@
         },
         "resolution": {
           "type": "object",
-          "additionalProperties": true,
+          "additionalProperties": false,
           "properties": {
             "min": { "type": "string" },
             "max": { "type": "string" },
@@ -273,15 +273,16 @@
         },
         "aspect_ratio": {
           "type": "object",
-          "additionalProperties": true,
+          "additionalProperties": false,
           "properties": {
             "allowed": { "type": "array", "items": { "type": "string" } },
-            "tolerance_percent": { "type": "number" }
+            "tolerance_percent": { "type": "number" },
+            "notes": { "type": "string" }
           }
         },
         "frame_rate": {
           "type": "object",
-          "additionalProperties": true,
+          "additionalProperties": false,
           "properties": {
             "mode": { "type": "string", "enum": ["fixed", "native_only", "allowed_list"] },
             "allowed": {
@@ -299,7 +300,7 @@
         "color": { "$ref": "#/$defs/video_color" },
         "bit_depth": {
           "type": "object",
-          "additionalProperties": true,
+          "additionalProperties": false,
           "properties": {
             "allowed": { "type": "array", "items": { "type": "integer" } },
             "min": { "type": "integer" },
@@ -312,7 +313,7 @@
         },
         "signal": {
           "type": "object",
-          "additionalProperties": true,
+          "additionalProperties": false,
           "properties": {
             "interlace_mode": {
               "type": "array",
@@ -328,7 +329,7 @@
         },
         "gop": {
           "type": "object",
-          "additionalProperties": true,
+          "additionalProperties": false,
           "description": "GOP structure constraints. Promoted to a first-class field in 0.7.0 — closed_required is heavily used by broadcast specs.",
           "properties": {
             "closed_required": { "type": "boolean" },
@@ -338,7 +339,7 @@
         },
         "timecode": {
           "type": "object",
-          "additionalProperties": true,
+          "additionalProperties": false,
           "description": "Embedded timecode track requirements. Promoted to a first-class field in 0.7.0.",
           "properties": {
             "ltc_required": { "type": "boolean" },
@@ -348,7 +349,7 @@
         },
         "safe_area": {
           "type": "object",
-          "additionalProperties": true,
+          "additionalProperties": false,
           "properties": {
             "title_safe_required": { "type": "boolean" },
             "action_safe_required": { "type": "boolean" },
@@ -372,7 +373,7 @@
         },
         "hdr": {
           "type": "object",
-          "additionalProperties": true,
+          "additionalProperties": false,
           "properties": {
             "formats": { "type": "array", "items": { "type": "string" } },
             "disallowed": { "type": "array", "items": { "type": "string" } },
@@ -392,7 +393,7 @@
         "sample_rate": { "type": "array", "items": { "type": "integer" } },
         "bit_depth": {
           "type": "object",
-          "additionalProperties": true,
+          "additionalProperties": false,
           "properties": {
             "allowed": { "type": "array", "items": { "type": "integer" } },
             "min": { "type": "integer" },
@@ -410,7 +411,7 @@
         },
         "track_count": {
           "type": "object",
-          "additionalProperties": true,
+          "additionalProperties": false,
           "properties": {
             "min": { "type": "integer", "minimum": 0 },
             "max": { "type": "integer", "minimum": 0 },
@@ -468,13 +469,13 @@
         },
         "loudness": {
           "type": "object",
-          "additionalProperties": true,
+          "additionalProperties": false,
           "properties": {
             "standards": {
               "type": "array",
               "items": {
                 "type": "object",
-                "additionalProperties": true,
+                "additionalProperties": false,
                 "required": ["name"],
                 "properties": {
                   "name": { "type": "string" },
@@ -493,7 +494,7 @@
         },
         "sync": {
           "type": "object",
-          "additionalProperties": true,
+          "additionalProperties": false,
           "$comment": "Audio-to-video sync. 'drift' (max_drift_ms*) is progressive desync that accumulates over the timeline — the measurement broadcast QC engines enforce via the A/V-sync-drift check. 'offset' (max_offset_ms) is a single fixed lip-sync error: a distinct measurement; see docs/gaps.md for its enforcement status.",
           "properties": {
             "max_drift_ms": {
@@ -681,7 +682,7 @@
           "properties": {
             "signal_limits": {
               "type": "object",
-              "additionalProperties": true,
+              "additionalProperties": false,
               "properties": {
                 "luminance": { "$ref": "#/$defs/signal_limit" },
                 "rgb": { "$ref": "#/$defs/signal_limit" }
@@ -698,7 +699,7 @@
           "properties": {
             "duration": {
               "type": "object",
-              "additionalProperties": true,
+              "additionalProperties": false,
               "properties": {
                 "must_match": { "type": "array", "items": { "type": "string" } },
                 "tolerance_ms": { "type": "number" }
@@ -756,7 +757,7 @@
 
     "signal_limit": {
       "type": "object",
-      "additionalProperties": true,
+      "additionalProperties": false,
       "properties": {
         "min": { "type": ["number", "null"] },
         "max": { "type": ["number", "null"] },

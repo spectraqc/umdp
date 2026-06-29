@@ -2,6 +2,22 @@
 
 All notable changes to the UMDP schema are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/) and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.11.0] — Closed value objects (`additionalProperties: false` on measurement blocks)
+
+### Changed
+
+- **Tightened validation on value/measurement objects.** The objects that carry measurement thresholds are now `additionalProperties: false`, so a key that isn't documented on one of them **fails** validation instead of passing silently — near-miss names (e.g. `av_sync_max_ms` vs `max_offset_ms`, SQC-1395) can no longer disable a constraint unnoticed. Locked objects: `assets.audio.sync`, `assets.audio.loudness` (+ `standards[]`), `assets.audio.bit_depth`, `assets.audio.track_count`, `constraints.video.signal_limits` (+ the `signal_limit` shape behind `luminance`/`rgb`), `constraints.timing.duration`, `assets.video.{resolution,aspect_ratio,frame_rate,bit_depth,signal,gop,timecode,safe_area}`, `assets.video.color.hdr`, and `test_signal.{bars,tone,slate,clock}`.
+- Added an optional `notes` (string) to `assets.video.aspect_ratio` so it locks consistently with the other video value objects.
+
+### Migrated
+
+- `profiles/rte_hd.json`: `assets.audio.sync.av_sync_max_ms: 5` → `max_offset_ms: 5` (the documented field; matches `tg4_hd`). Enforcement of the offset is tracked in SQC-1397.
+
+### Notes
+
+- **Container** objects (`assets`, `constraints`, `packaging`, the asset roots, …) remain `additionalProperties: true` — vendors can still add extension fields without forking, and `tools/validate.py` reports those as advisory `note`s. Extensibility is unchanged where it was intended.
+- This tightens validation on the locked objects (a profile that set an undocumented key on one of them would now fail). Scoped deliberately to value objects; shipped as a pre-1.0 minor rather than the full `1.0.0` strict-everywhere reversal. All bundled profiles validate.
+
 ## [0.10.0] — Documented A/V-sync drift thresholds (`assets.audio.sync`)
 
 ### Added

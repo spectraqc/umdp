@@ -7,7 +7,7 @@ UMDP is an open project. This document describes how decisions are made and how 
 1. **Vendor-neutral.** No single broadcaster, studio, or QC vendor controls UMDP. Anyone can fork, contribute, and adopt.
 2. **Real specs only.** UMDP fields exist because at least one published delivery spec needs them. Speculative fields are rejected.
 3. **Backwards-compatible by default.** Schema changes that break existing profiles require a major version bump and a documented migration.
-4. **Extension-friendly.** Every UMDP object accepts `additionalProperties`, so adopters can add custom fields without forking. Extensions that prove broadly useful become first-class fields in the next minor release.
+4. **Extension-friendly where it's safe.** Container objects (`assets`, `constraints`, `packaging`, …) accept `additionalProperties`, so adopters can add custom fields without forking; extensions that prove broadly useful become first-class fields in a later release. Value objects that carry measurement thresholds (e.g. `signal_limits`, `loudness`, `sync`, `frame_rate`) are closed (`additionalProperties: false`) so a near-miss key name can't silently drop a constraint (SQC-1395).
 
 ## Versioning
 
