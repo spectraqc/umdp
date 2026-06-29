@@ -2,6 +2,22 @@
 
 All notable changes to the UMDP schema are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/) and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.10.0] — Documented A/V-sync drift thresholds (`assets.audio.sync`)
+
+### Added
+
+- `assets.audio.sync` now documents the A/V-sync **drift** thresholds that QC engines already enforce, which were previously undocumented (passing only via `additionalProperties: true`):
+  - `max_drift_ms` — maximum tolerated progressive A/V sync drift in milliseconds before the A/V-sync-drift check fails (typically 40 ms). The primary, engine-bound sync threshold.
+  - `max_drift_ms_per_min` — optional bound on the *rate* of progressive drift (ms per minute).
+  - `max_drift_ms_hard_fail_above` — optional hard-fail boundary; drift between `max_drift_ms` and this value warns, above it errors (defaults to `max_drift_ms * 2`).
+- `docs/field-reference.md`: `assets.audio.sync` now distinguishes drift from offset.
+- `tools/validate.py`: an **advisory** (non-failing) report of profile keys not documented in the schema, so near-miss key names (e.g. `max_drift_ms` vs `max_offset_ms`) surface in review instead of passing silently under `additionalProperties: true`.
+
+### Notes
+
+- Backwards compatible — all `sync` fields are optional; existing profiles validate unchanged.
+- `max_offset_ms` (fixed lip-sync offset) is a *distinct* measurement from drift and remains documented, but no QC check binds it yet — its enforcement is tracked as an open gap in `docs/gaps.md`.
+
 ## [0.9.0] — Test-signal conformance (`test_signal`)
 
 ### Added
