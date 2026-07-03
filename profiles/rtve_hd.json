@@ -1,0 +1,99 @@
+{
+  "id": "rtve_hd",
+  "name": "RTVE — Entrega de Materiales, Especificaciones Técnicas (HD)",
+  "delivery_paradigm": "file",
+  "content_type": "program",
+  "governance": {
+    "spec_version": "Entrega de Materiales en RTVE — Especificaciones Técnicas (13/03/2025)",
+    "effective_date": "2025-03-13",
+    "supersedes": null,
+    "source": "Entrega de Materiales en RTVE — Especificaciones Técnicas (Corporación de Radio y Televisión Española, 13/03/2025)",
+    "sourceSpec": "https://licitaciones.rtve.es/resources/normativa/contratacion/250313%20Especificaciones%20t%C3%A9cnicas%20materiales%20(21-03-2025).pdf",
+    "sourceAccess": "public",
+    "jurisdiction": ["ES"],
+    "notes": "RTVE (Corporación de Radio y Televisión Española; La 1, La 2). Video: MXF OP1a, XDCAM HD422 50 Mbit/s, 1920x1080i/25 (SMPTE 274M), 4:2:2, >=8-bit, ITU-R BT.709. Audio: PCM 24-bit/48 kHz, 8-track structure (some tracks may be empty); stereo Lt/Rt and/or 5.1; Dolby E on AES pairs 1-4 (48k/20-bit, TC-synced); EBU R128 -23 LUFS +/-1 LU, true peak -1 dBTP (aligns with Spain's Ley 7/2010). TC start 0:00:00:00 (NOT 10:00:00:00); NO bars/tone/slate/carta de ajuste (first frame = first image); Dolby-E 5.1 files: 2 s black before first image; textless separated by 10 s black. Subtitles: binary EBU-STL (EBU Tech 3264), authoring standard UNE 153010. Audio description: EBU BWF .wav PCM 16-bit/48 kHz mono (UNE 153020). Sign language: separate MXF OP1a XDCAM 4:2:2 video. File naming Titulo_Año_MATERIAL (no accents/spaces/ñ; underscores; _UHD suffix for UHD). UHD/HDR (contracted): XAVC-Intra 300 / XAVC LongGOP 200, 2160p50, 4:2:2/4:4:4 >=10-bit, BT.2020 HLG. Metadata: accompanying 'parte de grabación' must match file. Delivery via RTVE NUBE portal. PSE not specified in this document. Language es, jurisdiction ES."
+  },
+  "inputs": {
+    "constraints": { "no_upconversion": true, "no_upscaling": true }
+  },
+  "assets": {
+    "video": {
+      "representation": "file",
+      "codec": { "allowed": ["xdcam_hd_422_50"], "notes": "XDCAM HD422 (MPEG-2 4:2:2 Long GOP) 50 Mbit/s." },
+      "container": { "allowed": ["mxf"], "notes": "MXF OP1a." },
+      "bitrate": { "mode": "constant", "target": 50000000 },
+      "resolution": { "allowed": ["1920x1080"], "notes": "1920 active pixels/line, 1080 lines (SMPTE 274M)." },
+      "aspect_ratio": { "allowed": ["16:9"] },
+      "frame_rate": {
+        "mode": "fixed",
+        "allowed": ["25"],
+        "tolerance": 0.01,
+        "notes": "25 fps, interlaced fields (1080i/25)."
+      },
+      "scan_type": ["interlaced"],
+      "color": {
+        "primaries": ["bt709"],
+        "transfer": ["bt709"],
+        "matrix": ["bt709"],
+        "range": ["limited"],
+        "notes": "ITU-R BT.709 (ITU-709). UHD variant: BT.2020 / HLG."
+      },
+      "bit_depth": { "allowed": [8], "min": 8, "notes": "At least 8 bits per sample ('nativos de al menos 8 bits')." },
+      "chroma_subsampling": ["4:2:2"],
+      "signal": {
+        "interlace_mode": ["true_interlace"],
+        "field_order": ["tff"],
+        "broadcast_system": "1080i/25",
+        "mains_frequency_hz": 50
+      }
+    },
+    "audio": {
+      "codec": { "allowed": ["pcm_s24le"], "notes": "PCM uncompressed. Dolby E permitted on AES pairs 1-4 (48 kHz/20-bit, TC-synced, no delay)." },
+      "sample_rate": [48000],
+      "bit_depth": { "allowed": [24], "uniform_required": true },
+      "track_count": {
+        "exact": 8,
+        "notes": "8-track structure (some tracks may be empty). UHD masters use 16 tracks. Stereo Lt/Rt and/or 5.1; commercial masters add International/M&E band on higher channels."
+      },
+      "language": { "mode": "single" },
+      "layout": {
+        "channel_map_required": true,
+        "allowed_layouts": ["L-R", "5.1"],
+        "notes": "Stereo Lt/Rt and/or 5.1. Co-official-language productions must include a Spanish version."
+      },
+      "loudness": {
+        "standards": [ { "name": "EBU R128", "target": -23.0, "tolerance": 1.0, "jurisdiction": "ES" } ],
+        "true_peak_max": -1.0,
+        "notes": "EBU R128 / Tech 3341: -23 LUFS +/-1 LU, Maximum Permitted True Peak -1 dBTP. Aligns with Spain's Ley 7/2010 (LGCA) loudness provisions. Bars & tone must NOT be included in the file."
+      },
+      "sync": { "must_match_video_duration": true }
+    },
+    "timed_text": {
+      "subtitles": {
+        "format": "ebu_stl",
+        "notes": "Binary EBU-STL per EBU Tech 3264; authoring standard UNE 153010. Required per contract/languages. Audio description as EBU BWF .wav (PCM 16-bit/48 kHz mono, UNE 153020). Sign language as a separate MXF OP1a XDCAM 4:2:2 video."
+      }
+    },
+    "metadata": {
+      "required": true,
+      "schemas": ["custom"],
+      "notes": "A 'parte de grabación' (production/QC report) accompanies delivery and must match the file metadata exactly (durations, first/last content frame, credits start). File naming: Titulo_AñoDeProducción_MATERIAL or Serie_Temporada_Capítulo_Año_MATERIAL; no accents/punctuation/spaces/ñ; underscores; _UHD suffix for UHD."
+    }
+  },
+  "structure": {
+    "type": "timeline",
+    "timeline": {
+      "timecode_start": "00:00:00:00",
+      "timecode_continuous": true,
+      "notes": "Timecode starts at 0:00:00:00 (NOT 10:00:00:00). No bars/tone/slate/carta de ajuste; first frame = first image. Dolby-E 5.1 files: 2 s black before first image. Textless material separated by 10 s black after last frame."
+    }
+  },
+  "constraints": {
+    "video": {
+      "pse_test_required": false
+    },
+    "timing": {
+      "duration": { "must_match": ["video", "audio"], "tolerance_ms": 40 }
+    }
+  }
+}

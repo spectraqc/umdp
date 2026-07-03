@@ -1,0 +1,128 @@
+{
+  "id": "orf_hd",
+  "name": "ORF — Technische Produktionsrichtlinien / HDF01a File Delivery (HD)",
+  "delivery_paradigm": "file",
+  "content_type": "program",
+  "governance": {
+    "spec_version": "ORF Technische Produktionsrichtlinien (HDTV); MXF-Profil ARD_ZDF_HDF01a",
+    "effective_date": "2016-01-01",
+    "supersedes": null,
+    "source": "ORF Technische Produktionsrichtlinien zur Herstellung von Fernsehproduktionen (HDTV) [orf__tr_hdtv.pdf]; aligned with the joint ARD/ZDF/ORF Technische Produktionsrichtlinien and MXF profile ARD_ZDF_HDF01a (IRT)",
+    "sourceSpec": "https://www.ard.de/die-ard/b2b/Technische-Richtlinien-der-ARD-100/",
+    "sourceAccess": "public",
+    "jurisdiction": ["AT"],
+    "notes": "ORF (Austria). Uses the joint ARD/ZDF/ORF technical production guidelines and the ARD_ZDF_HDF MXF profiles; ORF maintains its own file spec (beschaffung.orf.at). Video: MXF OP1a XDCAM HD422 (MPEG-2 4:2:2 Long GOP) 50 Mbit/s, 1920x1080i/25 TFF, 8-bit, BT.709, limited range (EBU R103); safe areas per EBU R95. Audio: PCM 24-bit/48 kHz, stereo standard (mono-compatible), multichannel 5.1/3.0 optional as discrete PCM or Dolby E; EBU R128 -23 LUFS +/-0.5 LU, true peak -1 dBTP. TC start 00:00:00:00 (ORF convention). No technical leader/bars for file delivery. Subtitles: EBU STL (shared ORF/SRF/ZDF subtitle presentation standards). Metadata: Medienbegleitkarte. PSE not specified. Language de, jurisdiction AT."
+  },
+  "inputs": {
+    "constraints": {
+      "native_frame_rate_only": true,
+      "no_upconversion": true,
+      "no_upscaling": true
+    }
+  },
+  "assets": {
+    "video": {
+      "representation": "file",
+      "codec": {
+        "allowed": ["xdcam_hd_422_50"],
+        "notes": "MPEG-2, 4:2:2, 8-bit, Long GOP, 50 Mbit/s (XDCAM-HD422 implementation, profile ARD_ZDF_HDF01a)."
+      },
+      "container": {
+        "allowed": ["mxf"],
+        "notes": "MXF OP1a; ARD_ZDF_HDF profiles."
+      },
+      "bitrate": { "mode": "constant", "target": 50000000, "min": 50000000, "max": 50000000 },
+      "resolution": { "allowed": ["1920x1080"] },
+      "aspect_ratio": { "allowed": ["16:9"] },
+      "frame_rate": {
+        "mode": "fixed",
+        "allowed": ["25"],
+        "tolerance": 0.01,
+        "notes": "1080i/25 (50 fields/s). 1080p/25 is a special format carried and signalled as 1080psf/25 / 1080i/25."
+      },
+      "scan_type": ["interlaced"],
+      "color": {
+        "primaries": ["bt709"],
+        "transfer": ["bt709"],
+        "matrix": ["bt709"],
+        "range": ["limited"],
+        "notes": "ITU-R BT.709-6."
+      },
+      "bit_depth": { "allowed": [8], "min": 8 },
+      "chroma_subsampling": ["4:2:2"],
+      "signal": {
+        "interlace_mode": ["true_interlace"],
+        "field_order": ["tff"],
+        "broadcast_system": "1080i/25",
+        "mains_frequency_hz": 50
+      },
+      "safe_area": {
+        "title_safe_required": true,
+        "action_safe_required": true,
+        "title_safe_percent": null,
+        "action_safe_percent": null
+      }
+    },
+    "audio": {
+      "codec": {
+        "allowed": ["pcm_s24le"],
+        "notes": "Uncompressed PCM (discrete). Dolby E permitted for multichannel exchange."
+      },
+      "sample_rate": [48000],
+      "bit_depth": { "allowed": [24], "uniform_required": true },
+      "track_count": {
+        "max": 8,
+        "notes": "Discrete mono AES3 tracks per ARD_ZDF_HDF01a (8 tracks). Stereo mix mono-compatible; multichannel 5.1/3.0 optional (discrete PCM or Dolby E)."
+      },
+      "language": { "mode": "single" },
+      "layout": {
+        "channel_map_required": true,
+        "allowed_layouts": ["L-R", "5.1"],
+        "notes": "Stereo is the standard production/exchange format; must be mono-compatible. Multichannel (5.1 or 3.0) optional, preferably discrete PCM."
+      },
+      "loudness": {
+        "standards": [
+          { "name": "EBU R128", "target": -23.0, "tolerance": 0.5, "jurisdiction": "AT" }
+        ],
+        "true_peak_max": -1.0,
+        "notes": "Programmlautheit -23.0 LUFS +/-0.5 LU (EBU R128 / ITU-R BS.1770). Max true peak -1 dBTP."
+      },
+      "sync": { "must_match_video_duration": true }
+    },
+    "timed_text": {
+      "subtitles": {
+        "format": "ebu_stl",
+        "notes": "EBU STL subtitles for the hearing-impaired; ORF, SRF and ZDF share common subtitle presentation standards. Audio description carried as an audio track."
+      }
+    },
+    "metadata": {
+      "required": true,
+      "schemas": ["custom"],
+      "notes": "Medienbegleitkarte per the ARD/ZDF/ORF guidelines."
+    }
+  },
+  "structure": {
+    "type": "timeline",
+    "timeline": {
+      "timecode_start": "00:00:00:00",
+      "timecode_continuous": true,
+      "notes": "Continuous gap-free timecode; ORF start convention 00:00:00:00. Deliver clean with no technical leader/bars/tone."
+    }
+  },
+  "constraints": {
+    "video": {
+      "signal_limits": {
+        "luminance": {
+          "min": 16,
+          "max": 235,
+          "tolerance_note": "ITU-R BT.709-6 / EBU R103 (8-bit nominal black 16 / white 235). Headroom must not be used for artistic effect; nominal level only briefly above the valid range. Gamut error over >1% of picture area."
+        },
+        "rgb": { "min": 16, "max": 235 }
+      },
+      "pse_test_required": false
+    },
+    "timing": {
+      "duration": { "must_match": ["video", "audio"], "tolerance_ms": 40 }
+    }
+  }
+}

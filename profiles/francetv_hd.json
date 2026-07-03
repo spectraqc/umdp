@@ -1,0 +1,117 @@
+{
+  "id": "francetv_hd",
+  "name": "France Télévisions — PAD fichiers (CST-RT-040, HD)",
+  "delivery_paradigm": "file",
+  "content_type": "program",
+  "governance": {
+    "spec_version": "CST-RT-040-TV v1.2 (13 Dec 2016) + France TV Annexe technique CDE fichiers HD (24-01-2023)",
+    "effective_date": "2016-12-13",
+    "supersedes": null,
+    "source": "CST-RT-040-TV v1.2 — Recommandation Technique PAD fichiers Éditeurs (CST/FICAM/HD Forum, 2016); France Télévisions Annexe technique CDE fichiers HD (2023)",
+    "sourceSpec": "https://www.ficam.fr/wp-content/uploads/2016/08/cst-rt-040-tv-2016-pad_fichiers_editeurs_v1.2.pdf",
+    "sourceAccess": "public",
+    "jurisdiction": ["FR"],
+    "notes": "France Télévisions (France 2/3/4/5). Governed by the shared French industry PAD recommendation CST-RT-040-TV v1.2 (CST/FICAM/HD Forum); France TV layers its own Annexe technique (2023) defining channel-specific timecode origin, audio-track organisation and file naming. Video: MXF OP1a conformant to AMWA AS-10 shim 'High_HD_2014', XDCAM HD422 (MPEG-2 422P@HL Long GOP, SMPTE RDD9) 50 Mbit/s, 1920x1080i/25 (1080/25p and PsF PROHIBITED), 4:2:2, 8-bit, BT.709 (monitors BT.1886), limited range (EBU R103 v2.0, 8-bit 5-246). Audio: PCM/AES3 24-bit/48 kHz, 8 discrete mono tracks (Dolby E permitted on 2 tracks); mono=2 identical tracks, stereo odd=L/even=R, 5.1 per ITU-R BS.775/EBU R91; EBU R128 -23 LUFS +/-1 LU (long programmes), LRA <=20 LU, TRUE PEAK -3 dBTP (stricter than R128 default -1); line-up 1 kHz -18 dBFS; A/V sync lead <=20 ms / lag <=40 ms. TC start on a whole hour (editor's choice; commonly 10:00:00:00 or 00:00:00:00); bars/slate/leader at editor's discretion. Subtitles: EBU STL (UER N19-2002) sidecar, Teletext L1, CPN 850, max 37 chars/2 lines white, last subtitle >=3 s before last image. Metadata: mandatory XML 'fiche de programme' (MetaPADTV template). PSE not specified in RT-040 (regulatory via ARCOM/CSA). Language fr, jurisdiction FR."
+  },
+  "inputs": {
+    "constraints": {
+      "native_frame_rate_only": true,
+      "no_upconversion": true,
+      "no_upscaling": true
+    }
+  },
+  "assets": {
+    "video": {
+      "representation": "file",
+      "codec": {
+        "allowed": ["xdcam_hd_422_50"],
+        "notes": "XDCAM HD422 = MPEG-2 422P@HL Long GOP (SMPTE RDD9) 50 Mbit/s CBR, 8-bit. MXF conformant to AMWA AS-10, shim High_HD_2014."
+      },
+      "container": { "allowed": ["mxf"], "notes": "MXF OP1a (AMWA AS-10)." },
+      "bitrate": { "mode": "constant", "target": 50000000, "min": 50000000, "max": 50000000 },
+      "resolution": { "allowed": ["1920x1080"] },
+      "aspect_ratio": { "allowed": ["16:9"] },
+      "frame_rate": {
+        "mode": "fixed",
+        "allowed": ["25"],
+        "tolerance": 0.01,
+        "notes": "1080i/25 only. 1080/25p and 1080/25PsF are prohibited."
+      },
+      "scan_type": ["interlaced"],
+      "color": {
+        "primaries": ["bt709"],
+        "transfer": ["bt709"],
+        "matrix": ["bt709"],
+        "range": ["limited"],
+        "notes": "ITU-R BT.709; monitors calibrated to BT.1886."
+      },
+      "bit_depth": { "allowed": [8], "min": 8 },
+      "chroma_subsampling": ["4:2:2"],
+      "signal": {
+        "interlace_mode": ["true_interlace"],
+        "field_order": ["tff"],
+        "broadcast_system": "1080i/25",
+        "mains_frequency_hz": 50
+      }
+    },
+    "audio": {
+      "codec": { "allowed": ["pcm_s24le"], "notes": "Linear PCM (AES3). Dolby E permitted on 2 tracks (20-bit pre-encode)." },
+      "sample_rate": [48000],
+      "bit_depth": { "allowed": [24], "uniform_required": true },
+      "track_count": {
+        "exact": 8,
+        "notes": "8 discrete AES3 mono channels. Mono -> 2 identical contiguous tracks; stereo -> odd=L, even=R; 5.1 per ITU-R BS.775 / EBU R91 (Dolby E 3/2). Track allocation declared in the XML; unused tracks = silence."
+      },
+      "language": { "mode": "multi" },
+      "layout": {
+        "channel_map_required": true,
+        "allowed_layouts": ["L-R", "5.1"],
+        "notes": "VF (version française) and VI (version internationale/M&E) delivered bi-piste. 5.1 order L R C LFE Ls Rs."
+      },
+      "loudness": {
+        "standards": [ { "name": "EBU R128", "target": -23.0, "tolerance": 1.0, "jurisdiction": "FR" } ],
+        "true_peak_max": -3.0,
+        "notes": "EBU R128 integrated -23.0 LUFS; long programmes (>2 min) +/-1.0 LU, short (<=2 min) at -23.0 LUFS. LRA <=20 LU. Max true peak -3 dBTP (stricter than R128 default -1). Line-up 1 kHz at -18 dBFS."
+      },
+      "sync": {
+        "max_offset_ms": 40,
+        "must_match_video_duration": true
+      }
+    },
+    "timed_text": {
+      "subtitles": {
+        "format": "ebu_stl",
+        "notes": "EBU STL (UER/EBU N19-2002) sidecar, Teletext presentation level 1, code page 850, TC format STL25.01, Latin charset, max 37 chars/line, max 2 lines, white (per CSA subtitle charter 2011). Last subtitle out >=3 s before last image. Audio-described mix version referenced in loudness table; no dedicated AD track spec in RT-040."
+      }
+    },
+    "metadata": {
+      "required": true,
+      "schemas": ["custom"],
+      "notes": "Mandatory XML 'fiche de programme' delivered with every MXF; generated (with the MXF filename) by the Excel 'MetaPADTV' template. File identifier left to the editor's discretion (auto-generated by MetaPADTV)."
+    }
+  },
+  "structure": {
+    "type": "timeline",
+    "timeline": {
+      "timecode_start": "10:00:00:00",
+      "timecode_continuous": true,
+      "notes": "First useful image/sound must start on a WHOLE HOUR (e.g. 00:00:00:00, 10:00:00:00) — exact origin at the editor's choice (France TV annexe defines it per channel; France 3 Corse mandates 00:00:00:00). Bars/mire/slate/leader are at the editor's discretion; RT-040 mandates none."
+    }
+  },
+  "constraints": {
+    "video": {
+      "signal_limits": {
+        "luminance": {
+          "min": 16,
+          "max": 235,
+          "tolerance_note": "EBU R103 v2.0 (8-bit nominal black 16 / white 235). RGB and Y within preferred 5-246 (8-bit); out-of-gamut pixels <=1% of active picture. Active lines 21-560 (540 active), +/-2-line tolerance."
+        },
+        "rgb": { "min": 16, "max": 235 }
+      },
+      "pse_test_required": false
+    },
+    "timing": {
+      "duration": { "must_match": ["video", "audio"], "tolerance_ms": 40 }
+    }
+  }
+}

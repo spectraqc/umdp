@@ -1,0 +1,100 @@
+{
+  "id": "npo_hd",
+  "name": "NPO — De Digitale Voorziening (DDV) file delivery (HD)",
+  "delivery_paradigm": "file",
+  "content_type": "program",
+  "governance": {
+    "spec_version": "DDV / ketenafspraken (tapeless delivery); version/date not stated in source",
+    "supersedes": null,
+    "source": "NPO / Dutch public-broadcasting chain agreements (ketenafspraken) for file-based delivery into De Digitale Voorziening (DDV), operated by NPO, the omroepen and Beeld en Geluid. Primary two-file MXF+metadata spec + DDV core technical spec (BIT-team).",
+    "sourceSpec": "https://docplayer.nl/3140556",
+    "sourceAccess": "contracted",
+    "jurisdiction": ["NL"],
+    "notes": "NPO (Nederlandse Publieke Omroep) — PROGRAMME/tapeless route into De Digitale Voorziening (DDV), NOT Ster/Ad Alliance ad-copy. CURRENCY CAVEAT: the located DDV/chain documents date from the tape->file transition era (~2010-2014), are image-based on a DNS-blocked host, and carry no stated version/date — treat as LOW-confidence / needs a current NPO/DDV source to confirm. Video: MXF OP1a, XDCAM HD422 (MPEG-2 Long GOP, GOP 12) 50 Mbit/s, 1920x1080i/50 (25 fps) TFF, 4:2:2, 8-bit, BT.709, limited range (EBU R103 not explicitly cited). Audio: PCM 24-bit/48 kHz; HD MXF must physically carry 8 channels; programme audio stereo on ch1(L)/ch2(R) (2-track or 4-track layout); EBU R128 -23 LUFS +/-0.5 LU, true peak -1 dBTP. Delivery = two files (MXF + identically-named XML metadata; media length must equal metadata length). TC continuous ascending; start value not stated; no bars/slate/leader. Subtitles: separate .890 (EBU/Screen exchange) file; TT888 access-subtitling rules (white/yellow/cyan/green, >=3-frame gap, 165-200 wpm). Metadata XML accompanies MXF (identical basename). PSE not found. Transport: upload to DDV (Mediaset 'compleet' >=2 working days before broadcast); producers certified before first delivery. Language nl, jurisdiction NL."
+  },
+  "inputs": {
+    "constraints": { "no_upconversion": true, "no_upscaling": true }
+  },
+  "assets": {
+    "video": {
+      "representation": "file",
+      "codec": {
+        "allowed": ["xdcam_hd_422_50"],
+        "notes": "XDCAM HD422 (MPEG-2 Long GOP, GOP size 12) 50 Mbit/s, 8-bit."
+      },
+      "container": { "allowed": ["mxf"], "notes": "MXF OP1a." },
+      "bitrate": { "mode": "constant", "target": 50000000 },
+      "resolution": { "allowed": ["1920x1080"] },
+      "aspect_ratio": { "allowed": ["16:9"] },
+      "frame_rate": {
+        "mode": "fixed",
+        "allowed": ["25"],
+        "tolerance": 0.01,
+        "notes": "1080i/50 (25 frames/s, 50 fields)."
+      },
+      "scan_type": ["interlaced"],
+      "color": {
+        "primaries": ["bt709"],
+        "transfer": ["bt709"],
+        "matrix": ["bt709"],
+        "range": ["limited"],
+        "notes": "ITU-R BT.709 (HDTV). Signal range/legal limits not explicitly cited in the DDV docs."
+      },
+      "bit_depth": { "allowed": [8], "min": 8, "notes": "8-bit inherent to XDCAM HD422 (not stated verbatim)." },
+      "chroma_subsampling": ["4:2:2"],
+      "signal": {
+        "interlace_mode": ["true_interlace"],
+        "field_order": ["tff"],
+        "broadcast_system": "1080i/25",
+        "mains_frequency_hz": 50
+      }
+    },
+    "audio": {
+      "codec": { "allowed": ["pcm_s24le"], "notes": "Uncompressed PCM." },
+      "sample_rate": [48000],
+      "bit_depth": { "allowed": [24], "uniform_required": true },
+      "track_count": {
+        "exact": 8,
+        "notes": "HD MXF must physically carry 8 audio channels. Programme audio delivered as stereo in a 2-track (1 AES pair) or 4-track (2 AES pairs) layout; ch1=Left, ch2=Right."
+      },
+      "language": { "mode": "single" },
+      "layout": {
+        "channel_map_required": true,
+        "allowed_layouts": ["L-R"],
+        "notes": "Programme stereo on ch1(L)/ch2(R)."
+      },
+      "loudness": {
+        "standards": [ { "name": "EBU R128", "target": -23.0, "tolerance": 0.5, "jurisdiction": "NL" } ],
+        "true_peak_max": -1.0,
+        "notes": "Programmaluidheid -23 LUFS +/-0.5 LU (EBU R128); true peak -1 dBTP; max short-term ~ +5 LU."
+      },
+      "sync": { "must_match_video_duration": true }
+    },
+    "timed_text": {
+      "subtitles": {
+        "format": "screen_890",
+        "notes": "Separate .890 subtitle file (EBU/Screen subtitling exchange), delivered as titelkopie (TIKO) or separate .890 (OWE). TT888 access-subtitling rules: colours white/yellow/cyan/green (red not used), >=3-frame gap, 165-200 wpm."
+      }
+    },
+    "metadata": {
+      "required": true,
+      "schemas": ["custom"],
+      "notes": "XML metadata file accompanies the MXF with an identical basename (differs only by extension); media length must equal metadata length. DDV 'Mediaset' record (MXF designation + MXF-number)."
+    }
+  },
+  "structure": {
+    "type": "timeline",
+    "timeline": {
+      "timecode_continuous": true,
+      "notes": "Continuous, monotonically ascending timecode per the MXF Material Package Timecode Track; start value not stated. No lead-in/lead-out with bars, slate or black; media length equals metadata length exactly."
+    }
+  },
+  "constraints": {
+    "video": {
+      "pse_test_required": false
+    },
+    "timing": {
+      "duration": { "must_match": ["video", "audio"], "tolerance_ms": 40 }
+    }
+  }
+}
