@@ -1,0 +1,128 @@
+{
+  "id": "nrk_hd",
+  "name": "NRK — Technical Standards for Delivery of Television Programmes (HD)",
+  "delivery_paradigm": "file",
+  "content_type": "program",
+  "governance": {
+    "spec_version": "NRK v4.4 (2021), based on DPP v4.0 (2013)",
+    "effective_date": "2021-01-01",
+    "supersedes": null,
+    "source": "Technical Standards for Delivery of Television Programmes to NRK, Version 4.4 (2021)",
+    "sourceSpec": "https://fido.nrk.no/5ea9477b578074d3646b1b5b1e86f9975fefbbff1b6e1695389c56ad287a4988/nrk_technical_delivery_standards_v4_4_2021.pdf",
+    "sourceAccess": "public",
+    "jurisdiction": ["NO"],
+    "notes": "NRK (Norway). English-language spec, mostly based on the UK DPP delivery document. Section 4.1 is the current enforced file spec; 4.3-4.12 (AS-11/DPP) are informational/future (NRK 'not ready to accept AS-11' yet). Video: MXF OP1a, XAVC Intra Class 100 / AVC-Intra 100 (100 Mbit/s, H.264 High 4:2:2 Intra L4.1), 1920x1080i/25 field-1 dominant, 4:2:2, 10-bit, BT.709, limited range (16-235/64-940, EBU R103). Audio: PCM 24-bit/48 kHz, 2/4/8 tracks (current; 4/16 future AS-11); 2-ch main stereo, 4-ch +M&E, 8-ch main 5.1 (FL FR C LFE Ls Rs); EBU R48/R123 code required; EBU R128 -23 LUFS (+/-1 LU live only), true peak fails >-1 dBTP (-3 recommended); line-up 1 kHz -18 dBFS EBU/GLITS. TC start 10:00:00:00 with 20s 100% bars + 7s ident clock leader (legacy 90s+30s). Subtitles: separate file (format not mandated); AD as separate BWF (EBU Tech 3285). Metadata: DPP metadata set v10; filenames UPPERCASE [A-Z 0-9 - _]. PSE not legally mandatory in Norway but encouraged (Harding FPA v2.5 / Ofcom guidance; DPP-approved device list); PSE Pass recorded in metadata. Delivery method agreed per broadcaster (nrkmaterials@nrk.no). Language no/nb/nn, jurisdiction NO."
+  },
+  "inputs": {
+    "constraints": {
+      "native_frame_rate_only": true,
+      "no_upconversion": true,
+      "no_upscaling": true
+    }
+  },
+  "assets": {
+    "video": {
+      "representation": "file",
+      "codec": {
+        "allowed": ["avc_intra_100"],
+        "notes": "XAVC Intra Class 100 / AVC-Intra 100 (H.264 High 4:2:2 Intra, Level 4.1), 100 Mbit/s, 10-bit. Current enforced HD codec (§4.1)."
+      },
+      "container": { "allowed": ["mxf"], "notes": "MXF OP1a. Future: AS-11 v1.1 UK DPP HD shim (not yet accepted)." },
+      "bitrate": { "mode": "constant", "target": 100000000 },
+      "resolution": { "allowed": ["1920x1080"], "notes": "Must fill active picture (no blanking; 2-px tolerance for CG/overlays)." },
+      "aspect_ratio": { "allowed": ["16:9"] },
+      "frame_rate": {
+        "mode": "fixed",
+        "allowed": ["25"],
+        "tolerance": 0.01,
+        "notes": "1080i/25 (50 fields, EBU Tech 3299 System 2). 1080p/50 not accepted; 1080psf/25 only if broadcaster requires."
+      },
+      "scan_type": ["interlaced"],
+      "color": {
+        "primaries": ["bt709"],
+        "transfer": ["bt709"],
+        "matrix": ["bt709"],
+        "range": ["limited"],
+        "notes": "ITU-R BT.709-5 Part 2."
+      },
+      "bit_depth": { "allowed": [10], "min": 10 },
+      "chroma_subsampling": ["4:2:2"],
+      "signal": {
+        "interlace_mode": ["true_interlace"],
+        "field_order": ["tff"],
+        "broadcast_system": "1080i/25",
+        "mains_frequency_hz": 50
+      }
+    },
+    "audio": {
+      "codec": { "allowed": ["pcm_s24le"], "notes": "Linear PCM in AES3 streams. Unused tracks = PCM digital silence." },
+      "sample_rate": [48000],
+      "bit_depth": { "allowed": [24], "uniform_required": true },
+      "track_count": {
+        "min": 2,
+        "max": 8,
+        "notes": "Current (§4.1): 2, 4 or 8 PCM channels. 2-ch: T1/2 main stereo. 4-ch: +T3/4 M&E stereo. 8-ch: T1/2 main stereo + T3-8 main 5.1 (FL FR C LFE Ls Rs). Future AS-11: 4 or 16 (R123:16c/16d/16f). EBU R48/R123 track-allocation code required in metadata."
+      },
+      "language": { "mode": "single" },
+      "layout": {
+        "channel_map_required": true,
+        "allowed_layouts": ["L-R", "5.1"],
+        "notes": "R48:2a / R123:4b (main stereo, +M&E), R123:4c (+AD on T3/4). Unused tracks carry PCM digital silence."
+      },
+      "loudness": {
+        "standards": [ { "name": "EBU R128", "target": -23.0, "tolerance": null, "jurisdiction": "NO" } ],
+        "true_peak_max": -1.0,
+        "notes": "EBU R128 Integrated -23.0 LUFS (no stated tolerance for file/tape delivery; +/-1.0 LU for live only). Max true peak fails if it exceeds -1 dBTP (-3 dBTP recommended). Line-up 1 kHz EBU/GLITS (BLITS for surround), reference -18 dBFS. LRA guidance <=18 LU."
+      },
+      "sync": { "max_offset_ms": 5, "must_match_video_duration": true }
+    },
+    "timed_text": {
+      "subtitles": {
+        "format": "separate_file",
+        "notes": "Subtitles delivered as a separate file named identically to the MXF apart from extension; specific format (EBU STL / EBU-TT) not mandated in this document. Closed-caption metadata: type Hard-of-Hearing / Translation, ISO 639-2. Audio description as a separate BWF/B-WAV file (EBU Tech 3285) matching MXF duration/TC. Signing recorded in metadata."
+      }
+    },
+    "metadata": {
+      "required": true,
+      "schemas": ["custom"],
+      "notes": "DPP minimum metadata set (DPP Metadata spreadsheet v10); 127-char free-text limit; ISO 639-2 language codes; PSE Pass (Yes/No/Not tested) mandatory. Filenames UPPERCASE, extension lowercase, chars [A-Z 0-9 - _] only."
+    }
+  },
+  "structure": {
+    "type": "timeline",
+    "timeline": {
+      "timecode_start": "10:00:00:00",
+      "timecode_continuous": true,
+      "programme_layout": {
+        "bars_start": "09:59:30:00",
+        "bars_duration_seconds": 20,
+        "clock_start": "09:59:50:00",
+        "clock_duration_min_seconds": 7,
+        "sync_plop_window": "09:59:57:06 to 09:59:57:08",
+        "programme_start": "10:00:00:00"
+      },
+      "notes": "100% colour bars (100/0/100/0, full raster; SMPTE bars not acceptable) + line-up tone from 09:59:30:00 (20s); ident clock/slate from 09:59:50:00 (7s, moving countdown, silence); black to 10:00:00:00. Legacy 90s bars + 30s clock permitted. End: fade/cut to silence, freeze/living hold 5s after end. Multipart: parts start on next whole minute."
+    }
+  },
+  "constraints": {
+    "video": {
+      "signal_limits": {
+        "luminance": {
+          "min": 64,
+          "max": 940,
+          "tolerance_note": "10-bit 64-940 (8-bit 16-235). EBU R103: luminance Y -1% to +103% (-7..721 mV); gamut error if out-of-gamut >=1% of picture area."
+        },
+        "rgb": {
+          "min": 64,
+          "max": 940,
+          "tolerance_note": "EBU R103: RGB -5% to +105% (-35..735 mV)."
+        }
+      },
+      "pse_test_required": false,
+      "pse_standard": "Harding FPA v2.5 / Ofcom guidance (encouraged, not legally mandatory in NO)"
+    },
+    "timing": {
+      "duration": { "must_match": ["video", "audio"], "tolerance_ms": 40 }
+    }
+  }
+}

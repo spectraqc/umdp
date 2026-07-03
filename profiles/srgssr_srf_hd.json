@@ -1,0 +1,108 @@
+{
+  "id": "srgssr_srf_hd",
+  "name": "SRG SSR / SRF — Technical Guidelines for Commissioned & Co-Produced Content (HD)",
+  "delivery_paradigm": "file",
+  "content_type": "program",
+  "governance": {
+    "spec_version": "V110 (in force 1 January 2026)",
+    "effective_date": "2026-01-01",
+    "supersedes": null,
+    "source": "SRF — Technical Guidelines for Commissioned and Co-Produced Content and Program Acquisitions (V110, Dec 2025 / in force 2026-01-01)",
+    "sourceSpec": "https://www.srf.ch/article/file/urn:srf:file:6964bbd99f90f/Technical-Guidelines-for-Commissioned-and-Co-Produced-Content-and-Program-Acquisitions.pdf",
+    "sourceAccess": "public",
+    "jurisdiction": ["CH"],
+    "notes": "SRG SSR, SRF unit (German-language, largest; governs SRF TV and Play SRF). Current house format is XAVC Long GOP 1080p/50 10-bit (SRF has moved OFF XDCAM HD422 1080i25). Video: MXF OP1a, XAVC Long GOP, 50 Mbit/s, 1920x1080p/50, 4:2:2, 10-bit, BT.709; safe areas EBU R95. UHD variant: XAVC Long GOP 200 Mbit/s 3840x2160p50 10-bit. Audio: AES3 PCM 24-bit/48 kHz, 16 discrete mono tracks; PGM layout 1/2 main stereo, 3-8 main 5.1 (L R C LFE Ls Rs), 9/10 Audio Description stereo, 11-16 second language; EBU R128 -23 LUFS +/-1 LU (SRG-group unified), true peak -1 dBTP, LRA target 8-12 LU (>18 rejected). TC start 10:00:00:00. Subtitles: STL or SRT sidecar, frame rate matching video. Delivery via VICO portal / SRG SSR transfer platform (or HDD/SSD exFAT). PSE not specified. Third-party/social outputs use -14 LUFS (out of scope here). Loudness is SRG-unified; RTS (fr) / RSI (it) / RTR (rm) publish their own equivalents. Language de-CH (also fr/it/rm), jurisdiction CH."
+  },
+  "inputs": {
+    "constraints": { "no_upconversion": true, "no_upscaling": true }
+  },
+  "assets": {
+    "video": {
+      "representation": "file",
+      "codec": {
+        "allowed": ["h264"],
+        "notes": "XAVC Long GOP (HD, H.264/MPEG-4 AVC Long GOP), 50 Mbit/s, 10-bit. Not XAVC-Intra."
+      },
+      "container": { "allowed": ["mxf"], "notes": "MXF OP1a per SMPTE 377M, Single Item Single Package." },
+      "bitrate": { "mode": "constant", "target": 50000000 },
+      "resolution": { "allowed": ["1920x1080"] },
+      "aspect_ratio": { "allowed": ["16:9"] },
+      "frame_rate": {
+        "mode": "fixed",
+        "allowed": ["50"],
+        "tolerance": 0.01,
+        "notes": "1080p/50 (progressive); EBU Tech 3299 System 4."
+      },
+      "scan_type": ["progressive"],
+      "color": {
+        "primaries": ["bt709"],
+        "transfer": ["bt709"],
+        "matrix": ["bt709"],
+        "range": ["limited"],
+        "notes": "ITU-R BT.709. UHD-1 variant per ITU-R BT.2100 raster (still BT.709 SDR unless HDR agreed)."
+      },
+      "bit_depth": { "allowed": [10], "min": 10 },
+      "chroma_subsampling": ["4:2:2"],
+      "safe_area": {
+        "title_safe_required": true,
+        "action_safe_required": true,
+        "title_safe_percent": null,
+        "action_safe_percent": null
+      }
+    },
+    "audio": {
+      "codec": { "allowed": ["pcm_s24le"], "notes": "AES3 PCM, discrete/uncompressed." },
+      "sample_rate": [48000],
+      "bit_depth": { "allowed": [24], "uniform_required": true },
+      "track_count": {
+        "max": 16,
+        "notes": "16 discrete mono channels (Dolby E by arrangement if >16). PGM: 1/2 main stereo, 3-8 main 5.1 (L R C LFE Ls Rs), 9/10 Audio Description stereo, 11-16 second language. Clean: 1/2 main stereo, 3-8 international 5.1."
+      },
+      "language": { "mode": "multi" },
+      "layout": {
+        "channel_map_required": true,
+        "allowed_layouts": ["L-R", "5.1"],
+        "tracks": [
+          { "track": 1, "role": "program_left" },
+          { "track": 2, "role": "program_right" },
+          { "track": 9, "role": "audio_description_left" },
+          { "track": 10, "role": "audio_description_right" }
+        ],
+        "notes": "Main 5.1 on 3-8; Audio Description stereo on 9-10; second-language on 11-16. Downmix coeffs L 0 / C -3 / R 0 / Ls -3 / Rs -3 / LFE -inf dB."
+      },
+      "loudness": {
+        "standards": [ { "name": "EBU R128", "target": -23.0, "tolerance": 1.0, "jurisdiction": "CH" } ],
+        "true_peak_max": -1.0,
+        "notes": "SRG-group unified: EBU R128 -23 LUFS +/-1 LU, true peak -1 dBTP. Loudness Range target 8-12 LU; LRA > 18 LU is rejected."
+      },
+      "sync": { "must_match_video_duration": true }
+    },
+    "timed_text": {
+      "subtitles": {
+        "format": "ebu_stl",
+        "notes": "Closed captions as separate sidecar files in STL or SRT, frame rate matching the video format. Open (burn-in) subtitles: Arial, white, drop-shadow/outline, kept out of letterbox bars. Audio description delivered as audio tracks 9-10 (not a separate service file)."
+      }
+    },
+    "metadata": {
+      "required": false,
+      "schemas": ["custom"],
+      "notes": "No metadata schema or filename convention defined in V110 (session-level naming guidance only for multitrack audio)."
+    }
+  },
+  "structure": {
+    "type": "timeline",
+    "timeline": {
+      "timecode_start": "10:00:00:00",
+      "timecode_continuous": true,
+      "notes": "First frame at 10:00:00:00. If no integral clean version, textless elements appended 30 s after content end. No bars/slate/leader specified."
+    }
+  },
+  "constraints": {
+    "video": {
+      "pse_test_required": false
+    },
+    "timing": {
+      "duration": { "must_match": ["video", "audio"], "tolerance_ms": 40 }
+    }
+  }
+}

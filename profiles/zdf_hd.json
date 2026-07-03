@@ -1,0 +1,114 @@
+{
+  "id": "zdf_hd",
+  "name": "ZDF — Spezifikation für filebasierte Anlieferungen (HD, profile ZDF-S01)",
+  "delivery_paradigm": "file",
+  "content_type": "program",
+  "governance": {
+    "spec_version": "ZDF-Spezifikation filebasierte Anlieferungen v3.0 (06.10.2023); profile ZDF-S01",
+    "effective_date": "2023-10-06",
+    "supersedes": null,
+    "source": "ZDF-Spezifikation für filebasierte Anlieferungen v3.0 (2023); baseline: Technische Produktionsrichtlinien für ARD, ZDF und ORF (1. Auflage, Nov 2025)",
+    "sourceSpec": "https://www.zdf.de/assets/technik-normen-spezifikationen-filebasierte-anlieferungen-100~original",
+    "sourceAccess": "public",
+    "jurisdiction": ["DE"],
+    "notes": "ZDF (Zweites Deutsches Fernsehen). Current file-delivery main profile ZDF-S01 is AVC-Intra 100 / 10-bit (NOT the legacy XDCAM HD422 HDF01a 8-bit — that is retired for ZDF). Video: MXF OP1a (Single Item Single Package), AVC-Intra Class 100 (H.264 High 4:2:2 Intra, RP 2027), 1920x1080 @ 25 (1080p/25 or 1080i/25), 4:2:2, 10-bit, BT.709, limited range (EBU R103 v3.0). Audio: PCM 24-bit/48 kHz, discrete mono tracks (CHCOUNT=1, even count 2-16); assignment 1/2 Send L/R, 3/4 2nd language, 5/6 Audio Description, 7/8 Dolby E, 9-14 5.1 (L R C LFE Ls Rs); EBU R128 -23 LUFS +/-0.5 LU, LRA <=20, true peak -1 dBTP; alignment level -18 dBFS. TC start 10:00:00:00, NO technical leader/bars. Subtitles EBU STL sidecar (types hoh/omu/ls). Metadata Medienbegleitkarte v2.0. File naming Produktionsnummer(8)_SF-n_Titel.mxf (SF=Sendematerial, CF=Cleanfeed). HDR variant: XAVC HD Intra 100, 1080p/50, HLG BT.2100. PSE not specified. Language de. Shares the joint ARD/ZDF/ORF signal/loudness baseline but the file-delivery layer (codec, TC, naming, portal) is ZDF-specific."
+  },
+  "inputs": {
+    "constraints": { "no_upconversion": true, "no_upscaling": true }
+  },
+  "assets": {
+    "video": {
+      "representation": "file",
+      "codec": {
+        "allowed": ["avc_intra_100"],
+        "notes": "AVC-Intra Class 100 (H.264 High 4:2:2 Intra, SMPTE RP 2027 Constrained), ~100 Mbit/s, 10-bit. Profile ZDF-S01."
+      },
+      "container": { "allowed": ["mxf"], "notes": "MXF OP1a per SMPTE 377, Single Item Single Package." },
+      "resolution": { "allowed": ["1920x1080"] },
+      "aspect_ratio": { "allowed": ["16:9"] },
+      "frame_rate": {
+        "mode": "fixed",
+        "allowed": ["25"],
+        "tolerance": 0.01,
+        "notes": "1080p/25 (progressive) or 1080i/25 (interlaced) both permitted."
+      },
+      "scan_type": ["progressive", "interlaced"],
+      "color": {
+        "primaries": ["bt709"],
+        "transfer": ["bt709"],
+        "matrix": ["bt709"],
+        "range": ["limited"],
+        "notes": "ITU-R BT.709-6 (SDR HD). HDR variant uses HLG / BT.2100 / BT.2020."
+      },
+      "bit_depth": { "allowed": [10], "min": 10 },
+      "chroma_subsampling": ["4:2:2"],
+      "signal": {
+        "broadcast_system": "1080i/25 or 1080p/25",
+        "mains_frequency_hz": 50
+      }
+    },
+    "audio": {
+      "codec": { "allowed": ["pcm_s24le"], "notes": "Uncompressed PCM, discrete mono (CHCOUNT=1, little-endian); Dolby E for multichannel by arrangement." },
+      "sample_rate": [48000],
+      "bit_depth": { "allowed": [24], "uniform_required": true },
+      "track_count": {
+        "min": 2,
+        "max": 16,
+        "notes": "Discrete mono tracks, EVEN count only (2-16). Assignment: 1 Send-L, 2 Send-R, 3/4 2nd language, 5/6 Audio Description, 7/8 Dolby E, 9-14 5.1 (L R C LFE Ls Rs), 15/16 by agreement. Production/M&E on the Cleanfeed file."
+      },
+      "language": { "mode": "single" },
+      "layout": {
+        "channel_map_required": true,
+        "allowed_layouts": ["L-R", "5.1"],
+        "tracks": [
+          { "track": 1, "role": "program_left", "language": "de" },
+          { "track": 2, "role": "program_right", "language": "de" },
+          { "track": 5, "role": "audio_description_left", "language": "de" },
+          { "track": 6, "role": "audio_description_right", "language": "de" }
+        ],
+        "notes": "Send L/R on 1/2; Audio Description on 5/6; 5.1 on 9-14."
+      },
+      "loudness": {
+        "standards": [ { "name": "EBU R128", "target": -23.0, "tolerance": 0.5, "jurisdiction": "DE" } ],
+        "true_peak_max": -1.0,
+        "notes": "EBU R128 v5.0 / ITU-R BS.1770-5. -23.0 LUFS +/-0.5 LU, LRA <=20 LU, true peak -1 dBTP. Alignment level (Bezugspegel) -18 dBFS; permitted max -9 dBFS (9 dB headroom)."
+      },
+      "sync": { "must_match_video_duration": true }
+    },
+    "timed_text": {
+      "subtitles": {
+        "format": "ebu_stl",
+        "notes": "EBU STL (.stl) sidecar, frame rate matching video, 25 fps TC grid. Types: hoh (hard-of-hearing), omu (original+subs), ls (easy language); ISO 639-2/T language codes. Audio description delivered as audio tracks 5-6, not a text service."
+      }
+    },
+    "metadata": {
+      "required": true,
+      "schemas": ["custom"],
+      "notes": "Medienbegleitkarte (MBK) v2.0 (Excel), named identically to the media file, or ZDF upload web form. File naming Produktionsnummer(8 digits)_SF-n_Titel.mxf (SF=Sendematerial, CF=Cleanfeed, NTH=neutral title bg; _MT for Mediathek). Only [0-9 a-z A-Z - _]; no umlauts/spaces."
+    }
+  },
+  "structure": {
+    "type": "timeline",
+    "timeline": {
+      "timecode_start": "10:00:00:00",
+      "timecode_continuous": true,
+      "notes": "Continuous 25 fps TC grid, no gaps; first frame = programme start = 10:00:00:00. No technical leader, precharge, bars or slate ('ohne techn. Vorspann')."
+    }
+  },
+  "constraints": {
+    "video": {
+      "signal_limits": {
+        "luminance": {
+          "min": 64,
+          "max": 940,
+          "tolerance_note": "EBU R103 v3.0, 10-bit (nominal black 64 / white 940). RGB and derived Y between -5% and +105% (-35..735 mV); gamut error if out-of-gamut >1% of picture area; TRS values (10-bit 0-3 and 1020-1023) forbidden."
+        },
+        "rgb": { "min": 64, "max": 940 }
+      },
+      "pse_test_required": false
+    },
+    "timing": {
+      "duration": { "must_match": ["video", "audio"], "tolerance_ms": 40 }
+    }
+  }
+}

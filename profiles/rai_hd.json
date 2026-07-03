@@ -1,0 +1,111 @@
+{
+  "id": "rai_hd",
+  "name": "RAI — HD File Delivery (advertising-spot spec; programme spec contracted)",
+  "delivery_paradigm": "file",
+  "content_type": "commercial",
+  "governance": {
+    "spec_version": "Specifiche tecniche fornitura spot pubblicitari HD (Feb 2021)",
+    "effective_date": "2021-02-01",
+    "supersedes": null,
+    "source": "RAI — Specifiche tecniche per la fornitura di spot pubblicitari televisivi in formato HD (Radiotelevisione Italiana, Feb 2021). NOTE: RAI's general programme/content delivery spec is contracted/portal-gated and was NOT publicly obtainable; this profile encodes the public HD advertising-spot spec, whose XDCAM HD422 envelope is RAI's HD house format.",
+    "sourceSpec": "https://it.readkong.com/page/rai-radiotelevisione-italiana-s-p-a-specifiche-tecniche-2520547",
+    "sourceAccess": "portal-login",
+    "jurisdiction": ["IT"],
+    "notes": "RAI (Radiotelevisione Italiana). Public authoritative spec = HD advertising-spot delivery (Feb 2021); the programme-delivery spec is contracted/gated (NOT obtained) — loudness/structure below are SPOT values and differ for programmes. Video: MXF OP1a, XDCAM HD422 (MPEG-2 Long GOP) 50 Mbit/s, 1920x1080i/25 TFF, 4:2:2, 8-bit, BT.709, limited range; legal limits RGB -5..+105% / Y -1..+103% (EBU R103), out-of-gamut <=1% pixels. Alternative profile: MOV/ProRes 422 HQ 10-bit. Audio: PCM 24-bit/48 kHz, 8 mono channels (stereo programme on 1-2, rest silence); EBU R128 integrated -23.0 LUFS +/-0.2 LU, max short-term -18.0 LUFS +/-0.2, true peak -2.0 dBTP +/-0.3 (SPOT values). TC start 10:00:00:00; 5s ID head -> 3s black -> content -> 3s black tail. Safe areas EBU R95. PSE required (ITC/Ofcom PSE guidance lineage). Delivery via RaiTrade portal (pubblicita.raitrade.it); min 4 business days lead. QC grade 5 on ITU-R BT.500. Italian loudness regulator AGCOM (Delibera 219/09/CSP, relative method); de-facto target EBU R128 -23 LUFS (NOT -24 LKFS). Language it, jurisdiction IT."
+  },
+  "inputs": {
+    "constraints": { "no_upconversion": true, "no_upscaling": true }
+  },
+  "assets": {
+    "video": {
+      "representation": "file",
+      "codec": {
+        "allowed": ["xdcam_hd_422_50", "prores_422_hq"],
+        "notes": "Primary: XDCAM HD422 (MPEG-2 Long GOP) 50 Mbit/s 8-bit in MXF OP1a. Alternative: Apple ProRes 422 HQ 10-bit in MOV."
+      },
+      "container": { "allowed": ["mxf", "mov"], "notes": "MXF OP1a (SMPTE RDD 9) for XDCAM HD422; MOV for the ProRes 422 HQ alternative." },
+      "bitrate": { "mode": "constant", "target": 50000000 },
+      "resolution": { "allowed": ["1920x1080"] },
+      "aspect_ratio": { "allowed": ["16:9"] },
+      "frame_rate": {
+        "mode": "fixed",
+        "allowed": ["25"],
+        "tolerance": 0.01,
+        "notes": "1080i/25 (interlaced, upper/top field first)."
+      },
+      "scan_type": ["interlaced"],
+      "color": {
+        "primaries": ["bt709"],
+        "transfer": ["bt709"],
+        "matrix": ["bt709"],
+        "range": ["limited"],
+        "notes": "ITU-R BT.709."
+      },
+      "bit_depth": { "allowed": [8], "min": 8, "notes": "8-bit for XDCAM HD422; 10-bit for the ProRes 422 HQ alternative." },
+      "chroma_subsampling": ["4:2:2"],
+      "signal": {
+        "interlace_mode": ["true_interlace"],
+        "field_order": ["tff"],
+        "broadcast_system": "1080i/25",
+        "mains_frequency_hz": 50
+      }
+    },
+    "audio": {
+      "codec": { "allowed": ["pcm_s24le"], "notes": "PCM. Unused channels carry silence." },
+      "sample_rate": [48000],
+      "bit_depth": { "allowed": [24], "uniform_required": true },
+      "track_count": {
+        "exact": 8,
+        "notes": "8 mono PCM channels; stereo programme on channels 1-2, remaining channels silence."
+      },
+      "language": { "mode": "single" },
+      "layout": {
+        "channel_map_required": true,
+        "allowed_layouts": ["L-R"],
+        "notes": "Stereo programme L/R on channels 1-2."
+      },
+      "loudness": {
+        "standards": [ { "name": "EBU R128", "target": -23.0, "tolerance": 0.2, "jurisdiction": "IT" } ],
+        "true_peak_max": -2.0,
+        "notes": "SPOT values: integrated -23.0 LUFS +/-0.2 LU, max short-term -18.0 LUFS +/-0.2, true peak -2.0 dBTP +/-0.3 (per EBU R128 / ITU-R BS.1770). AGCOM Delibera 219/09/CSP uses a relative method; the de-facto delivery target is EBU R128 -23 LUFS (not -24 LKFS)."
+      },
+      "sync": { "must_match_video_duration": true }
+    },
+    "timed_text": {
+      "subtitles": {
+        "format": "none",
+        "notes": "Not addressed in the advertising-spot spec (N/A for ad copy). RAI programme delivery carries Televideo subtitles + audio description, but that spec is contracted/NOT obtained."
+      }
+    },
+    "metadata": {
+      "required": false,
+      "schemas": ["custom"],
+      "notes": "MXF/RDD9 wrapper metadata; no separate public metadata schema/naming template in the spot spec (managed on RaiTrade upload)."
+    }
+  },
+  "structure": {
+    "type": "timeline",
+    "timeline": {
+      "timecode_start": "10:00:00:00",
+      "timecode_continuous": true,
+      "notes": "LTC preferably 10:00:00:00 at spot start. Structure: 5 s identification head (visual+audio ID or silence) -> 3 s black+silence -> content -> 3 s black+silence tail. One spot per file. Safe areas per EBU R95."
+    }
+  },
+  "constraints": {
+    "video": {
+      "signal_limits": {
+        "luminance": {
+          "min": 16,
+          "max": 235,
+          "tolerance_note": "EBU R103 (8-bit). Luma Y -1% to +103% (-7..721 mV); RGB -5% to +105% (-35..735 mV); <=1% of pixels may be out-of-gamut."
+        },
+        "rgb": { "min": 16, "max": 235 }
+      },
+      "pse_test_required": true,
+      "pse_standard": "ITC / Ofcom photosensitive-epilepsy guidance (Harding lineage)"
+    },
+    "timing": {
+      "duration": { "must_match": ["video", "audio"], "tolerance_ms": 40 }
+    }
+  }
+}

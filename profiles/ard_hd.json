@@ -1,0 +1,128 @@
+{
+  "id": "ard_hd",
+  "name": "ARD (Das Erste) — Technische Produktionsrichtlinien / HDF01a File Delivery (HD)",
+  "delivery_paradigm": "file",
+  "content_type": "program",
+  "governance": {
+    "spec_version": "1. Auflage November 2025 (Stand 28.11.2025); MXF-Profil ARD_ZDF_HDF01a",
+    "effective_date": "2025-11-28",
+    "supersedes": null,
+    "source": "Technische Produktionsrichtlinien zur Herstellung von Medienproduktionen für ARD, ZDF und ORF (1. Auflage, Nov 2025); MXF profile ARD_ZDF_HDF01a (IRT)",
+    "sourceSpec": "https://www.ard.de/die-ard/b2b/Technische-Richtlinien-der-ARD-100/",
+    "sourceAccess": "public",
+    "jurisdiction": ["DE"],
+    "notes": "ARD (Das Erste + Landesrundfunkanstalten). Governed by the jointly published ARD/ZDF/ORF Technische Produktionsrichtlinien (CC BY-ND); standard HD exchange profile ARD_ZDF_HDF01a. Video: MXF OP1a XDCAM HD422 (MPEG-2 4:2:2 Long GOP, SMPTE RDD 9) 50 Mbit/s, 1920x1080i/25 TFF, 8-bit, BT.709, limited range (EBU R103 v3.0). Audio: PCM 24-bit/48 kHz, 8 discrete mono AES3 tracks (HDF01a; HDF01b=16 by agreement); EBU R128 -23 LUFS +/-0.5 LU (+/-1.0 live), LRA max 20 LU, true peak -1 dBTP. Track assignment per Medienbegleitkarte (Var.4 8-ch: A1/2 stereo mix, A3/4 IT/M&E, A5/6 2. Sprachfassung incl. Audiodeskription/Hoerfilm, A7/8 Sendeton/Dolby E). File delivery carries NO technical leader/bars/tone. TC start 10:00:00:00 (ORF uses 00:00:00:00; ZDF/ORF maintain their own overriding file specs). Subtitles: EBU STL sidecar (EBU-TT-D-Basic-DE online). Metadata: Medienbegleitkarte (BMF/MFT 2.0 XML). PSE not specified. Language de. NOTE: shared ARD_ZDF_HDF basis but ZDF (zdf_hd) and ORF (orf_hd) each have their own file specs — see those profiles."
+  },
+  "inputs": {
+    "constraints": {
+      "native_frame_rate_only": true,
+      "no_upconversion": true,
+      "no_upscaling": true
+    }
+  },
+  "assets": {
+    "video": {
+      "representation": "file",
+      "codec": {
+        "allowed": ["xdcam_hd_422_50"],
+        "notes": "XDCAM HD422 = MPEG-2 4:2:2 Long GOP, 50 Mbit/s, 8-bit (ISO/IEC 13818-2 / SMPTE RDD 9:2013). Profile ARD_ZDF_HDF01a. AVC-Intra 100 / XAVC (10-bit) are defined alternatives in the guidelines but HDF01a is the standard HD exchange profile."
+      },
+      "container": {
+        "allowed": ["mxf"],
+        "notes": "MXF OP1a; XDCAM HD422 per SMPTE RDD 9:2013 (Multiple Body Partition, Variante 1)."
+      },
+      "bitrate": { "mode": "constant", "target": 50000000, "min": 50000000, "max": 50000000 },
+      "resolution": { "allowed": ["1920x1080"] },
+      "aspect_ratio": { "allowed": ["16:9"] },
+      "frame_rate": {
+        "mode": "fixed",
+        "allowed": ["25"],
+        "tolerance": 0.01,
+        "notes": "1080i/25 (50 fields/s). 1080p/25 must be carried and signalled as 1080psf/25 / 1080i/25."
+      },
+      "scan_type": ["interlaced"],
+      "color": {
+        "primaries": ["bt709"],
+        "transfer": ["bt709"],
+        "matrix": ["bt709"],
+        "range": ["limited"],
+        "notes": "ITU-R BT.709-6 for all HD SDR signals."
+      },
+      "bit_depth": { "allowed": [8], "min": 8 },
+      "chroma_subsampling": ["4:2:2"],
+      "signal": {
+        "interlace_mode": ["true_interlace"],
+        "field_order": ["tff"],
+        "broadcast_system": "1080i/25",
+        "mains_frequency_hz": 50
+      },
+      "safe_area": {
+        "title_safe_required": false,
+        "action_safe_required": false,
+        "title_safe_percent": null,
+        "action_safe_percent": null
+      }
+    },
+    "audio": {
+      "codec": {
+        "allowed": ["pcm_s24le"],
+        "notes": "Uncompressed PCM (discrete mono AES3). Dolby E only in defined multichannel exchange cases."
+      },
+      "sample_rate": [48000],
+      "bit_depth": { "allowed": [24], "uniform_required": true },
+      "track_count": {
+        "max": 8,
+        "notes": "HDF01a = 8 discrete mono tracks; HDF01b = 16 (by bilateral agreement). Assignment by essence track order, documented in the Medienbegleitkarte. Var.4 (8-ch): A1/2 stereo mix, A3/4 IT (M&E), A5/6 2. Sprachfassung (incl. Audiodeskription/Hoerfilm), A7/8 Sendeton (Dolby E or PCM silence). Var.5: discrete 5.1 (L R C LFE Ls Rs on A3-A8)."
+      },
+      "language": { "mode": "single" },
+      "layout": {
+        "channel_map_required": true,
+        "allowed_layouts": ["L-R", "5.1"],
+        "notes": "Stereo standard; multichannel (5.1 or 3.0) optional, exchanged preferably as discrete PCM (alternatively Dolby E). Stereo must be mono-compatible."
+      },
+      "loudness": {
+        "standards": [
+          { "name": "EBU R128", "target": -23.0, "tolerance": 0.5, "jurisdiction": "DE" }
+        ],
+        "true_peak_max": -1.0,
+        "notes": "EBU R128 (v5.0) + ITU-R BS.1770-5. Programme Loudness -23.0 LUFS +/-0.5 LU; +/-1.0 LU for live/as-live or where exact compliance is impractical. Loudness Range (LRA) max 20 LU in production. Max true peak -1 dBTP."
+      },
+      "sync": { "must_match_video_duration": true }
+    },
+    "timed_text": {
+      "subtitles": {
+        "format": "ebu_stl",
+        "notes": "Subtitles delivered as a separate EBU STL file (ARD UT-Standards). Online distribution uses EBU-TT-D-Basic-DE (XML). Required for new productions. Audio description ('Hoerfilm') carried as a 2. Sprachfassung audio track, not a text service."
+      }
+    },
+    "metadata": {
+      "required": true,
+      "schemas": ["custom"],
+      "notes": "Medienbegleitkarte based on a BMF XML sub-schema, transferred via MFT 2.0. Carries per-track audio assignment. No explicit filename convention in the TPR (deferred to broadcaster file specs)."
+    }
+  },
+  "structure": {
+    "type": "timeline",
+    "timeline": {
+      "timecode_start": "10:00:00:00",
+      "timecode_continuous": true,
+      "notes": "Continuous, gap-free timecode in the Material Package (ATC per SMPTE ST 12-2:2014); ARD start 10:00:00:00 (ORF uses 00:00:00:00). Deliver clean with NO technical leader/pre-/post-roll, no bars/tone, no ad breaks."
+    }
+  },
+  "constraints": {
+    "video": {
+      "signal_limits": {
+        "luminance": {
+          "min": 16,
+          "max": 235,
+          "tolerance_note": "EBU R103 v3.0 (8-bit nominal black 16 / white 235). RGB and resulting luma between -5% and +105% (-35 mV .. 735 mV); gamut error when exceeded over >1% of picture area. TRS values (8-bit 0/255) forbidden."
+        },
+        "rgb": { "min": 16, "max": 235 }
+      },
+      "pse_test_required": false
+    },
+    "timing": {
+      "duration": { "must_match": ["video", "audio"], "tolerance_ms": 40 }
+    }
+  }
+}
