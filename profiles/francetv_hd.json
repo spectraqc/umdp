@@ -74,7 +74,7 @@
         "notes": "EBU R128 integrated -23.0 LUFS; long programmes (>2 min) +/-1.0 LU, short (<=2 min) at -23.0 LUFS. LRA <=20 LU. Max true peak -3 dBTP (stricter than R128 default -1). Line-up 1 kHz at -18 dBFS."
       },
       "sync": {
-        "max_offset_ms": 40,
+        "max_drift_ms": 40,
         "must_match_video_duration": true
       }
     },

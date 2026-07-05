@@ -56,7 +56,7 @@ Codec, sample rate, bit depth, track count, language mode, channel layout, loudn
 
 `loudness.standards` is an array because some specs (rare) require both an integrated and a short-term measurement, or list a regional override.
 
-`sync` carries two *different* audio-to-video measurements. **Drift** — `max_drift_ms` (with optional `max_drift_ms_per_min` and `max_drift_ms_hard_fail_above`) — is progressive desync that accumulates over the timeline, and is what the A/V-sync-drift check enforces (typically 40 ms). **Offset** — `max_offset_ms` — is a single fixed lip-sync error; it is a distinct measurement (see [gaps.md](gaps.md) for its enforcement status). `must_match_video_duration` asserts the audio runs the full programme duration.
+`sync` is enforced by the A/V-sync-drift check. `max_drift_ms` (typically 40 ms) bounds the **constant lip-sync offset** — the median A/V delta the check reports — and is the primary, engine-bound threshold; `max_drift_ms_per_min` optionally bounds the **rate of progressive desync** that accumulates over the timeline, and `max_drift_ms_hard_fail_above` sets the warning→error boundary. `must_match_video_duration` asserts the audio runs the full programme duration. (A separate `max_offset_ms` key was retired in schema 0.12.0 / SQC-1397: it duplicated the constant-offset measurement `max_drift_ms` already binds.)
 
 ### `constraints.video.signal_limits`
 

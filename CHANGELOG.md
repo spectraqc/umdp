@@ -2,6 +2,17 @@
 
 All notable changes to the UMDP schema are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/) and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.12.0] — Retired `assets.audio.sync.max_offset_ms`
+
+### Removed
+
+- **`assets.audio.sync.max_offset_ms`.** The key documented a "fixed lip-sync offset" as a measurement distinct from drift, but no QC check ever bound it (SQC-1397). Investigation of the engine showed it was **redundant**: the A/V-sync-drift check already enforces the constant lip-sync offset — `max_drift_ms` bounds the *median* A/V delta (a constant offset), while `max_drift_ms_per_min` bounds the *progressive* component. There was no missing measurement, so the separate key was retired rather than wired to a duplicate check. The `sync` `$comment` and `docs/field-reference.md` now describe `max_drift_ms` as the constant-offset bound; the `docs/gaps.md` entry is resolved.
+
+### Migrated
+
+- `profiles/francetv_hd.json`: `assets.audio.sync.max_offset_ms: 40` → `max_drift_ms: 40` — 40 ms is a sensible EBU R37-class lip-sync bound, preserved under the engine-bound key (40 ms is also the check's default, so no behaviour change beyond making the gate explicit).
+- `profiles/nrk_hd.json` and `profiles/rte_hd.json`: dropped `max_offset_ms: 5`. 5 ms is far tighter than the onset-based sync heuristic can resolve or any broadcast lip-sync spec requires (EBU R37 ≈ ±40 ms), and it was never enforced — it looks like a placeholder. Both now fall back to the default 40 ms drift ceiling; the profile owners can set an explicit `max_drift_ms` if a tighter enforced bound is genuinely intended.
+
 ## [0.11.0] — Closed value objects (`additionalProperties: false` on measurement blocks)
 
 ### Changed
