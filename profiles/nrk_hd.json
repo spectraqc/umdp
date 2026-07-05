@@ -74,7 +74,7 @@
         "true_peak_max": -1.0,
         "notes": "EBU R128 Integrated -23.0 LUFS (no stated tolerance for file/tape delivery; +/-1.0 LU for live only). Max true peak fails if it exceeds -1 dBTP (-3 dBTP recommended). Line-up 1 kHz EBU/GLITS (BLITS for surround), reference -18 dBFS. LRA guidance <=18 LU."
       },
-      "sync": { "max_offset_ms": 5, "must_match_video_duration": true }
+      "sync": { "must_match_video_duration": true }
     },
     "timed_text": {
       "subtitles": {

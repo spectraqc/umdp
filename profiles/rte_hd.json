@@ -113,8 +113,7 @@
         "notes": "Follow EBU R128 guidelines for loudness normalisation and permitted maximum level of audio signals."
       },
       "sync": {
-        "must_match_video_duration": true,
-        "max_offset_ms": 5
+        "must_match_video_duration": true
       }
     },
     "timed_text": {
