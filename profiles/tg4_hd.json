@@ -75,7 +75,6 @@
         "field_order": [
           "tff"
         ],
-        "broadcast_system": "PAL/EBU",
         "mains_frequency_hz": 50
       },
       "gop": {
@@ -122,10 +121,12 @@
           {
             "name": "EBU R128",
             "target": -23.0,
-            "tolerance": 0.5
+            "tolerance": 1.0,
+            "jurisdiction": "IE"
           }
         ],
-        "true_peak_max": -1.0
+        "true_peak_max": -1.0,
+        "notes": "EBU R128. Programme Loudness (non-live) -23.0 LUFS ±1.0 LU; live/as-live ±2.0 LU (TG4 spec §3.1). Content fails above -1 dBTP; LRA guidance ≤18 LU."
       },
       "sync": {
         "must_match_video_duration": true
