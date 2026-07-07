@@ -1,0 +1,192 @@
+{
+  "id": "bbc_uhd_x1",
+  "name": "BBC iPlayer UHD — AS-11 X1 / IMF (TSP2121-1)",
+  "delivery_paradigm": "imf",
+  "content_type": "program",
+  "inputs": {
+    "constraints": {
+      "native_aspect_ratio_only": true,
+      "native_frame_rate_only": true,
+      "no_upconversion": true,
+      "no_upscaling": true
+    }
+  },
+  "assets": {
+    "video": {
+      "representation": "file",
+      "codec": {
+        "allowed": [
+          "h264"
+        ]
+      },
+      "container": {
+        "allowed": [
+          "mxf"
+        ]
+      },
+      "bitrate": {
+        "min": 200000000,
+        "mode": "variable"
+      },
+      "resolution": {
+        "allowed": [
+          "3840x2160"
+        ]
+      },
+      "aspect_ratio": {
+        "allowed": [
+          "16:9"
+        ]
+      },
+      "frame_rate": {
+        "mode": "fixed",
+        "allowed": [
+          "25",
+          "50"
+        ],
+        "tolerance": 0.01
+      },
+      "scan_type": [
+        "progressive"
+      ],
+      "color": {
+        "primaries": [
+          "bt2020"
+        ],
+        "transfer": [
+          "hlg"
+        ],
+        "matrix": [
+          "bt2020_ncl"
+        ],
+        "range": [
+          "limited"
+        ],
+        "hdr": {
+          "formats": [
+            "hlg"
+          ],
+          "metadata_required": false,
+          "fallback_required": false
+        },
+        "notes": "ITU-R BT.2100, narrow (limited) range. Commissioned programmes must normally be delivered as HLG HDR (BBC File v5.1.0 §1.3, §5.1.2); PQ is permitted only by prior agreement with the broadcaster. HLG carries no mastering-display static metadata and is legacy-display compatible, so no HDR metadata or SDR fallback is required for delivery. Line-up: EBU Tech 3373 HLG 6 Bars (the DPP UHD line-up signal)."
+      },
+      "bit_depth": {
+        "allowed": [
+          10
+        ]
+      },
+      "chroma_subsampling": [
+        "4:2:2"
+      ],
+      "quality": {
+        "colour_bars": {
+          "mode": "required_head",
+          "window_s": 20
+        }
+      },
+      "captions": {
+        "required": true
+      }
+    },
+    "audio": {
+      "codec": {
+        "allowed": [
+          "pcm_s24le"
+        ]
+      },
+      "sample_rate": [
+        48000
+      ],
+      "bit_depth": {
+        "allowed": [
+          24
+        ],
+        "uniform_required": true
+      },
+      "track_count": {
+        "min": 8,
+        "max": 128
+      },
+      "layout": {
+        "channel_map_required": true,
+        "allowed_layouts": [
+          "L-R",
+          "5.1"
+        ],
+        "notes": "AS-11 X1 DPP UHD 'Audio Layout Mode 1' — SMPTE ST 2067-8 Multichannel Audio (MCA) labelling, Default Audio Layout 'A'. Both mixes are MANDATORY and must appear in this order: Sound Track 1 = Stereo Main Mix (L, R); Sound Track 2 = Surround Main Mix 5.1 (L, R, C, LFE, Ls, Rs), English. Up to 128 sound tracks / channels; additional Alternative / M&E / Audio-Description tracks by prior agreement. Exactly one Dolby Audio Metadata Bitstream must be embedded, accurate for all 5.1 sound tracks. Uncompressed PCM mapped with SMPTE ST 382."
+      },
+      "loudness": {
+        "standards": [
+          {
+            "name": "EBU R128",
+            "target": -23.0,
+            "tolerance": 0.5,
+            "jurisdiction": "GB"
+          }
+        ],
+        "true_peak_max": -1.0,
+        "notes": "EBU R128 (EBU Tech 3343). Programme Loudness -23.0 LUFS ±0.5 LU (non-live); ±1.0 LU for live / as-live. Maximum true peak: recommended not to exceed -3 dBTP; content FAILS above -1 dBTP. Loudness Range (LRA) is guidance only, not a hard gate."
+      },
+      "sync": {
+        "must_match_video_duration": true,
+        "max_drift_ms": 40
+      }
+    },
+    "metadata": {
+      "required": true,
+      "schemas": [
+        "AS-11 Core DM",
+        "AS-11 X1 DPP UHD DM",
+        "AS-11 Segmentation DM"
+      ]
+    }
+  },
+  "constraints": {
+    "video": {
+      "signal_limits": {
+        "luminance": {
+          "min": 20,
+          "max": 984,
+          "tolerance_percent": 1,
+          "tolerance_note": "10-bit UHD (BBC File v5.1.0 §1.4): nominal/data range 64-940; preferred/gamut band 20-984; total 4-1019 (clipped beyond). Out-of-gamut is an error only after exceeding 1% of integrated active-image area (EBU R103)."
+        },
+        "rgb": {
+          "min": 20,
+          "max": 984,
+          "tolerance_percent": 1
+        }
+      },
+      "pse_test_required": true,
+      "pse_standard": "ITU-R BT.1702-3"
+    },
+    "timing": {
+      "duration": {
+        "must_match": [
+          "video",
+          "audio"
+        ],
+        "tolerance_ms": 40
+      }
+    }
+  },
+  "structure": {
+    "type": "timeline",
+    "timeline": {
+      "timecode_start": "10:00:00:00",
+      "timecode_continuous": true
+    }
+  },
+  "packaging": {
+    "type": "AS-11_X1_DPP_UHD"
+  },
+  "governance": {
+    "spec_version": "BBC File v5.1.0 (2020)",
+    "source": "AMWA AS-11 X1 (https://amwa-tv.github.io/AS-11_X1/AMWA_AS_11_X1.html) + BBC Technical Delivery Standards (File) v5.1.0, 2020 — UHD / iPlayer delivery: §1.3 ITU-R BT.2100 UHD, §2.2 loudness, §4.7 Audio Channel Allocations AS-11 DPP X1, §5.1 UHD Files. Based on UK DPP File v5.0.2 (2020).",
+    "sourceAccess": "public",
+    "jurisdiction": [
+      "GB"
+    ],
+    "notes": "BBC UHD delivery to iPlayer is a SEPARATE path from AS-11 UK DPP HD (see bbc_hd / dpp_uk_hd): the UHD programme delivers as a SMPTE TSP2121-1 (IMF) package / AMWA AS-11 X1, AND an AS-11 HD version must ALSO be delivered via the standard AS-11 delivery portal. Video: AVC / H.264, 3840x2160 16:9, 2160p/25 or 2160p/50 progressive, 10-bit, ITU-R BT.2100 HLG. Long-GoP or I-Frame must be agreed with the broadcaster in advance (so GOP is not hard-locked here). Minimum mean data rate (across the whole file): Long-GoP 2160p/25 = 200 Mb/s, 2160p/50 = 250 Mb/s; I-Frame 2160p/25 = 250 Mb/s, 2160p/50 = 500 Mb/s (bitrate.min is the 200 Mb/s floor; the engine treats bitrate as advisory). NB the AS-11 X1 bitrate research flagged a '2500 Mb/s' value for 2160p/50 Long-GoP as a likely typo — the BBC File v5.1.0 §5.1.1 table confirms it is 250 Mb/s. The QC read path for this profile is the UHD/HDR + IMF handling (imfcore / photonqc), NOT the AS-11 HD ffprobe path. PSE is mandatory (Ofcom guidelines, ITU-R BT.1702). Subtitles/closed captions delivered as a separate sidecar per broadcaster (IMSC / EBU-TT for the IMF package). Start timecode 10:00:00:00, continuous."
+  }
+}
