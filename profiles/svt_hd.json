@@ -24,13 +24,15 @@
         ]
       },
       "bitrate": {
-        "target": 113000000,
-        "mode": "constant"
+        "mode": "unconstrained",
+        "notes": "SVT permits both AVC-Intra 100 (~113 Mbps CBR) and ProRes 422/422 HQ (VBR); no single delivery bitrate applies across the allowed codecs."
       },
       "resolution": {
         "allowed": [
-          "1920x1080"
-        ]
+          "1920x1080",
+          "1280x720"
+        ],
+        "notes": "SVT delivers in native format: 720p/50, 1080i/25 and 1080p/25 (or 1080PsF/25). 720p/50 is SVT's transmission format (spec §1.2)."
       },
       "aspect_ratio": {
         "allowed": [
@@ -38,14 +40,18 @@
         ]
       },
       "frame_rate": {
-        "mode": "fixed",
+        "mode": "allowed_list",
         "allowed": [
-          "25"
+          "25",
+          "50"
         ],
-        "tolerance": 0.01
+        "tolerance": 0.01,
+        "notes": "50 fps for 720p/50; 25 fps for 1080i/25 and 1080p/25 (or 1080PsF/25)."
       },
       "scan_type": [
-        "interlaced"
+        "interlaced",
+        "progressive",
+        "psf"
       ],
       "color": {
         "primaries": [
@@ -72,12 +78,12 @@
       ],
       "signal": {
         "interlace_mode": [
+          "psf",
           "true_interlace"
         ],
         "field_order": [
           "tff"
         ],
-        "broadcast_system": "PAL/EBU",
         "mains_frequency_hz": 50
       },
       "gop": {
@@ -124,10 +130,12 @@
           {
             "name": "EBU R128",
             "target": -23.0,
-            "tolerance": 0.5
+            "tolerance": 1.0,
+            "jurisdiction": "SE"
           }
         ],
-        "true_peak_max": -1.0
+        "true_peak_max": -1.0,
+        "notes": "EBU R128. Programme Loudness -23.0 LUFS ±1.0 LU (SVT spec §2.2.1); content fails above -1 dBTP true peak; LRA guidance ≤18 LU."
       },
       "sync": {
         "must_match_video_duration": true
