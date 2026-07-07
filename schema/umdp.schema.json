@@ -1,10 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:umdp:schema:0.11.0",
+  "$id": "urn:umdp:schema:0.12.0",
   "title": "Universal Media Delivery Profile",
   "description": "Machine-readable schema for broadcast, OTT, cinema and ad-delivery technical specifications. UMDP is extension-friendly on its container objects (assets, constraints, packaging and the like accept additional properties so vendors and broadcasters can add fields and propose them upstream), while value objects that carry measurement thresholds (signal limits, loudness, sync, frame rate, …) are closed (additionalProperties: false) so a mistyped key cannot silently disable a constraint.",
   "type": "object",
-  "$comment": "UMDP 0.11.0 — schema version is independent of any individual profile's spec_version (governance.spec_version).",
+  "$comment": "UMDP 0.12.0 — schema version is independent of any individual profile's spec_version (governance.spec_version).",
   "required": ["id", "name", "delivery_paradigm"],
   "additionalProperties": true,
   "properties": {
@@ -533,7 +533,22 @@
           "properties": {
             "max_lines": { "type": "integer" },
             "max_chars_per_line": { "type": "integer" },
-            "reading_speed_cps": { "type": "number" }
+            "max_chars_per_second": {
+              "type": "number",
+              "description": "Maximum subtitle/caption reading speed in characters per second. The QC engine measures cps as the cue's literal character count (lines stripped and joined by a single space) divided by the cue's on-screen duration, and fails a cue above this bound (added in 0.12.0; e.g. paramount_mez uses 18)."
+            },
+            "max_cue_duration_s": {
+              "type": "number",
+              "description": "Maximum on-screen display duration of a single subtitle/caption cue, in seconds; a cue held longer than this fails (added in 0.12.0)."
+            },
+            "extended_chars_forbidden": {
+              "type": "boolean",
+              "description": "When true, subtitle/caption text must stay within the delivery's permitted character set — extended/non-permitted characters fail the check (added in 0.12.0)."
+            },
+            "reading_speed_cps": {
+              "type": "number",
+              "description": "Legacy alias of max_chars_per_second (same characters-per-second measurement). Retained for back-compat; the engine dual-reads it but prefers max_chars_per_second. Superseded in 0.12.0 — author new profiles with max_chars_per_second."
+            }
           }
         },
         "burn_in": {
