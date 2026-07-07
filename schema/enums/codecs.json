@@ -21,6 +21,7 @@
     { "id": "aac", "description": "Advanced Audio Coding" },
     { "id": "ac3", "description": "Dolby Digital (AC-3)" },
     { "id": "eac3", "description": "Dolby Digital Plus (E-AC-3)" },
+    { "id": "dolby_e", "description": "Dolby E (encoded multichannel audio carried over a PCM pair)" },
     { "id": "mp3", "description": "MPEG-1/2 Audio Layer III" }
   ]
 }

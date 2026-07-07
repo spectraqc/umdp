@@ -16,16 +16,16 @@
       "representation": "file",
       "codec": {
         "allowed": [
-          "AVC Intra"
+          "avc_intra_100"
         ]
       },
       "container": {
         "allowed": [
-          "MXF OP1a"
+          "mxf"
         ]
       },
       "bitrate": {
-        "target": 100,
+        "target": 100000000,
         "mode": "constant"
       },
       "resolution": {
@@ -109,7 +109,7 @@
     "audio": {
       "codec": {
         "allowed": [
-          "Linear PCM"
+          "pcm_s24le"
         ],
         "disallowed": [
           "aac",
@@ -134,7 +134,6 @@
         "channel_map_required": true,
         "allowed_layouts": [
           "L-R",
-          "Stereo",
           "Dual Mono"
         ]
       },

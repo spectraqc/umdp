@@ -13,7 +13,7 @@
       "representation": "file",
       "codec": {
         "allowed": [
-          "avc_intra_class_100"
+          "avc_intra_100"
         ]
       },
       "container": {

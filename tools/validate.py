@@ -16,7 +16,7 @@ Three classes of check run:
                     schema version; `$comment`, README and CHANGELOG must
                     agree with it (SQC-1117).
 
-One advisory (non-failing) report also runs:
+Two advisory (non-failing) reports also run:
 
   * Undocumented  — profile keys not declared in the schema's `properties`.
     keys           On *value* objects (signal_limits, loudness, sync, …) these
@@ -24,6 +24,14 @@ One advisory (non-failing) report also runs:
                     *container* objects, still `additionalProperties: true`, an
                     unknown key is legal extension and is reported as a `note`
                     so near-miss names surface in review (SQC-1395). Never fails
+                    CI on its own.
+
+  * Controlled    — codec / container / audio-codec tokens in a profile that are
+    vocabulary     not in the recommended lists (schema/enums/*.json). The schema
+                    leaves these fields as free strings (adopters may extend), so
+                    this only `note`s free-text / near-miss spellings (e.g.
+                    'AVC Intra' vs 'avc_intra_100', 'MXF OP1a' vs 'mxf') so
+                    profiles diff cleanly across vendors (SQC-1490). Never fails
                     CI on its own.
 
 Any failure prints a FAIL line and the script exits non-zero, so CI blocks
@@ -48,6 +56,7 @@ except ImportError:
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SCHEMA_PATH = REPO_ROOT / "schema" / "umdp.schema.json"
 PROFILES_DIR = REPO_ROOT / "profiles"
+ENUMS_DIR = REPO_ROOT / "schema" / "enums"
 README_PATH = REPO_ROOT / "README.md"
 CHANGELOG_PATH = REPO_ROOT / "CHANGELOG.md"
 
@@ -149,6 +158,61 @@ def undocumented_keys(schema: dict, data: object, root: dict, path: str = "") ->
     return found
 
 
+def load_controlled_vocab() -> dict[str, set[str]]:
+    """SQC-1490 — the recommended codec/container identifiers from
+    schema/enums/*.json, as id sets. Advisory only: the main schema does not
+    enforce these (schema/enums/README.md). Missing/unreadable enum files yield
+    empty sets, which disables the advisory for that field (never errors)."""
+    def ids(path: Path, *keys: str) -> set[str]:
+        try:
+            doc = json.loads(path.read_text())
+        except (OSError, json.JSONDecodeError):
+            return set()
+        out: set[str] = set()
+        for key in keys:
+            for entry in doc.get(key, []):
+                if isinstance(entry, dict) and isinstance(entry.get("id"), str):
+                    out.add(entry["id"])
+        return out
+
+    codecs = ENUMS_DIR / "codecs.json"
+    containers = ENUMS_DIR / "containers.json"
+    return {
+        "assets.video.codec": ids(codecs, "video"),
+        "assets.audio.codec": ids(codecs, "audio"),
+        "assets.video.container": ids(containers, "containers"),
+    }
+
+
+def non_canonical_tokens(data: object, vocab: dict[str, set[str]]) -> list[str]:
+    """SQC-1490 — advisory: codec / container / audio-codec tokens in a profile
+    that are not in the recommended controlled vocabulary. These fields are free
+    strings in the schema (so jsonschema accepts anything); surfacing off-vocab
+    tokens catches free-text / near-miss spellings (e.g. 'AVC Intra' vs
+    'avc_intra_100') so profiles diff cleanly. Empty vocab ⇒ field skipped."""
+    if not isinstance(data, dict):
+        return []
+    assets = data.get("assets")
+    assets = assets if isinstance(assets, dict) else {}
+    notes: list[str] = []
+    for field, allowed_vocab in vocab.items():
+        if not allowed_vocab:
+            continue
+        node: object = assets
+        for part in field.split(".")[1:]:  # skip leading "assets"
+            node = node.get(part) if isinstance(node, dict) else None
+        if not isinstance(node, dict):
+            continue
+        for bucket in ("allowed", "disallowed"):
+            for tok in node.get(bucket) or []:
+                if isinstance(tok, str) and tok not in allowed_vocab:
+                    notes.append(
+                        f"{field}.{bucket} token {tok!r} not in the recommended "
+                        "vocabulary (schema/enums/*.json)"
+                    )
+    return notes
+
+
 def validate_file(validator: Draft202012Validator, path: Path) -> list[str]:
     try:
         with path.open() as fh:
@@ -181,6 +245,8 @@ def main() -> int:
             print(f"  - {err}")
     else:
         print(f"ok   version consistency ({schema_version(schema)})")
+
+    vocab = load_controlled_vocab()
 
     targets = gather_targets(sys.argv[1:])
     if not targets:
@@ -230,6 +296,9 @@ def main() -> int:
             for key_path in undocumented_keys(schema, data, schema):
                 print(f"note {rel}: undocumented key {key_path!r} "
                       "(allowed by additionalProperties; not in schema)")
+            # SQC-1490 — advisory only: off-vocabulary codec/container tokens.
+            for msg in non_canonical_tokens(data, vocab):
+                print(f"note {rel}: {msg}")
 
     if failed:
         print(f"\n{failed} check(s) failed")
