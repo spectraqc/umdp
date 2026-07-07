@@ -39,12 +39,13 @@
         ]
       },
       "frame_rate": {
-        "mode": "fixed",
+        "mode": "allowed_list",
         "allowed": [
           "25",
           "50"
         ],
-        "tolerance": 0.01
+        "tolerance": 0.01,
+        "notes": "2160p/25 or 2160p/50, progressive only (BBC File v5.1.0 §1.1.1). Frame rate must be agreed with the broadcaster before shooting."
       },
       "scan_type": [
         "progressive"
@@ -69,7 +70,7 @@
           "metadata_required": false,
           "fallback_required": false
         },
-        "notes": "ITU-R BT.2100, narrow (limited) range. Commissioned programmes must normally be delivered as HLG HDR (BBC File v5.1.0 §1.3, §5.1.2); PQ is permitted only by prior agreement with the broadcaster. HLG carries no mastering-display static metadata and is legacy-display compatible, so no HDR metadata or SDR fallback is required for delivery. Line-up: EBU Tech 3373 HLG 6 Bars (the DPP UHD line-up signal)."
+        "notes": "ITU-R BT.2100, YCbCr only, narrow (limited) range. Commissioned programmes must normally be delivered as HLG HDR (BBC File v5.1.0 §1.3, §5.1.2); PQ is permitted only by prior agreement with the broadcaster. HLG carries no mastering-display static metadata and is legacy-display compatible, so no HDR metadata or SDR fallback is required for delivery. Chroma is sub-sampled 4:2:0 or 4:2:2 — programmes normally deliver as 4:2:0; 4:2:2 only where the broadcaster requires it (BBC File v5.1.0 §1.1.1). Line-up: EBU Tech 3373 HLG 6 Bars (the DPP UHD line-up signal)."
       },
       "bit_depth": {
         "allowed": [
@@ -77,13 +78,18 @@
         ]
       },
       "chroma_subsampling": [
+        "4:2:0",
         "4:2:2"
       ],
       "quality": {
         "colour_bars": {
           "mode": "required_head",
           "window_s": 20
-        }
+        },
+        "decode_error_max_count": 0,
+        "dropout_max_count": 0,
+        "dropped_frame_max_count": 0,
+        "dead_pixel_max_count": 0
       },
       "captions": {
         "required": true
