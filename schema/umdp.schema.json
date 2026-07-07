@@ -481,6 +481,10 @@
                   "name": { "type": "string" },
                   "target": { "type": ["number", "null"] },
                   "tolerance": { "type": ["number", "null"] },
+                  "lra_max": {
+                    "type": ["number", "null"],
+                    "description": "Loudness-range ceiling in LU for this standard (e.g. EBU R128 recommends 20). Added in 0.12.0 so the spec editor can carry the LRA constraint; documented but not yet bound to a QC check — enforcement tracked separately, like max_offset_ms."
+                  },
                   "jurisdiction": { "type": "string" }
                 }
               }

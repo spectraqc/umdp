@@ -10,6 +10,7 @@ All notable changes to the UMDP schema are recorded here. The format follows [Ke
   - `max_chars_per_second` — maximum reading speed in characters per second. The engine measures cps as the cue's literal character count (lines stripped, joined by a single space) over the cue's on-screen duration, and fails a cue above this bound (e.g. `paramount_mez` uses 18). This is the **canonical** reading-speed field.
   - `max_cue_duration_s` — maximum on-screen duration of a single cue in seconds; a cue held longer fails.
   - `extended_chars_forbidden` — when `true`, text outside the delivery's permitted character set fails the check.
+- `assets.audio.loudness.standards[].lra_max` — optional loudness-range ceiling (LU) per standard (e.g. EBU R128 ≈ 20), so the spec editor can carry the LRA constraint. Documented but not yet bound to a QC check — enforcement tracked separately (like `max_offset_ms`).
 
 ### Changed
 
