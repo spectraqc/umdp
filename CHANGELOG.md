@@ -2,6 +2,25 @@
 
 All notable changes to the UMDP schema are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/) and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.12.0] — Subtitle/caption reading-speed & cue constraints (`assets.timed_text.constraints`)
+
+### Added
+
+- `assets.timed_text.constraints` now documents the subtitle/caption checks the QC engine already enforces (previously passing only via `additionalProperties: true`):
+  - `max_chars_per_second` — maximum reading speed in characters per second. The engine measures cps as the cue's literal character count (lines stripped, joined by a single space) over the cue's on-screen duration, and fails a cue above this bound (e.g. `paramount_mez` uses 18). This is the **canonical** reading-speed field.
+  - `max_cue_duration_s` — maximum on-screen duration of a single cue in seconds; a cue held longer fails.
+  - `extended_chars_forbidden` — when `true`, text outside the delivery's permitted character set fails the check.
+- `assets.audio.loudness.standards[].lra_max` — optional loudness-range ceiling (LU) per standard (e.g. EBU R128 ≈ 20), so the spec editor can carry the LRA constraint. Documented but not yet bound to a QC check — enforcement tracked separately (like `max_offset_ms`).
+
+### Changed
+
+- `reading_speed_cps` is now documented as a **legacy alias** of `max_chars_per_second` (the same characters-per-second measurement). The engine dual-reads it but prefers `max_chars_per_second`; author new profiles with `max_chars_per_second`.
+
+### Notes
+
+- Backwards compatible — every field is optional and `assets.timed_text.constraints` remains `additionalProperties: true`. Existing profiles (including any using `reading_speed_cps`) validate unchanged.
+- Reconciles the canonical schema with the SpectraQC engine and spec editor, which had diverged: these three fields existed downstream (SQC-455/SQC-1297) but were never upstreamed. Brought current via SQC-1500.
+
 ## [0.11.0] — Closed value objects (`additionalProperties: false` on measurement blocks)
 
 ### Changed
