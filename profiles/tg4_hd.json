@@ -113,7 +113,7 @@
         "channel_map_required": true,
         "allowed_layouts": [
           "L-R",
-          "L-R-C-LFE-LS-RS"
+          "L-R-C-LFE-Ls-Rs"
         ]
       },
       "loudness": {

@@ -61,7 +61,7 @@
       "language": { "mode": "multi" },
       "layout": {
         "channel_map_required": true,
-        "allowed_layouts": ["L-R", "5.1"],
+        "allowed_layouts": ["L-R", "L-R-C-LFE-Ls-Rs"],
         "tracks": [
           { "track": 1, "role": "program_left" },
           { "track": 2, "role": "program_right" },

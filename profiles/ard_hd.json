@@ -77,7 +77,7 @@
       "language": { "mode": "single" },
       "layout": {
         "channel_map_required": true,
-        "allowed_layouts": ["L-R", "5.1"],
+        "allowed_layouts": ["L-R", "L-R-C-LFE-Ls-Rs"],
         "notes": "Stereo standard; multichannel (5.1 or 3.0) optional, exchanged preferably as discrete PCM (alternatively Dolby E). Stereo must be mono-compatible."
       },
       "loudness": {

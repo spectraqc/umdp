@@ -58,7 +58,7 @@
       "language": { "mode": "single" },
       "layout": {
         "channel_map_required": true,
-        "allowed_layouts": ["L-R", "5.1"],
+        "allowed_layouts": ["L-R", "L-R-C-LFE-Ls-Rs"],
         "notes": "Stereo Lt/Rt and/or 5.1. Co-official-language productions must include a Spanish version."
       },
       "loudness": {

@@ -2,6 +2,24 @@
 
 All notable changes to the UMDP schema are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/) and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.13.0] — Canonical channel-layout & broadcast-system vocabulary
+
+### Added
+
+- `schema/enums/layouts.json` — recommended audio channel-layout identifiers for `assets.audio.layout.allowed_layouts`. Each token is a hyphenated channel list in EBU R123 / SMPTE broadcast order (L, R, C, LFE, Ls, Rs): `L-R` (stereo), `L-R-C-LFE-Ls-Rs` (discrete 5.1), `M1-M2` (dual mono).
+- `schema/enums/broadcast-systems.json` — recommended broadcast-system / raster identifiers for `assets.video.signal.broadcast_system`, form `<lines><i|p>/<frame rate>` (e.g. `1080i/25`). Prefer this raster form over legacy analogue colour-system labels (PAL/SECAM/NTSC), which do not describe an HD/UHD signal.
+- `assets.video.signal.notes` — optional free-text note on the signal object (matches the `notes` already on sibling value objects such as `bit_depth` and `gop`). Carries qualifications like ZDF's "1080p/25 also accepted."
+- `tools/validate.py`: the controlled-vocabulary advisory (SQC-1490) now also covers `assets.audio.layout.allowed_layouts` and `assets.video.signal.broadcast_system`, `note`-ing any off-vocabulary token. Advisory only — never fails CI.
+
+### Changed
+
+- Normalised the layout vocabulary across the corpus: `5.1` (8 profiles) and the wrong-case `L-R-C-LFE-LS-RS` (3 profiles) → `L-R-C-LFE-Ls-Rs`; `Dual Mono` → `M1-M2`. `L-R` unchanged.
+- Normalised `broadcast_system`: `PAL/EBU` → `1080i/25` (rtl_smallitems); `1080i/25 or 1080p/25` → `1080i/25` + signal note (zdf).
+
+### Notes
+
+- Layouts and `broadcast_system` remain free strings in the schema (adopters may extend); the vocabulary is advisory, mirroring codec/container. The live QC engine does not gate on either field — this is data-hygiene for clean cross-vendor profile diffs. Corpus now emits zero vocabulary notes.
+
 ## [0.12.0] — Subtitle/caption reading-speed & cue constraints (`assets.timed_text.constraints`)
 
 ### Added

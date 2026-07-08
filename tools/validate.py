@@ -26,13 +26,14 @@ Two advisory (non-failing) reports also run:
                     so near-miss names surface in review (SQC-1395). Never fails
                     CI on its own.
 
-  * Controlled    — codec / container / audio-codec tokens in a profile that are
-    vocabulary     not in the recommended lists (schema/enums/*.json). The schema
-                    leaves these fields as free strings (adopters may extend), so
-                    this only `note`s free-text / near-miss spellings (e.g.
-                    'AVC Intra' vs 'avc_intra_100', 'MXF OP1a' vs 'mxf') so
-                    profiles diff cleanly across vendors (SQC-1490). Never fails
-                    CI on its own.
+  * Controlled    — codec / container / audio-codec / channel-layout /
+    vocabulary     broadcast-system tokens in a profile that are not in the
+                    recommended lists (schema/enums/*.json). The schema leaves
+                    these fields as free strings (adopters may extend), so this
+                    only `note`s free-text / near-miss spellings (e.g. 'AVC Intra'
+                    vs 'avc_intra_100', '5.1' vs 'L-R-C-LFE-Ls-Rs') so profiles
+                    diff cleanly across vendors (SQC-1490, extended SQC-1532).
+                    Never fails CI on its own.
 
 Any failure prints a FAIL line and the script exits non-zero, so CI blocks
 the merge. Advisory `note` lines do not affect the exit code.
@@ -159,10 +160,11 @@ def undocumented_keys(schema: dict, data: object, root: dict, path: str = "") ->
 
 
 def load_controlled_vocab() -> dict[str, set[str]]:
-    """SQC-1490 — the recommended codec/container identifiers from
-    schema/enums/*.json, as id sets. Advisory only: the main schema does not
-    enforce these (schema/enums/README.md). Missing/unreadable enum files yield
-    empty sets, which disables the advisory for that field (never errors)."""
+    """SQC-1490 — the recommended identifiers from schema/enums/*.json, as id
+    sets, keyed by the profile field they govern. Advisory only: the main schema
+    does not enforce these (schema/enums/README.md). Missing/unreadable enum
+    files yield empty sets, which disables the advisory for that field (never
+    errors). SQC-1532 extends coverage to channel layouts and broadcast_system."""
     def ids(path: Path, *keys: str) -> set[str]:
         try:
             doc = json.loads(path.read_text())
@@ -177,19 +179,29 @@ def load_controlled_vocab() -> dict[str, set[str]]:
 
     codecs = ENUMS_DIR / "codecs.json"
     containers = ENUMS_DIR / "containers.json"
+    layouts = ENUMS_DIR / "layouts.json"
+    broadcast_systems = ENUMS_DIR / "broadcast-systems.json"
     return {
         "assets.video.codec": ids(codecs, "video"),
         "assets.audio.codec": ids(codecs, "audio"),
         "assets.video.container": ids(containers, "containers"),
+        "assets.audio.layout.allowed_layouts": ids(layouts, "layouts"),
+        "assets.video.signal.broadcast_system": ids(broadcast_systems, "broadcast_systems"),
     }
 
 
 def non_canonical_tokens(data: object, vocab: dict[str, set[str]]) -> list[str]:
-    """SQC-1490 — advisory: codec / container / audio-codec tokens in a profile
-    that are not in the recommended controlled vocabulary. These fields are free
-    strings in the schema (so jsonschema accepts anything); surfacing off-vocab
-    tokens catches free-text / near-miss spellings (e.g. 'AVC Intra' vs
-    'avc_intra_100') so profiles diff cleanly. Empty vocab ⇒ field skipped."""
+    """SQC-1490 / SQC-1532 — advisory: codec / container / audio-codec / layout /
+    broadcast-system tokens in a profile that are not in the recommended
+    controlled vocabulary. These fields are free strings in the schema (so
+    jsonschema accepts anything); surfacing off-vocab tokens catches free-text /
+    near-miss spellings (e.g. 'AVC Intra' vs 'avc_intra_100', '5.1' vs
+    'L-R-C-LFE-Ls-Rs') so profiles diff cleanly. Empty vocab ⇒ field skipped.
+
+    The governed field's value takes one of three shapes, handled by leaf type:
+      * bucket object — {allowed:[...], disallowed:[...]} (codec, container);
+      * bare list     — allowed_layouts;
+      * scalar string — broadcast_system."""
     if not isinstance(data, dict):
         return []
     assets = data.get("assets")
@@ -201,13 +213,22 @@ def non_canonical_tokens(data: object, vocab: dict[str, set[str]]) -> list[str]:
         node: object = assets
         for part in field.split(".")[1:]:  # skip leading "assets"
             node = node.get(part) if isinstance(node, dict) else None
-        if not isinstance(node, dict):
-            continue
-        for bucket in ("allowed", "disallowed"):
-            for tok in node.get(bucket) or []:
+        if isinstance(node, dict):
+            # bucket object: check allowed/disallowed token lists
+            for bucket in ("allowed", "disallowed"):
+                for tok in node.get(bucket) or []:
+                    if isinstance(tok, str) and tok not in allowed_vocab:
+                        notes.append(
+                            f"{field}.{bucket} token {tok!r} not in the recommended "
+                            "vocabulary (schema/enums/*.json)"
+                        )
+        elif isinstance(node, (list, str)):
+            # bare list or scalar string: check the token(s) directly
+            tokens = node if isinstance(node, list) else [node]
+            for tok in tokens:
                 if isinstance(tok, str) and tok not in allowed_vocab:
                     notes.append(
-                        f"{field}.{bucket} token {tok!r} not in the recommended "
+                        f"{field} token {tok!r} not in the recommended "
                         "vocabulary (schema/enums/*.json)"
                     )
     return notes

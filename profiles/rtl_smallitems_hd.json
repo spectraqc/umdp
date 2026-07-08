@@ -81,7 +81,7 @@
         "field_order": [
           "tff"
         ],
-        "broadcast_system": "PAL/EBU",
+        "broadcast_system": "1080i/25",
         "mains_frequency_hz": 50
       },
       "gop": {
@@ -124,7 +124,7 @@
         "channel_map_required": true,
         "allowed_layouts": [
           "L-R",
-          "L-R-C-LFE-LS-RS"
+          "L-R-C-LFE-Ls-Rs"
         ],
         "tracks": [
           { "track": 1, "role": "Stereo Mix L", "language": "Lang 1" },

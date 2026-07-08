@@ -134,7 +134,7 @@
         "channel_map_required": true,
         "allowed_layouts": [
           "L-R",
-          "Dual Mono"
+          "M1-M2"
         ]
       },
       "loudness": {
