@@ -118,7 +118,7 @@
         "channel_map_required": true,
         "allowed_layouts": [
           "L-R",
-          "5.1"
+          "L-R-C-LFE-Ls-Rs"
         ],
         "notes": "AS-11 X1 DPP UHD 'Audio Layout Mode 1' — SMPTE ST 2067-8 Multichannel Audio (MCA) labelling, Default Audio Layout 'A'. Both mixes are MANDATORY and must appear in this order: Sound Track 1 = Stereo Main Mix (L, R); Sound Track 2 = Surround Main Mix 5.1 (L, R, C, LFE, Ls, Rs), English. Up to 128 sound tracks / channels; additional Alternative / M&E / Audio-Description tracks by prior agreement. Exactly one Dolby Audio Metadata Bitstream must be embedded, accurate for all 5.1 sound tracks. Uncompressed PCM mapped with SMPTE ST 382."
       },

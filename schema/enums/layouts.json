@@ -1,0 +1,8 @@
+{
+  "$comment": "Recommended audio channel-layout identifiers used in assets.audio.layout.allowed_layouts. Each token is a hyphenated channel list in EBU R123 / SMPTE broadcast order (L, R, C, LFE, Ls, Rs) — the file-exchange order used throughout EBU R123 (2009) Table 1 and transcribed in the /tools/channel-maps reference. Not enforced by the main schema; adopters may extend.",
+  "layouts": [
+    { "id": "L-R", "description": "Stereo pair — Left, Right (EBU R123 2-channel programme mix)" },
+    { "id": "L-R-C-LFE-Ls-Rs", "description": "Discrete 5.1 surround in EBU R123 / SMPTE broadcast channel order (L, R, C, LFE, Ls, Rs)" },
+    { "id": "M1-M2", "description": "Dual mono — two independent mono channels (e.g. two language services); not a spatial layout" }
+  ]
+}

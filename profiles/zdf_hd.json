@@ -43,8 +43,9 @@
       "bit_depth": { "allowed": [10], "min": 10 },
       "chroma_subsampling": ["4:2:2"],
       "signal": {
-        "broadcast_system": "1080i/25 or 1080p/25",
-        "mains_frequency_hz": 50
+        "broadcast_system": "1080i/25",
+        "mains_frequency_hz": 50,
+        "notes": "1080p/25 also accepted."
       }
     },
     "audio": {
@@ -59,7 +60,7 @@
       "language": { "mode": "single" },
       "layout": {
         "channel_map_required": true,
-        "allowed_layouts": ["L-R", "5.1"],
+        "allowed_layouts": ["L-R", "L-R-C-LFE-Ls-Rs"],
         "tracks": [
           { "track": 1, "role": "program_left", "language": "de" },
           { "track": 2, "role": "program_right", "language": "de" },

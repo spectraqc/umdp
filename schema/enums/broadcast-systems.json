@@ -1,0 +1,9 @@
+{
+  "$comment": "Recommended broadcast-system (raster / scan) identifiers used in assets.video.signal.broadcast_system. Form is <active lines><scan: i|p>/<frame rate in Hz>, e.g. 1080i/25 = 1080-line interlaced at 25 frames/s (50 fields). Prefer this raster form over legacy analogue colour-system labels (PAL/SECAM/NTSC), which do not describe an HD/UHD signal. Not enforced by the main schema; adopters may extend.",
+  "broadcast_systems": [
+    { "id": "1080i/25", "description": "1080-line interlaced, 25 frames/s (HD, 50 Hz regions) — EBU/DVB HDTV" },
+    { "id": "1080p/25", "description": "1080-line progressive, 25 frames/s (HD, 50 Hz regions)" },
+    { "id": "1080p/50", "description": "1080-line progressive, 50 frames/s (HD, 50 Hz regions)" },
+    { "id": "2160p/50", "description": "2160-line (UHD-1) progressive, 50 frames/s (50 Hz regions)" }
+  ]
+}
