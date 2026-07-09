@@ -1,0 +1,31 @@
+{
+  "delivery_paradigm": "file",
+  "assets": {
+    "audio": {
+      "loudness": {
+        "standards": [
+          {
+            "name": "EBU R128",
+            "target": -23.0,
+            "tolerance": 0.5,
+            "jurisdiction": "global"
+          }
+        ],
+        "true_peak_max": -1.0,
+        "notes": "EBU R128: Programme Loudness target -23.0 LUFS with a permitted deviation of ±0.5 LU where exact normalisation is possible (±1.0 LU is allowed for live material). Maximum Permitted True Peak Level -1 dBTP (measured with a ≥4x-oversampling true-peak meter). Loudness Range (LRA) is measured and reported but not gated — R128 defines no LRA ceiling."
+      }
+    }
+  },
+  "id": "r128_audio",
+  "name": "EBU R128 Loudness (audio-only)",
+  "governance": {
+    "spec_version": "R128 (2020)",
+    "effective_date": "2020-09-01",
+    "supersedes": null,
+    "source": "EBU R 128 — Loudness normalisation and permitted maximum level of audio signals",
+    "sourceSpec": "https://tech.ebu.ch/publications/r128",
+    "sourceAccess": "public",
+    "jurisdiction": ["global"],
+    "notes": "Audio-only delivery profile: checks EBU R128 integrated loudness and true-peak on a standalone audio file (no video). Carries no video, container, codec, channel-layout or timed-text constraints — loudness compliance only. Loudness/true-peak are measured by the C++ audioqc engine (SQC-1365) via the audio slow-tier fan-out (SQC-1571)."
+  }
+}
