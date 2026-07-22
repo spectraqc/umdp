@@ -7,6 +7,9 @@ It lets a broadcaster, studio, post house, or QC vendor encode "what does this d
 **Schema version:** `0.13.0`
 **Spec licence:** [CC BY 4.0](LICENSE) · **Tooling licence:** [MIT](LICENSE-MIT)
 
+**Canonical repository:** [github.com/spectraqc/umdp](https://github.com/spectraqc/umdp) — please open issues and pull requests here.
+A read-only mirror is published at [codeberg.org/spectraqc/umdp](https://codeberg.org/spectraqc/umdp).
+
 ---
 
 ## Independence
