@@ -1,0 +1,59 @@
+{
+  "profile": "r128_audio",
+  "$comment": "Per-field provenance. Only method='human' counts toward governance.verification.status='verified'.",
+  "fields": {
+    "delivery_paradigm": {
+      "state": "stated",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "structural categorisation (this profile covers file-based audio-only deliveries); EBU R128 is a loudness measurement standard and doesn't discuss delivery mode. Same treatment as id/name."
+    },
+    "assets.audio.loudness.standards[0].name": {
+      "state": "stated",
+      "method": "literal",
+      "source": "r128.pdf (EBU R 128-2023)",
+      "matched": "EBU R 128-2023  Audio loudness normalisation & permitted maximum level"
+    },
+    "assets.audio.loudness.standards[0].target": {
+      "state": "stated",
+      "method": "literal",
+      "source": "r128.pdf (EBU R 128-2023)",
+      "matched": "the Programme Loudness Level shall be normalised to a Target Level of −23.0 LUFS"
+    },
+    "assets.audio.loudness.standards[0].tolerance": {
+      "state": "contradicted",
+      "method": "model",
+      "source": "r128.pdf (EBU R 128-2023)",
+      "matched": "±1.0 LU is permitted [when Target Level is not achievable practically, e.g. live]; ±0.2 LU is allowed for QC/measurement-workflow tolerance",
+      "note": "profile asserts 0.5, but current R128-2023 states neither 1.0 (the live/impractical exception) nor 0.2 (QC measurement tolerance) as a general tolerance. 0.5 matches the document's OWN changelog note that a 2014-vintage (V3) edition once used ±0.5 LU — possibly a stale figure carried over from an older R128 edition. FLAGGED for human ruling: not corrected here, confidence too low to pick a replacement value."
+    },
+    "assets.audio.loudness.standards[0].jurisdiction": {
+      "state": "stated",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "EBU R128 is nominally a European standard but is a de facto global reference used well outside EBU membership; 'global' is a categorical description of this profile's intended applicability, not a value the standard document itself states."
+    },
+    "assets.audio.loudness.true_peak_max": {
+      "state": "stated",
+      "method": "literal",
+      "source": "r128.pdf (EBU R 128-2023)",
+      "matched": "the True Peak Level of a programme shall not exceed −1 dBTP"
+    },
+    "id": {
+      "state": "stated",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "authoring identifier, not a value asserted by the cited source document. Same treatment as clearcast_commercials."
+    },
+    "name": {
+      "state": "stated",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "authored title, not a value the source document states. Same treatment as clearcast_commercials."
+    }
+  }
+}
