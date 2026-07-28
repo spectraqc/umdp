@@ -192,7 +192,7 @@
     "notes": "Swedish public broadcaster SVT. EBU R128 loudness, MXF AS-11-style file delivery with ProRes also accepted.",
     "verification": {
       "status": "unverified",
-      "assertions": 60,
+      "assertions": 56,
       "verified_fields": 0,
       "unsourced_fields": 0
     }

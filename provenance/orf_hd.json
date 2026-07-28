@@ -234,27 +234,6 @@
       "state": "contradicted",
       "note": "the source appears to state a DIFFERENT value — needs a human ruling"
     },
-    "id": {
-      "state": "stated",
-      "method": "model",
-      "source": "n/a",
-      "matched": "n/a",
-      "note": "authoring identifier for this profile, not a value asserted by the cited source document. Same for `name`. See clearcast_commercials.json for the same pattern."
-    },
-    "delivery_paradigm": {
-      "state": "stated",
-      "method": "literal",
-      "source": "orf__tr_hdtv.pdf",
-      "matched": "filebasiert / File",
-      "note": "matched via description, not the canonical token — the document repeatedly frames delivery as 'filebasierte Produktionskette' and 'das File beginnt mit dem ersten Vollbild/Frame' (Section 2.1.2, 2.5.1), the English loanword 'File' used throughout, consistent with how assets.video.representation='file' was already sourced in this profile."
-    },
-    "content_type": {
-      "state": "stated",
-      "method": "literal",
-      "source": "orf__tr_hdtv.pdf",
-      "matched": "Programmbeitrag",
-      "note": "matched via description, not the canonical token — 'Programmbeitrag' (programme item/contribution) is the document's term throughout (e.g. 'Der Programmbeitrag wird als MXF-Datei... angeliefert', Section 2.4.6/2.4.9). No commercial/promo/trailer content is in scope; this is a general programme delivery spec."
-    },
     "assets.video.bitrate.mode": {
       "state": "stated",
       "method": "model",

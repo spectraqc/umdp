@@ -199,7 +199,7 @@
     "notes": "Common air-ready HD master spec adopted by BBC, ITV, Channel 4, Channel 5, Sky, STV, TG4 via the DPP. AVC-Intra Class 100 at 1080i25 (50i), 10-bit 4:2:2, MXF OP1a, PCM 24-bit 48 kHz one-channel-per-track (track_count.min = 4 covers stereo programme + M&E), EBU R128 −23 LUFS, true-peak ≤ −1 dBTP, BT.709 SDR, TFF. PSE strict (ITU-R BT.1702) is mandatory. Start TC 10:00:00:00 follows UK broadcast convention. Per SQC-1946/1947 provenance reconciliation (2026-07-28): removed 19 fields with no traceable source in AMWA_AS_11_UK_DPP_HD/SD, DPP011 or the DPP QC Guidelines — the engine-internal video/audio quality-detection thresholds (blockiness, dead_pixel, decode_error, dropout, dropped_frame, blurriness, banding, ghosting, ringing, mosquito_noise, aliasing, tilt, judder, click, dual_mono_max_pct, min_phase_correlation), frame_rate.tolerance, and slate.window_s/required_fields. assets.audio.loudness.standards[0].tolerance (0.5) and assets.audio.sync.max_drift_ms (40) are flagged CONTRADICTED in provenance/dpp_uk_hd.json — the DPP QC Guidelines state ±1 LU and ±10ms respectively; needs a human ruling before either is trusted as a hard gate. See provenance/dpp_uk_hd.json for full per-field sourcing.",
     "verification": {
       "status": "unverified",
-      "assertions": 56,
+      "assertions": 52,
       "verified_fields": 0,
       "unsourced_fields": 0
     }

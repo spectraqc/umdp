@@ -174,18 +174,6 @@
       "source": "RTE_IPU-Content-Delivery.pdf",
       "matched": "16"
     },
-    "content_type": {
-      "state": "stated",
-      "method": "literal",
-      "source": "RTE_IPU-Content-Delivery.pdf",
-      "matched": "program"
-    },
-    "delivery_paradigm": {
-      "state": "stated",
-      "method": "literal",
-      "source": "RTE_IPU-Content-Delivery.pdf",
-      "matched": "file"
-    },
     "packaging.delivery": {
       "state": "stated",
       "method": "literal",
@@ -313,20 +301,6 @@
       "method": "literal",
       "source": "RTE_IPU-Content-Delivery.pdf",
       "matched": "All content should be compliant with (PSE) ITU-R BT.1702"
-    },
-    "id": {
-      "state": "stated",
-      "method": "model",
-      "source": "n/a",
-      "matched": "n/a",
-      "note": "authoring identifier for this profile, not a value asserted by the cited source document. Same for `name`. Flagged in SQC-1947 as possibly a _leaf_assertions scope question — not resolved here."
-    },
-    "name": {
-      "state": "stated",
-      "method": "model",
-      "source": "n/a",
-      "matched": "n/a",
-      "note": "same as `id` — this profile's authored title, not a value the source document states. See SQC-1947 note."
     }
   }
 }

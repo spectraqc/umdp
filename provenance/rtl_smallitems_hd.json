@@ -350,13 +350,6 @@
       "evidence": "the maximum level of the luminance signal must not exceed 100%.",
       "state": "stated"
     },
-    "delivery_paradigm": {
-      "state": "stated",
-      "method": "model",
-      "source": "Technical_Specifications_SmallItems_November_2022.pdf",
-      "matched": "\"deliver spots as a media file\"; glossary: \"In this context, 'program' means a single commercial spot or trailer\"; \"duration of the commercial spot\"",
-      "note": "the literal token 'ad' is not stated; the document's exclusive subject is commercial spots and trailers ('Small Items'), which is the categorical basis for classifying this profile's delivery_paradigm as 'ad' (see schema's open-enum examples, which list 'ad' alongside 'file'/'cinema'/'live')."
-    },
     "assets.video.gop.max_length": {
       "state": "stated",
       "method": "model",
@@ -516,20 +509,6 @@
       "method": "literal",
       "source": "Technical_Specifications_SmallItems_November_2022.pdf",
       "matched": "specifications@rtl.de"
-    },
-    "id": {
-      "state": "stated",
-      "method": "model",
-      "source": "n/a",
-      "matched": "n/a",
-      "note": "authoring identifier for this profile, not a value asserted by the cited source document. Same for `name`. Flagged in SQC-1947 as possibly a _leaf_assertions scope question — not resolved here."
-    },
-    "name": {
-      "state": "stated",
-      "method": "model",
-      "source": "n/a",
-      "matched": "n/a",
-      "note": "same as `id` — this profile's authored title, not a value the source document states. See SQC-1947 note."
     }
   }
 }

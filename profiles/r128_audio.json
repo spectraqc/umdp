@@ -31,7 +31,7 @@
     "notes": "Audio-only delivery profile: checks EBU R128 integrated loudness and true-peak on a standalone audio file (no video). Carries no video, container, codec, channel-layout or timed-text constraints — loudness compliance only. Loudness/true-peak are measured by the C++ audioqc engine (SQC-1365) via the audio slow-tier fan-out (SQC-1571).",
     "verification": {
       "status": "unverified",
-      "assertions": 8,
+      "assertions": 5,
       "verified_fields": 0,
       "unsourced_fields": 0
     }

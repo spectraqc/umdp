@@ -193,7 +193,7 @@
     "notes": "RTÉ HD broadcast delivery. Video: MPEG-2 Long GOP (XDCAM HD 422-50), MXF OP1-a Closed/Complete, 1920x1080i/25, 4:2:2, BT.709, 8-bit limited (16–235), 50 Mbps. Audio: PCM 24-bit 48kHz BWF, up to 8 tracks (Ch1-2 programme stereo; Ch3-4 optional M&E or Dolby E; Ch5-6 optional AD premixed); EBU R128 -23 LUFS. Subtitles: EBU STL; foreign language content burnt-in Arial Regular 58px. Timecode: 10:00:00:00 start, MXF Timecode Track. PSE test required per ITU-R BT.1702. Delivery via Aspera FASPEX; filename: MI + 9-digit Media ID + .mxf.",
     "verification": {
       "status": "unverified",
-      "assertions": 51,
+      "assertions": 47,
       "verified_fields": 0,
       "unsourced_fields": 0
     }

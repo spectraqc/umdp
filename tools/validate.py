@@ -256,10 +256,18 @@ def _leaf_assertions(obj, prefix: str = ""):
     Booleans, nulls and free text are authoring judgements rather than values a specification
     states, so they are not assertions a source can be asked to support and are excluded from
     the counts. `governance` is metadata about the profile, not a claim about the delivery.
+
+    SQC-1954 — id/name/delivery_paradigm/content_type are excluded too: across a full pass of
+    real profiles (SQC-1946/1938) these four consistently surfaced as "unsourced" even though
+    none of them is a value a broadcaster's spec document states. `id` and `name` are this
+    profile's own authored identifier and title; `delivery_paradigm` and `content_type` are how
+    the author categorised the delivery, not a fact the source asserts. Every one of the 10
+    profiles reconciled so far needed a source="n/a" workaround record for exactly these four
+    fields — that's the rule being wrong, not 10 coincidences.
     """
     if isinstance(obj, dict):
         for key, val in obj.items():
-            if not prefix and key == "governance":
+            if not prefix and key in ("governance", "id", "name", "delivery_paradigm", "content_type"):
                 continue
             yield from _leaf_assertions(val, f"{prefix}.{key}" if prefix else key)
     elif isinstance(obj, list):
