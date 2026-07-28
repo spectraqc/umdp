@@ -220,18 +220,6 @@
       "source": "TechnicalDeliveryStandardsTG4.pdf, TechnicalDeliveryStandardsTG4 (1).pdf",
       "matched": "64"
     },
-    "content_type": {
-      "state": "stated",
-      "method": "literal",
-      "source": "TechnicalDeliveryStandardsTG4.pdf, TechnicalDeliveryStandardsTG4 (1).pdf",
-      "matched": "program"
-    },
-    "delivery_paradigm": {
-      "state": "stated",
-      "method": "literal",
-      "source": "TechnicalDeliveryStandardsTG4.pdf, TechnicalDeliveryStandardsTG4 (1).pdf",
-      "matched": "file"
-    },
     "structure.timeline.timecode_start": {
       "state": "stated",
       "method": "literal",
@@ -325,20 +313,6 @@
       "source": "TechnicalDeliveryStandardsTG4.pdf",
       "matched": "25 frames per second (50 fields) interlaced; section 4.5 Programme Layout / Format specifies frame-exact timecodes for every element (e.g. Part SOM, Part Duration) with no stated tolerance",
       "note": "40ms = one video frame at the document's own stated 25fps. Not a number the document states directly — derived the same way as the equivalent clearcast_commercials record, from how strictly the document treats frame-exact timing (exact SOM/part-duration timecodes). Flag for human review before trusting as a hard tolerance."
-    },
-    "id": {
-      "state": "stated",
-      "method": "model",
-      "source": "n/a",
-      "matched": "n/a",
-      "note": "authoring identifier for this profile, not a value asserted by the cited source document. Same pattern as clearcast_commercials' id/name records. See SQC-1947 note."
-    },
-    "name": {
-      "state": "stated",
-      "method": "model",
-      "source": "n/a",
-      "matched": "n/a",
-      "note": "same as `id` — this profile's authored title, not a value the source document states. See SQC-1947 note."
     }
   }
 }

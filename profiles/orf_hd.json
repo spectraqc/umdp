@@ -16,7 +16,7 @@
     "notes": "ORF (Austria). Uses the joint ARD/ZDF/ORF technical production guidelines and the ARD_ZDF_HDF MXF profiles; ORF maintains its own file spec (beschaffung.orf.at). Video: MXF OP1a XDCAM HD422 (MPEG-2 4:2:2 Long GOP) 50 Mbit/s, 1920x1080i/25 TFF, 8-bit, BT.709, limited range (EBU R103); safe areas per EBU R95. Audio: PCM 24-bit/48 kHz, stereo standard (mono-compatible), multichannel 5.1/3.0 optional as discrete PCM or Dolby E; EBU R128 -23 LUFS +/-0.5 LU, true peak -1 dBTP. TC start 00:00:00:00 (ORF convention). No technical leader/bars for file delivery. Subtitles: EBU STL (shared ORF/SRF/ZDF subtitle presentation standards). Metadata: Medienbegleitkarte. PSE not specified. Language de, jurisdiction AT.",
     "verification": {
       "status": "unverified",
-      "assertions": 50,
+      "assertions": 47,
       "verified_fields": 0,
       "unsourced_fields": 0
     }

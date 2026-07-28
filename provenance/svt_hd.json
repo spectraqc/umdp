@@ -261,18 +261,6 @@
       "source": "Technical_Specification_for_the_Delivery_of_Television_Programmes_as_FILES_to_SVT_v5.1.pdf",
       "matched": "64"
     },
-    "content_type": {
-      "state": "stated",
-      "method": "literal",
-      "source": "Technical_Specification_for_the_Delivery_of_Television_Programmes_as_FILES_to_SVT_v5.1.pdf",
-      "matched": "program"
-    },
-    "delivery_paradigm": {
-      "state": "stated",
-      "method": "literal",
-      "source": "Technical_Specification_for_the_Delivery_of_Television_Programmes_as_FILES_to_SVT_v5.1.pdf",
-      "matched": "file"
-    },
     "structure.timeline.timecode_start": {
       "state": "stated",
       "method": "literal",
@@ -359,20 +347,6 @@
       "source": "Technical_Specification_for_the_Delivery_of_Television_Programmes_as_FILES_to_SVT_v5.1.pdf",
       "matched": "a 25-counting timecode (25 T/C) must be used (§5.4); 'File duration and timecode must exactly match the principal video file' (§4.8)",
       "note": "40ms = one video frame at the document's own 25fps timecode counting rate. Not a number the document states directly — derived from how strictly it treats exact duration/timecode matching (audio-only files must exactly match the principal video file; hard-parted programme metadata requires exact part durations). Flag for human review before trusting as a hard tolerance — same derivation pattern as clearcast_commercials' duration.tolerance_ms."
-    },
-    "id": {
-      "state": "stated",
-      "method": "model",
-      "source": "n/a",
-      "matched": "n/a",
-      "note": "authoring identifier for this profile, not a value asserted by the cited source document. Same pattern as clearcast_commercials' id record. See SQC-1947."
-    },
-    "name": {
-      "state": "stated",
-      "method": "model",
-      "source": "n/a",
-      "matched": "n/a",
-      "note": "same as `id` — this profile's authored title, not a value the source document states. See SQC-1947 note."
     }
   }
 }

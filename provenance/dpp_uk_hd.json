@@ -77,18 +77,6 @@
       "source": "AMWA_AS_11_UK_DPP_HD.pdf, AMWA_AS_11_UK_DPP_SD.pdf",
       "matched": "mxf"
     },
-    "content_type": {
-      "state": "stated",
-      "method": "literal",
-      "source": "AMWA_AS_11_UK_DPP_HD.pdf, AMWA_AS_11_UK_DPP_SD.pdf",
-      "matched": "program"
-    },
-    "delivery_paradigm": {
-      "state": "stated",
-      "method": "literal",
-      "source": "AMWA_AS_11_UK_DPP_HD.pdf, AMWA_AS_11_UK_DPP_SD.pdf",
-      "matched": "file"
-    },
     "assets.video.codec.allowed[0]": {
       "method": "model",
       "evidence": "rp 2027 class 100 picture essence at 1080i25 with 10 bit samples",
@@ -104,20 +92,6 @@
       "method": "model",
       "evidence": "layout_ebu_r_48_2a",
       "state": "stated"
-    },
-    "id": {
-      "state": "stated",
-      "method": "model",
-      "source": "n/a",
-      "matched": "n/a",
-      "note": "authoring identifier for this profile, not a value asserted by the cited source document. Same for `name`. See SQC-1947 note."
-    },
-    "name": {
-      "state": "stated",
-      "method": "model",
-      "source": "n/a",
-      "matched": "n/a",
-      "note": "same as `id` — this profile's authored title, not a value the source document states. See SQC-1947 note."
     },
     "assets.video.bitrate.mode": {
       "state": "stated",

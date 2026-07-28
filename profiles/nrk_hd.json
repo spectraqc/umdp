@@ -16,7 +16,7 @@
     "notes": "NRK (Norway). English-language spec, mostly based on the UK DPP delivery document. Section 4.1 is the current enforced file spec; 4.3-4.12 (AS-11/DPP) are informational/future (NRK 'not ready to accept AS-11' yet). Video: MXF OP1a, XAVC Intra Class 100 / AVC-Intra 100 (100 Mbit/s, H.264 High 4:2:2 Intra L4.1), 1920x1080i/25 field-1 dominant, 4:2:2, 10-bit, BT.709, limited range (16-235/64-940, EBU R103). Audio: PCM 24-bit/48 kHz, 2/4/8 tracks (current; 4/16 future AS-11); 2-ch main stereo, 4-ch +M&E, 8-ch main 5.1 (FL FR C LFE Ls Rs); EBU R48/R123 code required; EBU R128 -23 LUFS (+/-1 LU live only), true peak fails >-1 dBTP (-3 recommended); line-up 1 kHz -18 dBFS EBU/GLITS. TC start 10:00:00:00 with 20s 100% bars + 7s ident clock leader (legacy 90s+30s). Subtitles: separate file (format not mandated); AD as separate BWF (EBU Tech 3285). Metadata: DPP metadata set v10; filenames UPPERCASE [A-Z 0-9 - _]. PSE not legally mandatory in Norway but encouraged (Harding FPA v2.5 / Ofcom guidance; DPP-approved device list); PSE Pass recorded in metadata. Delivery method agreed per broadcaster (nrkmaterials@nrk.no). Language no/nb/nn, jurisdiction NO.",
     "verification": {
       "status": "unverified",
-      "assertions": 55,
+      "assertions": 52,
       "verified_fields": 0,
       "unsourced_fields": 0
     }

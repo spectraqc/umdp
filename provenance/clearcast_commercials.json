@@ -172,18 +172,6 @@
       "source": "Clearcast-Library-Technical-Specification-Guide-v1.6.pdf, Clearcast-Library-Technical-Specification-Guide-v1.4-2.pdf",
       "matched": "16"
     },
-    "content_type": {
-      "state": "stated",
-      "method": "literal",
-      "source": "Clearcast-Library-Technical-Specification-Guide-v1.6.pdf, Clearcast-Library-Technical-Specification-Guide-v1.4-2.pdf",
-      "matched": "commercial"
-    },
-    "delivery_paradigm": {
-      "state": "stated",
-      "method": "literal",
-      "source": "Clearcast-Library-Technical-Specification-Guide-v1.6.pdf, Clearcast-Library-Technical-Specification-Guide-v1.4-2.pdf",
-      "matched": "file"
-    },
     "structure.timeline.programme_layout.clock_duration_seconds": {
       "state": "stated",
       "method": "literal",
@@ -315,20 +303,6 @@
       "source": "Clearcast-Library-Technical-Specification-Guide-v1.6.pdf, Clearcast-Library-Technical-Specification-Guide-v1.4-2.pdf",
       "matched": "document title/scope: Clearcast is the UK advertising clearance body",
       "note": "categorical fact about the standard's applicable market, not a numeric spec value the document states as text 'GB'."
-    },
-    "id": {
-      "state": "stated",
-      "method": "model",
-      "source": "n/a",
-      "matched": "n/a",
-      "note": "authoring identifier for this profile, not a value asserted by the cited source document. Same for `name`. Flagged in SQC-1947 as possibly a _leaf_assertions scope question — not resolved here."
-    },
-    "name": {
-      "state": "stated",
-      "method": "model",
-      "source": "n/a",
-      "matched": "n/a",
-      "note": "same as `id` — this profile's authored title, not a value the source document states. See SQC-1947 note."
     }
   }
 }

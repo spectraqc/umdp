@@ -190,7 +190,7 @@
     "notes": "BBC UHD delivery to iPlayer is a SEPARATE path from AS-11 UK DPP HD (see bbc_hd / dpp_uk_hd): the UHD programme delivers as a SMPTE TSP2121-1 (IMF) package / AMWA AS-11 X1, AND an AS-11 HD version must ALSO be delivered via the standard AS-11 delivery portal. Video: AVC / H.264, 3840x2160 16:9, 2160p/25 or 2160p/50 progressive, 10-bit, ITU-R BT.2100 HLG. Long-GoP or I-Frame must be agreed with the broadcaster in advance (so GOP is not hard-locked here). Minimum mean data rate (across the whole file): Long-GoP 2160p/25 = 200 Mb/s, 2160p/50 = 250 Mb/s; I-Frame 2160p/25 = 250 Mb/s, 2160p/50 = 500 Mb/s (bitrate.min is the 200 Mb/s floor; the engine treats bitrate as advisory). NB the AS-11 X1 bitrate research flagged a '2500 Mb/s' value for 2160p/50 Long-GoP as a likely typo — the BBC File v5.1.0 §5.1.1 table confirms it is 250 Mb/s. The QC read path for this profile is the UHD/HDR + IMF handling (imfcore / photonqc), NOT the AS-11 HD ffprobe path. PSE is mandatory (Ofcom guidelines, ITU-R BT.1702). Subtitles/closed captions delivered as a separate sidecar per broadcaster (IMSC / EBU-TT for the IMF package). Start timecode 10:00:00:00, continuous.",
     "verification": {
       "status": "unverified",
-      "assertions": 53,
+      "assertions": 49,
       "verified_fields": 0,
       "unsourced_fields": 0
     }

@@ -216,18 +216,6 @@
       "source": "TechnicalDeliveryStandardsBBCFile.pdf, TechnicalDeliveryStandardsBBC.pdf, AMWA_AS_11_X1.pdf",
       "matched": "1.0"
     },
-    "content_type": {
-      "state": "stated",
-      "method": "literal",
-      "source": "TechnicalDeliveryStandardsBBCFile.pdf, TechnicalDeliveryStandardsBBC.pdf, AMWA_AS_11_X1.pdf",
-      "matched": "program"
-    },
-    "delivery_paradigm": {
-      "state": "stated",
-      "method": "literal",
-      "source": "TechnicalDeliveryStandardsBBCFile.pdf, TechnicalDeliveryStandardsBBC.pdf, AMWA_AS_11_X1.pdf",
-      "matched": "imf"
-    },
     "structure.timeline.timecode_start": {
       "state": "stated",
       "method": "literal",
@@ -255,20 +243,6 @@
       "evidence": "each primary component should lie between 0 and 100% of the video range between black level and the peak level (r, g and b).",
       "state": "contradicted",
       "note": "the source appears to state a DIFFERENT value — needs a human ruling"
-    },
-    "id": {
-      "state": "stated",
-      "method": "model",
-      "source": "n/a",
-      "matched": "n/a",
-      "note": "authoring identifier for this profile, not a value asserted by the cited source document. Same for `name`. Flagged in SQC-1947 as possibly a _leaf_assertions scope question — not resolved here."
-    },
-    "name": {
-      "state": "stated",
-      "method": "model",
-      "source": "n/a",
-      "matched": "n/a",
-      "note": "same as `id` — this profile's authored title, not a value the source document states. See SQC-1947 note."
     },
     "assets.video.bitrate.mode": {
       "method": "model",
