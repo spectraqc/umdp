@@ -9,6 +9,7 @@ All notable changes to the UMDP schema are recorded here. The format follows [Ke
 - `governance.verification` — a **computed** roll-up of how much of this profile has actually been checked against its cited source: `status` (`unverified` / `partial` / `verified`), `assertions`, `verified_fields`, `unsourced_fields`, `verified_at`.
 - `provenance/<id>.json` — optional per-field provenance sidecar. One record per value-bearing leaf field: the source document, where in it the value was found, the method (`human` / `model` / `literal`), and who confirmed it.
 - `tools/validate.py`: recomputes `governance.verification` from the sidecar and **fails** if a profile's block disagrees with it. The roll-up cannot be hand-authored or inflated.
+- `tools/validate.py` (SQC-1947): a value-bearing assertion with **no** provenance record at all now **fails** validation outright, not just an overstated `governance.verification`. Omitting a field stays legal; asserting one with nothing behind it does not. This is deliberately unconditional — CI is red on every one of the 16 shipped profiles until SQC-1946 backfills the remaining unsourced fields, rather than letting the debt this audit found sit invisible again.
 
 ### Why
 

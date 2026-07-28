@@ -7,7 +7,7 @@ Usage:
     tools/validate.py path/to/profile.json     # validate a specific file
     tools/validate.py profiles/*.json
 
-Three classes of check run:
+Four classes of check run:
 
   * JSON Schema   — every target validates against schema/umdp.schema.json.
   * Convention    — every profile's top-level `id` equals its filename stem,
@@ -15,6 +15,18 @@ Three classes of check run:
   * Version       — the schema `$id` is the single source of truth for the
                     schema version; `$comment`, README and CHANGELOG must
                     agree with it (SQC-1117).
+  * Provenance    — every value-bearing leaf field must have a record in
+                    provenance/<id>.json (SQC-1947); a declared
+                    governance.verification roll-up must match what's
+                    computed from that sidecar, never hand-authored
+                    (SQC-1935). Omitting a field stays legal — UMDP models
+                    absence — this only targets an asserted value with
+                    nothing shown to support it. This is currently RED on
+                    every shipped profile: 0.14.0 (SQC-1935) added the
+                    mechanism but deliberately backfilled only 8 of 16
+                    profiles; SQC-1946 is paying down the rest. That's the
+                    intended state, not a bug in this gate — it exists so
+                    the debt can't grow while it's paid down, per SQC-1947.
 
 Two advisory (non-failing) reports also run:
 
@@ -322,6 +334,32 @@ def check_verification(data: dict, profile_id: str) -> list[str]:
     return errors
 
 
+def check_provenance(data: dict, profile_id: str) -> list[str]:
+    """SQC-1947 — every value-bearing assertion must have a provenance record.
+
+    This is what 601 unsourced assertions (SQC-1935/1946) were: a value the
+    profile stated as fact with nothing behind it but governance.sourceSpec
+    vouching for the whole document. Omitting a field stays legal — UMDP
+    already models absence, and "not stated in source" is a correct profile
+    outcome, so _leaf_assertions() never sees a field that isn't there.
+    Booleans, nulls and free text are authoring judgements rather than values
+    a spec states and are excluded the same way (see _leaf_assertions). This
+    only targets an assertion that exists with no record at all; it does not
+    require the record to be method="human" — that bar is verified_fields /
+    governance.verification.status, a stronger, separate claim.
+    """
+    records = load_provenance(profile_id)
+    unsourced = [p for p, _v in _leaf_assertions(data) if p not in records]
+    if not unsourced:
+        return []
+    shown = ", ".join(unsourced[:5])
+    more = f" (+{len(unsourced) - 5} more)" if len(unsourced) > 5 else ""
+    return [
+        f"{len(unsourced)} value-bearing assertion(s) have no provenance record in "
+        f"provenance/{profile_id}.json: {shown}{more}"
+    ]
+
+
 def validate_file(validator: Draft202012Validator, path: Path) -> list[str]:
     try:
         with path.open() as fh:
@@ -383,6 +421,7 @@ def main() -> int:
                 )
             if isinstance(profile_id, str):
                 errs.extend(check_verification(data, profile_id))
+                errs.extend(check_provenance(data, profile_id))
                 if profile_id in ids:
                     errs.append(
                         f"convention: duplicate id {profile_id!r} "
