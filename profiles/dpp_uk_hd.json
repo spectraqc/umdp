@@ -42,8 +42,7 @@
         "mode": "fixed",
         "allowed": [
           "25"
-        ],
-        "tolerance": 0.01
+        ]
       },
       "scan_type": [
         "interlaced"
@@ -84,23 +83,10 @@
         "max_length": 1
       },
       "quality": {
-        "blockiness_max_score": 20,
         "colour_bars": {
           "mode": "required_head",
           "window_s": 20
-        },
-        "dead_pixel_max_count": 0,
-        "decode_error_max_count": 0,
-        "dropout_max_count": 0,
-        "dropped_frame_max_count": 0,
-        "blurriness_laplacian_min": 100,
-        "banding_max_score": 0.05,
-        "ghosting_max_correlation": 0.4,
-        "ringing_max_score": 50,
-        "mosquito_noise_max_score": 10,
-        "aliasing_max_hf_ratio": 0.15,
-        "image_tilt_max_degrees": 1.0,
-        "pulldown_judder_max": 0.3
+        }
       },
       "captions": {
         "required": true
@@ -147,11 +133,6 @@
         ],
         "true_peak_max": -1.0
       },
-      "quality": {
-        "click_max_count": 5,
-        "dual_mono_max_pct": 90,
-        "min_phase_correlation": 0.3
-      },
       "sync": {
         "must_match_video_duration": true,
         "max_drift_ms": 40
@@ -185,15 +166,7 @@
     },
     "content": {
       "slate": {
-        "enabled": true,
-        "window_s": 60,
-        "required_fields": [
-          "title",
-          "duration",
-          "frame_rate",
-          "audio_standard",
-          "resolution"
-        ]
+        "enabled": true
       }
     },
     "timing": {
@@ -223,6 +196,12 @@
     "jurisdiction": [
       "GB"
     ],
-    "notes": "Common air-ready HD master spec adopted by BBC, ITV, Channel 4, Channel 5, Sky, STV, TG4 via the DPP. AVC-Intra Class 100 at 1080i25 (50i), 10-bit 4:2:2, MXF OP1a, PCM 24-bit 48 kHz one-channel-per-track (track_count.min = 4 covers stereo programme + M&E), EBU R128 −23 LUFS, true-peak ≤ −1 dBTP, BT.709 SDR, TFF. PSE strict (ITU-R BT.1702) is mandatory. Start TC 10:00:00:00 follows UK broadcast convention. dual_mono_max_pct relaxed to 90% so the check only flags content that's actually mono-in-stereo rather than firing on normal centre-channel dialogue. Quality thresholds (mosquito/banding/ringing/etc.) inherited from test_profile_full_hd until SQC-835 hardening lands."
+    "notes": "Common air-ready HD master spec adopted by BBC, ITV, Channel 4, Channel 5, Sky, STV, TG4 via the DPP. AVC-Intra Class 100 at 1080i25 (50i), 10-bit 4:2:2, MXF OP1a, PCM 24-bit 48 kHz one-channel-per-track (track_count.min = 4 covers stereo programme + M&E), EBU R128 −23 LUFS, true-peak ≤ −1 dBTP, BT.709 SDR, TFF. PSE strict (ITU-R BT.1702) is mandatory. Start TC 10:00:00:00 follows UK broadcast convention. Per SQC-1946/1947 provenance reconciliation (2026-07-28): removed 19 fields with no traceable source in AMWA_AS_11_UK_DPP_HD/SD, DPP011 or the DPP QC Guidelines — the engine-internal video/audio quality-detection thresholds (blockiness, dead_pixel, decode_error, dropout, dropped_frame, blurriness, banding, ghosting, ringing, mosquito_noise, aliasing, tilt, judder, click, dual_mono_max_pct, min_phase_correlation), frame_rate.tolerance, and slate.window_s/required_fields. assets.audio.loudness.standards[0].tolerance (0.5) and assets.audio.sync.max_drift_ms (40) are flagged CONTRADICTED in provenance/dpp_uk_hd.json — the DPP QC Guidelines state ±1 LU and ±10ms respectively; needs a human ruling before either is trusted as a hard gate. See provenance/dpp_uk_hd.json for full per-field sourcing.",
+    "verification": {
+      "status": "unverified",
+      "assertions": 56,
+      "verified_fields": 0,
+      "unsourced_fields": 0
+    }
   }
 }
