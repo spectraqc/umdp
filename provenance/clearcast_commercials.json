@@ -242,6 +242,93 @@
       "method": "model",
       "evidence": "either a 0 second freeze or a 5 second freeze",
       "state": "stated"
+    },
+    "assets.video.codec.allowed[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "Clearcast-Library-Technical-Specification-Guide-v1.6.pdf, Clearcast-Library-Technical-Specification-Guide-v1.4-2.pdf",
+      "matched": "XDCAM 50 (Format: MPEG Video, Format Profile: 4:2:2, Bit Rate: 50 Mbit/s)",
+      "note": "canonical token derived by combining the codec/profile/bitrate fields, same pattern as the codec.allowed[3] avc-intra match already recorded here"
+    },
+    "assets.video.color.range[0]": {
+      "state": "stated",
+      "method": "model",
+      "source": "Clearcast-Library-Technical-Specification-Guide-v1.6.pdf, Clearcast-Library-Technical-Specification-Guide-v1.4-2.pdf",
+      "matched": "RGB Gamut: EBU R103",
+      "note": "Clearcast cites EBU R103 by name for RGB gamut rather than restating its numeric range; EBU R103 defines the 8-bit legal/limited range. Not a literal 'limited' string match, hence method=model not literal."
+    },
+    "assets.audio.track_count.min": {
+      "state": "stated",
+      "method": "literal",
+      "source": "Clearcast-Library-Technical-Specification-Guide-v1.6.pdf, Clearcast-Library-Technical-Specification-Guide-v1.4-2.pdf",
+      "matched": "the audio channels are stereo (where audio is playing over channels 1 and 2)"
+    },
+    "structure.type": {
+      "state": "stated",
+      "method": "literal",
+      "source": "Clearcast-Library-Technical-Specification-Guide-v1.6.pdf, Clearcast-Library-Technical-Specification-Guide-v1.4-2.pdf",
+      "matched": "section header 'Timeline of a commercial or sponsorship'"
+    },
+    "structure.timeline.programme_layout.end_freeze_options_seconds[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "Clearcast-Library-Technical-Specification-Guide-v1.6.pdf, Clearcast-Library-Technical-Specification-Guide-v1.4-2.pdf",
+      "matched": "FORMAT WITH 0 SECOND FREEZE"
+    },
+    "packaging.type": {
+      "state": "stated",
+      "method": "model",
+      "source": "Clearcast-Library-Technical-Specification-Guide-v1.6.pdf, Clearcast-Library-Technical-Specification-Guide-v1.4-2.pdf",
+      "matched": "Container / Format: MXF (no IMF or DCP packaging mentioned anywhere in the doc)",
+      "note": "inferred: a flat MXF essence file has no enclosing package format, so packaging.type=none. Not itself a literal string in the source."
+    },
+    "packaging.delivery": {
+      "state": "stated",
+      "method": "literal",
+      "source": "Clearcast-Library-Technical-Specification-Guide-v1.6.pdf, Clearcast-Library-Technical-Specification-Guide-v1.4-2.pdf",
+      "matched": "materials submitted to / uploaded to the Clearcast Library"
+    },
+    "constraints.video.signal_limits.luminance.max": {
+      "state": "stated",
+      "method": "model",
+      "source": "Clearcast-Library-Technical-Specification-Guide-v1.6.pdf, Clearcast-Library-Technical-Specification-Guide-v1.4-2.pdf",
+      "matched": "RGB Gamut: EBU R103",
+      "note": "235 is EBU R103's published 8-bit legal-range luminance ceiling; Clearcast's doc cites the standard by name but does not restate the number itself."
+    },
+    "constraints.video.signal_limits.rgb.max": {
+      "state": "stated",
+      "method": "model",
+      "source": "Clearcast-Library-Technical-Specification-Guide-v1.6.pdf, Clearcast-Library-Technical-Specification-Guide-v1.4-2.pdf",
+      "matched": "RGB Gamut: EBU R103",
+      "note": "same as constraints.video.signal_limits.luminance.max — EBU R103's published ceiling, cited by standard name rather than restated as a number."
+    },
+    "constraints.timing.duration.tolerance_ms": {
+      "state": "stated",
+      "method": "model",
+      "source": "Clearcast-Library-Technical-Specification-Guide-v1.6.pdf, Clearcast-Library-Technical-Specification-Guide-v1.4-2.pdf",
+      "matched": "Frame Rate: 25 FPS; SOM must be at an exact timecode; 'the duration should not exceed the stated length'",
+      "note": "40ms = one video frame at the document's own stated 25fps. Not a number the document states directly — derived from its frame rate given how strictly it treats frame-exact timing (exact SOM timecode, exact slate clock match). Flag for human review before trusting as a hard tolerance."
+    },
+    "assets.audio.loudness.standards[0].jurisdiction": {
+      "state": "stated",
+      "method": "model",
+      "source": "Clearcast-Library-Technical-Specification-Guide-v1.6.pdf, Clearcast-Library-Technical-Specification-Guide-v1.4-2.pdf",
+      "matched": "document title/scope: Clearcast is the UK advertising clearance body",
+      "note": "categorical fact about the standard's applicable market, not a numeric spec value the document states as text 'GB'."
+    },
+    "id": {
+      "state": "stated",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "authoring identifier for this profile, not a value asserted by the cited source document. Same for `name`. Flagged in SQC-1947 as possibly a _leaf_assertions scope question — not resolved here."
+    },
+    "name": {
+      "state": "stated",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "same as `id` — this profile's authored title, not a value the source document states. See SQC-1947 note."
     }
   }
 }
