@@ -234,6 +234,94 @@ def non_canonical_tokens(data: object, vocab: dict[str, set[str]]) -> list[str]:
     return notes
 
 
+PROVENANCE_DIR = REPO_ROOT / "provenance"
+HUMAN_METHODS = {"human"}
+
+
+def _leaf_assertions(obj, prefix: str = ""):
+    """Yield (dotted_path, value) for every VALUE-BEARING leaf, expanding lists by index.
+
+    Booleans, nulls and free text are authoring judgements rather than values a specification
+    states, so they are not assertions a source can be asked to support and are excluded from
+    the counts. `governance` is metadata about the profile, not a claim about the delivery.
+    """
+    if isinstance(obj, dict):
+        for key, val in obj.items():
+            if not prefix and key == "governance":
+                continue
+            yield from _leaf_assertions(val, f"{prefix}.{key}" if prefix else key)
+    elif isinstance(obj, list):
+        for n, val in enumerate(obj):
+            yield from _leaf_assertions(val, f"{prefix}[{n}]")
+    elif isinstance(obj, bool) or obj is None:
+        return
+    elif isinstance(obj, str) and (len(obj) > 60 or prefix.endswith("notes")):
+        return
+    else:
+        yield prefix, obj
+
+
+def load_provenance(profile_id: str) -> dict:
+    path = PROVENANCE_DIR / f"{profile_id}.json"
+    if not path.exists():
+        return {}
+    try:
+        blob = json.loads(path.read_text())
+    except json.JSONDecodeError:
+        return {}
+    return blob.get("fields", {}) if isinstance(blob, dict) else {}
+
+
+def compute_verification(data: dict, records: dict) -> dict:
+    """The roll-up, derived from the sidecar. Never read from the profile.
+
+    'verified' requires a HUMAN record on every assertion. Literal matching and model checking
+    produce candidates for review, not verification: a machine agreeing with a value it was
+    handed is not evidence the value is right, and treating it as such is how 601 unsourced
+    assertions came to look authoritative in the first place.
+    """
+    assertions = [p for p, _v in _leaf_assertions(data)]
+    verified, dates = 0, []
+    for path in assertions:
+        rec = records.get(path)
+        if isinstance(rec, dict) and rec.get("method") in HUMAN_METHODS and rec.get("state") == "stated":
+            verified += 1
+            if rec.get("verified_at"):
+                dates.append(rec["verified_at"])
+    unsourced = sum(1 for p in assertions if p not in records)
+    if assertions and verified == len(assertions):
+        status = "verified"
+    elif verified:
+        status = "partial"
+    else:
+        status = "unverified"
+    out = {"status": status, "assertions": len(assertions),
+           "verified_fields": verified, "unsourced_fields": unsourced}
+    if dates:
+        out["verified_at"] = max(dates)
+    return out
+
+
+def check_verification(data: dict, profile_id: str) -> list[str]:
+    """A profile may not overstate how much of it has been checked."""
+    computed = compute_verification(data, load_provenance(profile_id))
+    declared = (data.get("governance") or {}).get("verification")
+    if declared is None:
+        if computed["status"] != "unverified":
+            return ["governance.verification missing but provenance records exist "
+                    f"(compute it: {json.dumps(computed, sort_keys=True)})"]
+        return []
+    errors = []
+    for key, want in computed.items():
+        got = declared.get(key)
+        if got != want:
+            errors.append(
+                f"governance.verification.{key}: declared {got!r} but computed {want!r} "
+                "from provenance/ — the roll-up is derived, not authored"
+            )
+    return errors
+
+
 def validate_file(validator: Draft202012Validator, path: Path) -> list[str]:
     try:
         with path.open() as fh:
@@ -294,6 +382,7 @@ def main() -> int:
                     "(filename without .json must equal top-level id)"
                 )
             if isinstance(profile_id, str):
+                errs.extend(check_verification(data, profile_id))
                 if profile_id in ids:
                     errs.append(
                         f"convention: duplicate id {profile_id!r} "
