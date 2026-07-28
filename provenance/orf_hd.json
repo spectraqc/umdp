@@ -190,15 +190,17 @@
     },
     "constraints.video.signal_limits.luminance.max": {
       "state": "stated",
-      "method": "literal",
+      "method": "model",
       "source": "orf__tr_hdtv.pdf",
-      "matched": "235"
+      "matched": "EBU R 103 (section 2.1.3, \"Videopegel und Gamut\")",
+      "note": "corrected during SQC-1946 review: the earlier SQC-1935 backfill pass recorded this as method=literal matched='16'/'235', but those numbers don't actually appear in orf__tr_hdtv.pdf — the document cites 'EBU R 103' by name (section 2.1.3, Videopegel und Gamut) without restating its numeric legal range, same as this profile's rgb.min/rgb.max fields and clearcast_commercials' identical fields. Downgraded to model to match."
     },
     "constraints.video.signal_limits.luminance.min": {
       "state": "stated",
-      "method": "literal",
+      "method": "model",
       "source": "orf__tr_hdtv.pdf",
-      "matched": "16"
+      "matched": "EBU R 103 (section 2.1.3, \"Videopegel und Gamut\")",
+      "note": "corrected during SQC-1946 review: the earlier SQC-1935 backfill pass recorded this as method=literal matched='16'/'235', but those numbers don't actually appear in orf__tr_hdtv.pdf — the document cites 'EBU R 103' by name (section 2.1.3, Videopegel und Gamut) without restating its numeric legal range, same as this profile's rgb.min/rgb.max fields and clearcast_commercials' identical fields. Downgraded to model to match."
     },
     "structure.timeline.timecode_start": {
       "state": "stated",
@@ -231,6 +233,102 @@
       "evidence": "grundlage fur die medienbegleitkarte ist ein xml schema (bmf-teilschema)",
       "state": "contradicted",
       "note": "the source appears to state a DIFFERENT value — needs a human ruling"
+    },
+    "id": {
+      "state": "stated",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "authoring identifier for this profile, not a value asserted by the cited source document. Same for `name`. See clearcast_commercials.json for the same pattern."
+    },
+    "delivery_paradigm": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "filebasiert / File",
+      "note": "matched via description, not the canonical token — the document repeatedly frames delivery as 'filebasierte Produktionskette' and 'das File beginnt mit dem ersten Vollbild/Frame' (Section 2.1.2, 2.5.1), the English loanword 'File' used throughout, consistent with how assets.video.representation='file' was already sourced in this profile."
+    },
+    "content_type": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "Programmbeitrag",
+      "note": "matched via description, not the canonical token — 'Programmbeitrag' (programme item/contribution) is the document's term throughout (e.g. 'Der Programmbeitrag wird als MXF-Datei... angeliefert', Section 2.4.6/2.4.9). No commercial/promo/trailer content is in scope; this is a general programme delivery spec."
+    },
+    "assets.video.bitrate.mode": {
+      "state": "stated",
+      "method": "model",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "MPEG-2, 4:2:2, 8 Bit, long GOP, 50 Mbit/s (XDCAM-HD422 Implementierung)",
+      "note": "the document does not use the words 'konstant'/'CBR'. Derived: bitrate.min/target/max are all independently stated as the single value 50 Mbit/s (already literal-sourced elsewhere in this file), and XDCAM-HD422 Long GOP at 50 Mbit/s is the industry-standard fixed-rate (CBR) implementation of that codec profile. Flag for human review."
+    },
+    "assets.video.frame_rate.mode": {
+      "method": "model",
+      "evidence": "Eine Abtastrate von 50 Bildern pro Sekunde (1080i/25); Frame Rate: 25 is the sole delivery frame rate given for HD file delivery, no alternate rates offered",
+      "state": "stated"
+    },
+    "assets.video.color.range[0]": {
+      "state": "stated",
+      "method": "model",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "In EBU R 103 ist daher definiert... Die RGB Komponenten... müssen zwischen –5% und 105% (–35mV und 735mV) liegen... Schwarzpegel bei null (0%, 0mV), Weißpegel bei 100% (700mV)",
+      "note": "same pattern as clearcast_commercials' assets.video.color.range[0]: the document defines nominal black (0%) and white (100%) levels with headroom via EBU R103, which is the legal/limited-range convention, but never restates the word 'limited' or the 8-bit code values themselves. Not a literal string match, hence method=model."
+    },
+    "assets.video.bit_depth.allowed[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "8 Bit",
+      "note": "from the compression-format description 'MPEG-2, 4:2:2, 8 Bit, long GOP, 50 Mbit/s (XDCAM-HD422 Implementierung)', Section 2.1.2 — not a standalone bit-depth field, but the number/unit is literally present."
+    },
+    "assets.video.bit_depth.min": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "8 Bit",
+      "note": "same source as assets.video.bit_depth.allowed[0] — the profile's only allowed codec is 8-bit, so min=8 follows from the same stated value."
+    },
+    "assets.audio.loudness.standards[0].tolerance": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "Programmlautheit: -23,0 LUFS ±0,5 LU",
+      "note": "Section 2.2.3.5. Document separately notes ±1,0 LU is accepted for live programming, which is out of scope for this file-delivery profile."
+    },
+    "assets.audio.loudness.standards[0].jurisdiction": {
+      "state": "stated",
+      "method": "model",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "document scope: ORF (Österreichischer Rundfunk) technical guidelines, jointly issued with ARD/ZDF",
+      "note": "categorical fact about the standard's applicable market, not a numeric spec value the document states as text 'AT'. Same pattern as clearcast_commercials' jurisdiction field."
+    },
+    "structure.type": {
+      "state": "stated",
+      "method": "model",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "Der Sendebeitrag muss bei Timecode 00:00:00:00 beginnen; ... muss der Timecode ... durchgängig sein (Section 2.4.3/2.5.1)",
+      "note": "structure.type classifies which structural shape (flat/timeline/reel/graph) the profile uses; it is not itself a phrase the document states. Derived from the document's continuous single-timecode, gap-free delivery model (no reel/segment structure described for file delivery), matching this profile's populated structure.timeline block."
+    },
+    "constraints.video.signal_limits.rgb.min": {
+      "state": "stated",
+      "method": "model",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "Schwarzpegel... bei null (0%, 0mV)... In EBU R 103... zwischen –5% und 105%",
+      "note": "the document defines the nominal black level as 0% (0mV) via EBU R103 and never restates the 8-bit code value 16 directly; 16 is the conventional 8-bit legal-range code for 0% nominal black per ITU-R BT.601/709 convention. Same derivation clearcast_commercials used for its analogous R103-cited fields."
+    },
+    "constraints.video.signal_limits.rgb.max": {
+      "state": "stated",
+      "method": "model",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "Weißpegel für alle drei Signale bei 100% oder 700mV... In EBU R 103... zwischen –5% und 105%",
+      "note": "the document defines the nominal white level as 100% (700mV) via EBU R103 and never restates the 8-bit code value 235 directly; 235 is the conventional 8-bit legal-range code for 100% nominal white per ITU-R BT.601/709 convention. Same derivation clearcast_commercials used for its analogous R103-cited fields."
+    },
+    "constraints.timing.duration.tolerance_ms": {
+      "state": "stated",
+      "method": "model",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "Frame Rate: 25 (1080i/25); Section 2.2.3.6 Bild/Ton-Versatz: 'Ton darf dem Bild um nicht mehr als 40 ms voreilen, Ton darf dem Bild um nicht mehr als 60 ms nacheilen' (EBU R37)",
+      "note": "40ms = one video frame at the document's own stated 25fps, same derivation clearcast_commercials used for this field. The document separately states a literal '40 ms' figure in its EBU R37 audio/video-sync (lip-sync) tolerance, a different concept (A/V offset, not video/audio duration matching) that coincidentally matches this value. Flag for human review before trusting as a hard duration-match tolerance — the frame-duration derivation, not the R37 coincidence, is the basis for this record."
     }
   }
 }
