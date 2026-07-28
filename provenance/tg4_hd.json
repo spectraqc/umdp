@@ -265,6 +265,80 @@
       "evidence": "rgb components must be between -5 % and 105%",
       "state": "contradicted",
       "note": "the source appears to state a DIFFERENT value — needs a human ruling"
+    },
+    "assets.video.bitrate.mode": {
+      "state": "stated",
+      "method": "model",
+      "source": "TechnicalDeliveryStandardsTG4.pdf",
+      "matched": "the video essence in the file must be encoded as AVC Intra Class 100 as defined by SMPTE RP 2027:2011. This equates to an actual video essence data rate of approximately 113Mbits/s",
+      "note": "AVC-Intra Class 100 (SMPTE RP 2027) is an intra-frame-only codec defined with a fixed target bitrate per its governing standard; the document states an approximate data rate rather than the word 'constant'. Derived from the codec's defining standard, not a literal string match — flagged for human review."
+    },
+    "assets.video.color.range[0]": {
+      "state": "stated",
+      "method": "model",
+      "source": "TechnicalDeliveryStandardsTG4.pdf",
+      "matched": "each component is allowed to range between 0 and 100% (or 0mV and 700mV). This equates to digital sample levels 16 and 235 (8-bit systems) or 64 and 940 (10 bit systems)",
+      "note": "16-235 (8-bit) / 64-940 (10-bit) is the broadcast legal/limited signal range as opposed to full range (0-255/0-1023); the document states the numeric levels but never uses the word 'limited' itself, hence method=model not literal. Same source text underlies the already-recorded constraints.video.signal_limits.luminance/rgb min/max (64/940) in this file."
+    },
+    "assets.video.signal.field_order[0]": {
+      "state": "stated",
+      "method": "model",
+      "source": "TechnicalDeliveryStandardsTG4.pdf",
+      "matched": "Cuts in material must happen on frame boundaries (i.e. between field 2 and field 1). Motion on psf material must always occur between field 2 and field 1 (i.e. field 1 dominance)",
+      "note": "the document specifies 'field 1 dominance' for 1080i/25 material but never uses the term 'top field first'. By the standard 1080i line-numbering convention, field 1 is the field containing the first (topmost) line, so field-1-dominance corresponds to top-field-first — an inference from the cited field-dominance rule plus external 1080i convention, not a literal string match. Flagged for human review."
+    },
+    "assets.audio.codec.disallowed[1]": {
+      "state": "stated",
+      "method": "model",
+      "source": "TechnicalDeliveryStandardsTG4.pdf",
+      "matched": "All audio tracks must be encoded as PCM with a sample rate of 48kHz at a depth of 24bits/sample",
+      "note": "the document names PCM as the sole required audio codec (section 4.4) but never names MP3 individually. mp3 is treated as disallowed here as one of the non-PCM codecs excluded by the PCM-only requirement — same reasoning already applied to the aac entry at disallowed[0] in this file, not a literal match."
+    },
+    "assets.audio.track_count.min": {
+      "state": "stated",
+      "method": "literal",
+      "source": "TechnicalDeliveryStandardsTG4.pdf",
+      "matched": "HD files must contain a group of either 4 or 16 tracks"
+    },
+    "assets.metadata.schemas[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "TechnicalDeliveryStandardsTG4.pdf",
+      "matched": "must be delivered as a single MXF OP1a file which conforms to the AMWA specification AS-11 v1.1... using the 'UK DPP shim specifications'; metadata table example Shim name: 'UK DPP HD'"
+    },
+    "structure.type": {
+      "state": "stated",
+      "method": "literal",
+      "source": "TechnicalDeliveryStandardsTG4.pdf",
+      "matched": "section header '4.5 Programme Layout / Format' and its Time-code / Duration / Picture / Sound layout table"
+    },
+    "packaging.type": {
+      "state": "stated",
+      "method": "model",
+      "source": "TechnicalDeliveryStandardsTG4.pdf",
+      "matched": "Each programme should be delivered as a single principal MXF file...; Closed captions...must be delivered as a separate file...named identically to the principal MXF file; Additional audio only files...must be supplied as BWF...files; PSE/AQC/Eyeball QC reports...must be delivered with the [master] programme file, in PDF form",
+      "note": "inferred: the principal MXF essence file is routinely delivered together with sidecar caption, BWF audio-only, and PDF QC-report files — a bundle rather than a single standalone MXF. Not itself a literal 'bundle' string in the source, same inference pattern as clearcast_commercials' packaging.type record — flagged for human review."
+    },
+    "constraints.timing.duration.tolerance_ms": {
+      "state": "stated",
+      "method": "model",
+      "source": "TechnicalDeliveryStandardsTG4.pdf",
+      "matched": "25 frames per second (50 fields) interlaced; section 4.5 Programme Layout / Format specifies frame-exact timecodes for every element (e.g. Part SOM, Part Duration) with no stated tolerance",
+      "note": "40ms = one video frame at the document's own stated 25fps. Not a number the document states directly — derived the same way as the equivalent clearcast_commercials record, from how strictly the document treats frame-exact timing (exact SOM/part-duration timecodes). Flag for human review before trusting as a hard tolerance."
+    },
+    "id": {
+      "state": "stated",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "authoring identifier for this profile, not a value asserted by the cited source document. Same pattern as clearcast_commercials' id/name records. See SQC-1947 note."
+    },
+    "name": {
+      "state": "stated",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "same as `id` — this profile's authored title, not a value the source document states. See SQC-1947 note."
     }
   }
 }

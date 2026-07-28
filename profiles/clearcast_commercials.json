@@ -43,7 +43,6 @@
         "allowed": [
           "25"
         ],
-        "tolerance": 0.01,
         "notes": "25 fps interlaced (50i). NTSC frame rates not accepted."
       },
       "scan_type": [
@@ -107,7 +106,6 @@
           {
             "name": "EBU R128",
             "target": -23.0,
-            "tolerance": 1.0,
             "jurisdiction": "GB"
           }
         ],
@@ -184,6 +182,12 @@
       "GB",
       "IE"
     ],
-    "notes": "Clearcast is the UK/Ireland broadcast advertising clearance body. All UK/Ireland TV commercials must pass Clearcast QC before transmission. TVC delivery formats: XDCAM HD 422-50 (MXF OP-1a, 8-bit, 50 Mbps); ProRes 422 HQ (MXF OP-1a or MOV, 10-bit, 114 Mbps); DNxHD / VC-3 HD (MXF OP-1a, 8-bit); AVC-Intra Class 100 (MXF OP-1a, 10-bit, 114 Mbps). All TVCs: 1920x1080i/25, 4:2:2, BT.709, limited range. Audio: PCM stereo Ch1+2, 48 kHz, min 16-bit (24-bit for XDCAM); EBU R128 -23 LUFS; true peak -1 dBTP; mean phase ≥ -0.95. Timecode: SOM 10:00:00:00 in MXF Material Package timecode track; 10-second clock slate before SOM; 6 frames audio silence at head and tail; end freeze 5 seconds or 0 seconds. PSE test: ITU-R BT.1702. RGB gamut: EBU R103. Rough cuts additionally accepted as H.264 MP4 (15 Mbps, AAC audio, interlaced or progressive)."
+    "notes": "Clearcast is the UK/Ireland broadcast advertising clearance body. All UK/Ireland TV commercials must pass Clearcast QC before transmission. TVC delivery formats: XDCAM HD 422-50 (MXF OP-1a, 8-bit, 50 Mbps); ProRes 422 HQ (MXF OP-1a or MOV, 10-bit, 114 Mbps); DNxHD / VC-3 HD (MXF OP-1a, 8-bit); AVC-Intra Class 100 (MXF OP-1a, 10-bit, 114 Mbps). All TVCs: 1920x1080i/25, 4:2:2, BT.709, limited range. Audio: PCM stereo Ch1+2, 48 kHz, min 16-bit (24-bit for XDCAM); EBU R128 -23 LUFS; true peak -1 dBTP; mean phase ≥ -0.95. Timecode: SOM 10:00:00:00 in MXF Material Package timecode track; 10-second clock slate before SOM; 6 frames audio silence at head and tail; end freeze 5 seconds or 0 seconds. PSE test: ITU-R BT.1702. RGB gamut: EBU R103. Rough cuts additionally accepted as H.264 MP4 (15 Mbps, AAC audio, interlaced or progressive).",
+    "verification": {
+      "status": "unverified",
+      "assertions": 52,
+      "verified_fields": 0,
+      "unsourced_fields": 0
+    }
   }
 }

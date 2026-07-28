@@ -193,16 +193,18 @@
       "matched": "aspera faspex"
     },
     "structure.timeline.programme_layout.bars_duration_seconds": {
-      "state": "stated",
-      "method": "literal",
+      "state": "contradicted",
+      "method": "model",
       "source": "RTE_IPU-Content-Delivery.pdf",
-      "matched": "27"
+      "evidence": "Appendix 3 programme-layout table: the 'EBU Bars' row has duration 90'. The number 27 (27\" 05fr) that was previously matched literally belongs to the following, separate 'Ident and countdown Clock' row, not to the Bars row.",
+      "note": "profile previously asserted bars_duration_seconds=27, taken from the Clock row's duration rather than the Bars row's. The literal string '27' does appear in the document, but attached to the wrong segment. Bars run 09:58:00:00 -> 09:59:30:00 (90 seconds), matching corrected bars_start + this duration landing exactly on clock_start. Corrected profiles/rte_hd.json bars_duration_seconds to 90."
     },
     "structure.timeline.programme_layout.bars_start": {
-      "state": "stated",
-      "method": "literal",
+      "state": "contradicted",
+      "method": "model",
       "source": "RTE_IPU-Content-Delivery.pdf",
-      "matched": "09:59:30:00"
+      "evidence": "Appendix 3 programme-layout table (Timecode/Duration/Picture/Sound): row 1 is timecode 09.58.00.00, duration 90', Picture='EBU Bars (100/0/75/0 or 100/0/100/0)', Sound='Lineup tone'. Row 2 is timecode 09.59.30.00, duration 27\" 05fr, Picture='Ident and countdown Clock', Sound='Silence'.",
+      "note": "profile previously asserted bars_start=09:59:30:00, which is actually the START of the following 'Ident and countdown Clock' row (matches clock_start, correctly recorded separately), not of the Bars row. The Bars picture itself begins at 09:58:00:00, concurrent with lineup_tone_start (already correctly recorded). Corrected profiles/rte_hd.json bars_start to 09:58:00:00. This is the 'bars_start' error referenced in SQC-1946."
     },
     "structure.timeline.programme_layout.clock_start": {
       "state": "stated",
@@ -255,15 +257,76 @@
     },
     "structure.timeline.programme_layout.black_start": {
       "method": "model",
-      "evidence": "09.59.57.06",
+      "evidence": "Appendix 3 programme-layout table: row timecode 09.59.57.06, duration 2\" 19fr, Picture='Black', Sound='Silence'. 09:59:57:06 + 2s19fr (69 frames @25fps) lands exactly on 10:00:00:00 (programme_start), confirming the arithmetic is self-consistent.",
       "state": "contradicted",
-      "note": "the source appears to state a DIFFERENT value — needs a human ruling"
+      "note": "profile previously asserted black_start=09:59:57:08. The source table states 09:59:57:06 for the Black row (the same timecode as the preceding optional 2-frame sync-plop row — the plop, when used, is a 2-frame white flash at the START of the black segment, not a separate segment before it). Confirmed via two independent extractions (pdftotext -layout and PyMuPDF) and duration arithmetic. Corrected profiles/rte_hd.json black_start to 09:59:57:06. This is the 'black_start' error referenced in SQC-1946 (two frames)."
     },
     "constraints.timing.duration.tolerance_ms": {
       "method": "model",
       "evidence": "sound must not lead or lag the vision by more than 5 ms. ... within +/- 5 ms",
       "state": "contradicted",
       "note": "the source appears to state a DIFFERENT value — needs a human ruling"
+    },
+    "structure.timeline.programme_layout.sync_plop_window": {
+      "state": "contradicted",
+      "method": "model",
+      "source": "RTE_IPU-Content-Delivery.pdf",
+      "evidence": "Section 2.2.1 Audio/Video sync markers: 'The sync plop must be between timecode 09:59:57:06 and 09:59:57:08'. Corroborated by the Appendix 3 layout table row: timecode 09.59.57.06 (optional), duration 2fr, Picture='2 Frames peak white' — 2 frames starting at :06 span frames 06 and 07, i.e. up to (not including) :08.",
+      "note": "profile previously asserted sync_plop_window='09:59:57:06 to 09:59:57:07'. The document's own literal wording states the window boundary as 09:59:57:08, not :07. Corrected profiles/rte_hd.json sync_plop_window to '09:59:57:06 to 09:59:57:08' to match the literal text. Not a literal string match for the exact profile-format value ('X to Y'), hence method=model, but the underlying timecodes are direct quotes."
+    },
+    "assets.video.color.range[0]": {
+      "state": "stated",
+      "method": "model",
+      "source": "RTE_IPU-Content-Delivery.pdf",
+      "matched": "digital sample levels 16 and 235 (8-bit systems)",
+      "note": "the document states the numeric black=16/white=235 8-bit range directly (section 1.4.1, 'Measuring signal levels') but never uses the word 'limited'. 16-235 is the standard definition of legal/limited range as opposed to full range (0-255); constraints.video.signal_limits.luminance/rgb min/max are already recorded from this same passage. Not a literal string match for 'limited', hence method=model."
+    },
+    "assets.audio.track_count.max": {
+      "state": "stated",
+      "method": "literal",
+      "source": "RTE_IPU-Content-Delivery.pdf",
+      "matched": "1 Stream up to a max of 8 tracks"
+    },
+    "assets.audio.loudness.standards[0].tolerance": {
+      "state": "stated",
+      "method": "model",
+      "source": "RTE_IPU-Content-Delivery.pdf",
+      "matched": "Follow EBU Recommendation R 128 Guidelines, “Loudness normalisation & permitted maximum level of audio signals”",
+      "note": "RTE's document cites EBU R128 by name rather than restating a numeric tolerance. EBU R128 itself (Standards/ebu/Audio - loudness & metering/r128.pdf, clause h) states the Target Level of -23.0 LUFS carries 'a tolerance of ±1.0 LU'. Not a number RTE states directly — derived from the named standard. Flag for human review before trusting as RTE's own hard tolerance rather than R128's general provision."
+    },
+    "structure.type": {
+      "state": "stated",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "authoring choice of representation for this profile's structure (a timeline of dated segments), not a value asserted by the source document. Same treatment as id/name — see clearcast_commercials pattern and SQC-1947 note."
+    },
+    "packaging.type": {
+      "state": "stated",
+      "method": "model",
+      "source": "RTE_IPU-Content-Delivery.pdf",
+      "matched": "File Type: MXF (no IMF or DCP packaging mentioned anywhere in the document)",
+      "note": "inferred: a flat MXF essence file (OP1-a, Closed/Complete) has no enclosing package format, so packaging.type=none. Not itself a literal string in the source. Same reasoning as clearcast_commercials.packaging.type."
+    },
+    "constraints.video.pse_standard": {
+      "state": "stated",
+      "method": "literal",
+      "source": "RTE_IPU-Content-Delivery.pdf",
+      "matched": "All content should be compliant with (PSE) ITU-R BT.1702"
+    },
+    "id": {
+      "state": "stated",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "authoring identifier for this profile, not a value asserted by the cited source document. Same for `name`. Flagged in SQC-1947 as possibly a _leaf_assertions scope question — not resolved here."
+    },
+    "name": {
+      "state": "stated",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "same as `id` — this profile's authored title, not a value the source document states. See SQC-1947 note."
     }
   }
 }

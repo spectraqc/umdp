@@ -299,6 +299,80 @@
       "method": "model",
       "evidence": "exceeds 1%",
       "state": "stated"
+    },
+    "assets.video.bitrate.mode": {
+      "state": "stated",
+      "method": "model",
+      "source": "Technical_Specification_for_the_Delivery_of_Television_Programmes_as_FILES_to_SVT_v5.1.pdf",
+      "matched": "720p50, preferably as (Avid) DNxHD 175x (a.k.a. 185x), optionally as (Panasonic) AVC-Intra 100, optionally as (Apple) ProRes 422 (HQ), all 10-bit video codecs, and optionally as (Sony) XDCAM MPEG HD422, 8-bit (§5.2.1)",
+      "note": "the document names four alternative HD delivery codecs per frame-rate/resolution combination (DNxHD, AVC-Intra 100, ProRes 422 HQ, XDCAM MPEG HD422) without stating one shared delivery bitrate; §1.6.1 gives only a 160 Mb/s floor for intra-frame post-production codecs generally, not a fixed or capped delivery rate. Derived: bitrate.mode=unconstrained because no single number applies across the allowed codec set."
+    },
+    "assets.video.frame_rate.mode": {
+      "state": "stated",
+      "method": "model",
+      "source": "Technical_Specification_for_the_Delivery_of_Television_Programmes_as_FILES_to_SVT_v5.1.pdf",
+      "matched": "50 frames per second, progressive scan – known as 720p/50 ... 25 frames per second (50 fields) interlaced – known as 1080i/25 ... 25 frames per second, progressive scan ... known as 1080p/25 (§1.1.2)",
+      "note": "the document names exactly two discrete frame rates (25 and 50 fps) rather than a continuous range, so the schema's frame_rate.mode is derived as 'allowed_list' rather than 'range' — same pattern as clearcast_commercials' frame_rate.mode record."
+    },
+    "assets.video.gop.max_length": {
+      "state": "stated",
+      "method": "model",
+      "source": "Technical_Specification_for_the_Delivery_of_Television_Programmes_as_FILES_to_SVT_v5.1.pdf",
+      "matched": "720p50, preferably as (Avid) DNxHD 175x ... optionally as (Panasonic) AVC-Intra 100, optionally as (Apple) ProRes 422 (HQ) ... optionally as (Sony) XDCAM MPEG HD422 (§5.2.1); 'Intra-frame based post-production codecs used to edit HD programmes should be at least 160 Mb/s' (§1.6.1)",
+      "note": "the document never uses the word GOP. All the HD delivery codecs it names (DNxHD, AVC-Intra 100, ProRes 422 HQ, XDCAM MPEG HD422) are intra-frame-only professional formats, and §1.6.1 independently frames 'intra-frame based' codecs as the expected class for HD post-production. Derived: an all-intra codec set implies GOP max_length=1 (every frame independently coded). Flag for human review — inferred from the codec list, not a stated GOP value."
+    },
+    "assets.audio.codec.disallowed[1]": {
+      "state": "stated",
+      "method": "model",
+      "source": "Technical_Specification_for_the_Delivery_of_Television_Programmes_as_FILES_to_SVT_v5.1.pdf",
+      "matched": "Audio that has previously been lossy bit reduced must not be used, due to causing cascade coding artefacts. (§2.x, before 2.8 Sound to Vision Synchronisation)",
+      "note": "mp3 is not literally named; it is a lossy audio codec and therefore falls under this general prohibition on previously lossy-bit-reduced audio — the same source sentence already recorded (via method=literal) for disallowed[0]/[2] (aac/ac3)."
+    },
+    "assets.audio.loudness.standards[0].tolerance": {
+      "state": "stated",
+      "method": "literal",
+      "source": "Technical_Specification_for_the_Delivery_of_Television_Programmes_as_FILES_to_SVT_v5.1.pdf",
+      "matched": "-23.0 LUFS ±1,0 LU"
+    },
+    "structure.type": {
+      "state": "stated",
+      "method": "model",
+      "source": "Technical_Specification_for_the_Delivery_of_Television_Programmes_as_FILES_to_SVT_v5.1.pdf",
+      "matched": "§4.1 'Programme Layout for File Delivery' table: elements laid out in sequence against Time-code (25 T/C) / Duration (25 T/C) — bars, ident clock/slate, black, Programme, part breaks, end of programme — each at a specified timecode",
+      "note": "the document never uses the word 'timeline', but §4.1 defines the delivery as a sequence of elements at fixed timecodes, which is what the schema's structure.type='timeline' token represents. Derived from the section's content, not a literal string match."
+    },
+    "packaging.type": {
+      "state": "stated",
+      "method": "literal",
+      "source": "Technical_Specification_for_the_Delivery_of_Television_Programmes_as_FILES_to_SVT_v5.1.pdf",
+      "matched": "The file format, i.e. the container/wrapper, shall preferably be MXF OP-1a ... The audio should preferably be bundled with the video inside the container/wrapper, optionally delivered separately (§5.2, §5.2.2)"
+    },
+    "constraints.video.signal_limits.rgb.tolerance_percent": {
+      "state": "stated",
+      "method": "literal",
+      "source": "Technical_Specification_for_the_Delivery_of_Television_Programmes_as_FILES_to_SVT_v5.1.pdf",
+      "matched": "The R’G’B’ components and the corresponding Luminance (Y’) signal, should not normally exceed the “Preferred Min. / Max.” range ... Measuring equipment should indicate an ‘Out-of-Gamut’ occurrence only after the error exceeds 1% of an integrated area of the active image. (§1.2.1)"
+    },
+    "constraints.timing.duration.tolerance_ms": {
+      "state": "stated",
+      "method": "model",
+      "source": "Technical_Specification_for_the_Delivery_of_Television_Programmes_as_FILES_to_SVT_v5.1.pdf",
+      "matched": "a 25-counting timecode (25 T/C) must be used (§5.4); 'File duration and timecode must exactly match the principal video file' (§4.8)",
+      "note": "40ms = one video frame at the document's own 25fps timecode counting rate. Not a number the document states directly — derived from how strictly it treats exact duration/timecode matching (audio-only files must exactly match the principal video file; hard-parted programme metadata requires exact part durations). Flag for human review before trusting as a hard tolerance — same derivation pattern as clearcast_commercials' duration.tolerance_ms."
+    },
+    "id": {
+      "state": "stated",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "authoring identifier for this profile, not a value asserted by the cited source document. Same pattern as clearcast_commercials' id record. See SQC-1947."
+    },
+    "name": {
+      "state": "stated",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "same as `id` — this profile's authored title, not a value the source document states. See SQC-1947 note."
     }
   }
 }

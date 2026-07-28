@@ -84,7 +84,7 @@
       "source": "TechnicalDeliveryStandardsBBCFile.pdf, TechnicalDeliveryStandardsBBC.pdf, AMWA_AS_11_X1.pdf",
       "matched": "128"
     },
-    "assets.metadata.schemas[2]": {
+    "assets.metadata.schemas[0]": {
       "state": "stated",
       "method": "literal",
       "source": "TechnicalDeliveryStandardsBBCFile.pdf, TechnicalDeliveryStandardsBBC.pdf, AMWA_AS_11_X1.pdf",
@@ -255,6 +255,77 @@
       "evidence": "each primary component should lie between 0 and 100% of the video range between black level and the peak level (r, g and b).",
       "state": "contradicted",
       "note": "the source appears to state a DIFFERENT value — needs a human ruling"
+    },
+    "id": {
+      "state": "stated",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "authoring identifier for this profile, not a value asserted by the cited source document. Same for `name`. Flagged in SQC-1947 as possibly a _leaf_assertions scope question — not resolved here."
+    },
+    "name": {
+      "state": "stated",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "same as `id` — this profile's authored title, not a value the source document states. See SQC-1947 note."
+    },
+    "assets.video.bitrate.mode": {
+      "method": "model",
+      "evidence": "5.1.1 UHD Video Codec: 'The AVC / H.264 coded video in each MXF file must have a mean data rate (mean value across the entire file) of at least:' followed by a table of per-format floors (200Mb/s .. 500Mb/s)",
+      "state": "stated",
+      "note": "the doc specifies a minimum MEAN data rate across the whole file, not a fixed rate — that phrasing implies variable bitrate. The word 'variable' itself is not used in the source; derived from how the floor is expressed."
+    },
+    "assets.video.color.range[0]": {
+      "method": "model",
+      "evidence": "'Full range video levels must not be used for delivered television programmes.' (§1.2.1), read together with the 10 bit (HD & UHD) row of the signal-range table: Expected Video Range 64–940.",
+      "state": "stated",
+      "note": "the doc states full-range is prohibited (a negation), not the literal token 'limited'. Same pattern as clearcast_commercials' assets.video.color.range[0] record, which was also method=model for an equivalent range-by-citation rather than range-by-token statement."
+    },
+    "assets.video.quality.colour_bars.mode": {
+      "state": "stated",
+      "method": "literal",
+      "source": "TechnicalDeliveryStandardsBBCFile.pdf",
+      "matched": "§4.1 Programme Layout for File Delivery table: bars/UHD line-up positioned at 09:59:30:00 for a duration of 20\", immediately preceding Programme which starts at 10:00:00:00",
+      "note": "same table already cited for the sibling field assets.video.quality.colour_bars.window_s=20; the table's positioning of bars before the programme start is the literal basis for 'required_head'."
+    },
+    "assets.audio.track_count.min": {
+      "method": "model",
+      "evidence": "§4.7 Audio Channel Allocations AS-11 DPP X1 table: '1st Track — 2 [channels] — Stereo Main Mix — L, R — Eng — 1' and '2nd Track — 6 [channels] — Surround Main Mix — L,R,C,LFE,Ls,Rs — Eng — 1', with 'the sound tracks listed in the table below must always be included in the MXF file in the order specified'.",
+      "state": "stated",
+      "note": "derived by summing the channel counts of the two MANDATORY sound tracks (2 + 6 = 8) — the doc does not state '8' directly anywhere. Flag for human review: the doc's own vocabulary distinguishes 'Sound Track' (2 mandatory) from 'channel' (8 mandatory channels across those 2 tracks), and this field's exact semantics (tracks vs channels) should be confirmed against how the QC engine counts audio tracks."
+    },
+    "constraints.video.signal_limits.rgb.max": {
+      "state": "stated",
+      "method": "literal",
+      "source": "TechnicalDeliveryStandardsBBCFile.pdf",
+      "matched": "20 – 984 (10 bit (HD & UHD) row, 'Preferred Minimum/Maximum' column)",
+      "note": "same table already cited for constraints.video.signal_limits.luminance.min=20 (literal); the table's intro sentence states the Preferred Minimum/Maximum range applies to 'the RGB components and the corresponding Luminance (Y) signal', so 984 covers rgb.max as well as luminance."
+    },
+    "constraints.video.pse_standard": {
+      "method": "model",
+      "evidence": "§3.2.3 UHD Programmes: 'HDR test devices must be compliant with ITU-R BT.1702-2 but contact the broadcaster for the latest advice on testing UHD programmes.'",
+      "state": "contradicted",
+      "note": "the source states BT.1702-2, not BT.1702-3 as currently asserted — needs a human ruling. This is the only ITU-R BT.1702 mention found anywhere across TechnicalDeliveryStandardsBBCFile.pdf, TechnicalDeliveryStandardsBBC.pdf, and AMWA_AS_11_X1.pdf."
+    },
+    "constraints.timing.duration.tolerance_ms": {
+      "method": "model",
+      "evidence": "§4.7/4.8: audio-only file 'duration and timecode must exactly match the principal MXF file'; §4.1 layout table requires frame-exact timecode positioning throughout; assets.video.frame_rate.allowed[0]=25 (already cited literal).",
+      "state": "stated",
+      "note": "40ms = one video frame at the doc's base 25fps rate (1/25s), following the same derivation clearcast_commercials used for the identical field/value. Not itself a number stated in the source — flag for human review, since at the profile's other allowed rate (50fps) the equivalent single-frame tolerance would be 20ms."
+    },
+    "structure.type": {
+      "method": "model",
+      "evidence": "§4.1 Programme Layout for File Delivery: a Time-code / Duration / Video / Audio table positioning elements continuously from 09:59:30:00 through Programme start at 10:00:00:00 and beyond.",
+      "state": "stated",
+      "note": "the doc does not use the literal word 'timeline' as a structural label (unlike clearcast_commercials, which had a literal section header 'Timeline of a commercial or sponsorship'); inferred here from the continuous timecode-positioned layout table."
+    },
+    "packaging.type": {
+      "state": "stated",
+      "method": "literal",
+      "source": "TechnicalDeliveryStandardsBBCFile.pdf",
+      "matched": "'The programme must be delivered to the AS-11 X1 DPP UHD specification (\"MXF Program Contribution – DPP UHD\").' (§5.1 UHD Files)",
+      "note": "canonical token derived by underscore-joining the literal phrase 'AS-11 X1 DPP UHD'; same pattern as other canonical-token derivations already in this file (e.g. enum matches recorded via `matched`)."
     }
   }
 }

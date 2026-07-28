@@ -81,9 +81,6 @@
           "psf",
           "true_interlace"
         ],
-        "field_order": [
-          "tff"
-        ],
         "mains_frequency_hz": 50
       },
       "gop": {
@@ -183,7 +180,7 @@
     }
   },
   "id": "svt_hd",
-  "name": "SVT (Sweden) \u2014 Programme Delivery",
+  "name": "SVT (Sweden) — Programme Delivery",
   "governance": {
     "spec_version": "5.1",
     "effective_date": "2022-01-01",
@@ -192,6 +189,12 @@
     "jurisdiction": [
       "SE"
     ],
-    "notes": "Swedish public broadcaster SVT. EBU R128 loudness, MXF AS-11-style file delivery with ProRes also accepted."
+    "notes": "Swedish public broadcaster SVT. EBU R128 loudness, MXF AS-11-style file delivery with ProRes also accepted.",
+    "verification": {
+      "status": "unverified",
+      "assertions": 60,
+      "verified_fields": 0,
+      "unsourced_fields": 0
+    }
   }
 }

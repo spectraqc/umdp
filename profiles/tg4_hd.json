@@ -39,8 +39,7 @@
         "mode": "fixed",
         "allowed": [
           "25"
-        ],
-        "tolerance": 0.01
+        ]
       },
       "scan_type": [
         "interlaced"
@@ -174,15 +173,21 @@
     }
   },
   "id": "tg4_hd",
-  "name": "TG4 \u2014 Technical Delivery Standards",
+  "name": "TG4 — Technical Delivery Standards",
   "governance": {
     "spec_version": "1.0",
     "effective_date": "2021-01-01",
     "supersedes": null,
-    "source": "TechnicalDeliveryStandardsTG4.pdf \u2014 based on UK DPP File spec",
+    "source": "TechnicalDeliveryStandardsTG4.pdf — based on UK DPP File spec",
     "jurisdiction": [
       "IE"
     ],
-    "notes": "TG4 (Irish-language broadcaster) follows the UK DPP HD AS-11 envelope with Irish-language tracks expected."
+    "notes": "TG4 (Irish-language broadcaster) follows the UK DPP HD AS-11 envelope with Irish-language tracks expected.",
+    "verification": {
+      "status": "unverified",
+      "assertions": 54,
+      "verified_fields": 0,
+      "unsourced_fields": 0
+    }
   }
 }

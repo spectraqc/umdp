@@ -40,7 +40,6 @@
         "allowed": [
           "25"
         ],
-        "tolerance": 0.01,
         "notes": "50i — 25 fps interlaced, 50 interlaced fields per second. Timecode embedded in MXF Timecode Track."
       },
       "scan_type": [
@@ -138,14 +137,14 @@
       "timecode_continuous": true,
       "programme_layout": {
         "lineup_tone_start": "09:58:00:00",
-        "bars_start": "09:59:30:00",
-        "bars_duration_seconds": 27,
+        "bars_start": "09:58:00:00",
+        "bars_duration_seconds": 90,
         "clock_start": "09:59:30:00",
-        "sync_plop_window": "09:59:57:06 to 09:59:57:07",
-        "black_start": "09:59:57:08",
+        "sync_plop_window": "09:59:57:06 to 09:59:57:08",
+        "black_start": "09:59:57:06",
         "programme_start": "10:00:00:00"
       },
-      "notes": "Lineup tone at 09:58:00:00 (90 sec). EBU Bars (100/0/75/0 or 100/0/100/0) + countdown clock 09:59:30:00. Optional sync plop at 09:59:57:06–07: 2 frames peak white + 1 frame 1kHz tone on all tracks at -18 dBFS, audio within ±5 ms of video flash. Black at 09:59:57:08 to 10:00:00:00. Programme ends with freeze or living hold after end of part; fade/cut to silence by end of programme."
+      "notes": "Lineup tone + EBU Bars (100/0/75/0 or 100/0/100/0) at 09:58:00:00 (90 sec). Ident and countdown clock at 09:59:30:00 (27s05fr). Optional sync plop at 09:59:57:06–07: 2 frames peak white + 1 frame 1kHz tone on all tracks at -18 dBFS, audio within ±5 ms of video flash. Black at 09:59:57:06 to 10:00:00:00 (the optional sync plop, when used, is a 2-frame white flash within the first 2 frames of this black segment). Programme ends with freeze or living hold after end of part; fade/cut to silence by end of programme."
     }
   },
   "packaging": {
@@ -191,6 +190,12 @@
     "jurisdiction": [
       "IE"
     ],
-    "notes": "RTÉ HD broadcast delivery. Video: MPEG-2 Long GOP (XDCAM HD 422-50), MXF OP1-a Closed/Complete, 1920x1080i/25, 4:2:2, BT.709, 8-bit limited (16–235), 50 Mbps. Audio: PCM 24-bit 48kHz BWF, up to 8 tracks (Ch1-2 programme stereo; Ch3-4 optional M&E or Dolby E; Ch5-6 optional AD premixed); EBU R128 -23 LUFS. Subtitles: EBU STL; foreign language content burnt-in Arial Regular 58px. Timecode: 10:00:00:00 start, MXF Timecode Track. PSE test required per ITU-R BT.1702. Delivery via Aspera FASPEX; filename: MI + 9-digit Media ID + .mxf."
+    "notes": "RTÉ HD broadcast delivery. Video: MPEG-2 Long GOP (XDCAM HD 422-50), MXF OP1-a Closed/Complete, 1920x1080i/25, 4:2:2, BT.709, 8-bit limited (16–235), 50 Mbps. Audio: PCM 24-bit 48kHz BWF, up to 8 tracks (Ch1-2 programme stereo; Ch3-4 optional M&E or Dolby E; Ch5-6 optional AD premixed); EBU R128 -23 LUFS. Subtitles: EBU STL; foreign language content burnt-in Arial Regular 58px. Timecode: 10:00:00:00 start, MXF Timecode Track. PSE test required per ITU-R BT.1702. Delivery via Aspera FASPEX; filename: MI + 9-digit Media ID + .mxf.",
+    "verification": {
+      "status": "unverified",
+      "assertions": 51,
+      "verified_fields": 0,
+      "unsourced_fields": 0
+    }
   }
 }

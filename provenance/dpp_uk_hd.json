@@ -104,6 +104,420 @@
       "method": "model",
       "evidence": "layout_ebu_r_48_2a",
       "state": "stated"
+    },
+    "id": {
+      "state": "stated",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "authoring identifier for this profile, not a value asserted by the cited source document. Same for `name`. See SQC-1947 note."
+    },
+    "name": {
+      "state": "stated",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "same as `id` — this profile's authored title, not a value the source document states. See SQC-1947 note."
+    },
+    "assets.video.bitrate.mode": {
+      "state": "stated",
+      "method": "model",
+      "source": "DPP011-Technical-Delivery-Requirements-Programme-Delivery_v7.0_01.pdf",
+      "matched": "encoded as AVC Intra Class 100 ... an actual video essence data rate of approximately 113Mbits/s",
+      "note": "AVC-Intra Class 100 is an intra-frame codec class defined around a fixed nominal data rate per frame; a stated single approximate rate ('approximately 113Mbits/s') rather than a min/max range is consistent with constant bitrate, but the word 'constant' is not itself in the source."
+    },
+    "assets.video.representation": {
+      "state": "stated",
+      "method": "literal",
+      "source": "AMWA_AS_11_UK_DPP_HD.pdf, AMWA_AS_11_UK_DPP_SD.pdf",
+      "matched": "define a file format for the delivery of finished HD TV Programmes"
+    },
+    "assets.video.resolution.allowed[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "DPP011-Technical-Delivery-Requirements-Programme-Delivery_v7.0_01.pdf",
+      "matched": "1920 x 1080 pixels in an aspect ratio of 16:9",
+      "note": "AMWA_AS_11_UK_DPP_HD.pdf only gives the abbreviated form '1080i25 with 10 bit samples'; DPP011 §1.1.1 states the resolution numerically."
+    },
+    "assets.video.aspect_ratio.allowed[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "DPP011-Technical-Delivery-Requirements-Programme-Delivery_v7.0_01.pdf",
+      "matched": "1920 x 1080 pixels in an aspect ratio of 16:9"
+    },
+    "assets.video.frame_rate.mode": {
+      "state": "stated",
+      "method": "model",
+      "source": "AMWA_AS_11_UK_DPP_HD.pdf, DPP011-Technical-Delivery-Requirements-Programme-Delivery_v7.0_01.pdf",
+      "matched": "1080i25 / 25 frames per second (50 fields) interlaced",
+      "note": "only a single frame rate value is stated anywhere in the spec set; 'fixed' mode is inferred from there being no allowed-list or native-only language, not itself a stated token."
+    },
+    "assets.video.frame_rate.allowed[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "DPP011-Technical-Delivery-Requirements-Programme-Delivery_v7.0_01.pdf",
+      "matched": "25 frames per second (50 fields) interlaced – known as 1080i/25"
+    },
+    "assets.video.frame_rate.tolerance": {
+      "state": "unsupported",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "REMOVED from profile — no frame-rate accuracy/drift tolerance (ppm or otherwise) appears anywhere in AMWA_AS_11_UK_DPP_HD.pdf, AMWA_AS_11_UK_DPP_SD.pdf, DPP011 or the DPP QC Guidelines. Reads as an engine-internal measurement tolerance, not a spec-stated value. Kept as a record only to document why the key was deleted."
+    },
+    "assets.video.scan_type[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "DPP011-Technical-Delivery-Requirements-Programme-Delivery_v7.0_01.pdf, DPP-Quality-Control-Guidelines-v2.0.2.pdf",
+      "matched": "25 frames per second (50 fields) interlaced; QC Guidelines 'Scanning' test (EBU 0048B) Required value 'Interlaced'"
+    },
+    "assets.video.color.primaries[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "DPP011-Technical-Delivery-Requirements-Programme-Delivery_v7.0_01.pdf",
+      "matched": "colour primaries – ITU-R BT.709"
+    },
+    "assets.video.color.transfer[0]": {
+      "state": "stated",
+      "method": "model",
+      "source": "DPP011-Technical-Delivery-Requirements-Programme-Delivery_v7.0_01.pdf",
+      "matched": "colour primaries – ITU-R BT.709 ... The HD format is fully specified in ITU BT.709-6",
+      "note": "DPP011 names BT.709 explicitly for primaries and says the whole HD format is 'fully specified in ITU BT.709-6'; transfer characteristics are bundled inside that standard by definition but aren't individually named as 'transfer' in the source text."
+    },
+    "assets.video.color.matrix[0]": {
+      "state": "stated",
+      "method": "model",
+      "source": "DPP011-Technical-Delivery-Requirements-Programme-Delivery_v7.0_01.pdf",
+      "matched": "colour primaries – ITU-R BT.709 ... The HD format is fully specified in ITU BT.709-6",
+      "note": "same reasoning as color.transfer[0] — matrix coefficients are part of BT.709 by definition, not individually named in the source."
+    },
+    "assets.video.color.range[0]": {
+      "state": "stated",
+      "method": "model",
+      "source": "DPP011-Technical-Delivery-Requirements-Programme-Delivery_v7.0_01.pdf",
+      "matched": "Full range video levels must not be used for delivered television programmes.",
+      "note": "the source states the prohibition of full range, not the word 'limited' itself — limited/legal range is the only remaining option given the Expected/Preferred/Total sample-value table for 10-bit HD in the same section."
+    },
+    "assets.video.chroma_subsampling[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "DPP011-Technical-Delivery-Requirements-Programme-Delivery_v7.0_01.pdf",
+      "matched": "colour sub-sampled at a ratio of 4:2:2"
+    },
+    "assets.video.signal.interlace_mode[0]": {
+      "state": "stated",
+      "method": "model",
+      "source": "DPP011-Technical-Delivery-Requirements-Programme-Delivery_v7.0_01.pdf, DPP-Quality-Control-Guidelines-v2.0.2.pdf",
+      "matched": "25 frames per second (50 fields) interlaced; QC Guidelines 'Scanning' test: 'Signal format should be Interlace [and not] progressive of PSF video formats'",
+      "note": "'50 fields' per second (as opposed to 25 progressive frames flagged interlaced) indicates genuine field-based interlace rather than PsF; 'true_interlace' is UMDP's own enum token for that, not literal source text."
+    },
+    "assets.video.signal.field_order[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "DPP011-Technical-Delivery-Requirements-Programme-Delivery_v7.0_01.pdf, DPP-Quality-Control-Guidelines-v2.0.2.pdf",
+      "matched": "top field first; QC Guidelines 'Field order' test (EBU 0041B) Required value 'Top field first'"
+    },
+    "assets.video.gop.max_length": {
+      "state": "stated",
+      "method": "model",
+      "source": "AMWA_AS_11_UK_DPP_HD.pdf",
+      "matched": "RP 2027 Class 100 Picture Essence ... ; Reference table: SMPTE RP 2027 'AVC Intra-frame Coding Specification'",
+      "note": "AVC-Intra ('Intra-frame Coding' per its own SMPTE RP 2027 title, already cited for codec.allowed[0]) encodes every frame independently — GOP length of 1 follows necessarily from that codec choice, it is not itself a stated number."
+    },
+    "assets.video.quality.blockiness_max_score": {
+      "state": "unsupported",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "REMOVED from profile. DPP-Quality-Control-Guidelines-v2.0.2.pdf has a qualitative 'Blockiness' eyeball item ('no visible blocking or edges... poor compression', Editorial warning, reported only 'If present') but states no numeric score or algorithm threshold. 'max_score: 20' is a SpectraQC internal detection-algorithm default, not traceable to any cited document."
+    },
+    "assets.video.quality.colour_bars.mode": {
+      "state": "stated",
+      "method": "model",
+      "source": "DPP-Quality-Control-Guidelines-v2.0.2.pdf, DPP011-Technical-Delivery-Requirements-Programme-Delivery_v7.0_01.pdf",
+      "matched": "AV Line-up (present at correct timecode) ... Line must start at 09:59:30:00 ... [before] Programme Start Time ... 10:00:00:00",
+      "note": "the line-up/bars signal is required in the pre-programme block, before ident/clock and before programme start — i.e. at the head of the file. 'required_head' is UMDP's own mode token for that placement, not literal source text."
+    },
+    "assets.video.quality.colour_bars.window_s": {
+      "state": "stated",
+      "method": "model",
+      "source": "DPP-Quality-Control-Guidelines-v2.0.2.pdf, DPP011-Technical-Delivery-Requirements-Programme-Delivery_v7.0_01.pdf",
+      "matched": "Line-up start 09:59:30:00 ... Ident Clock Start 09:59:50:00",
+      "note": "20 seconds derived by subtracting the two literal timecodes both documents give for line-up start and ident/clock start (09:59:30:00 to 09:59:50:00). Not itself a stated duration in either source — an arithmetic derivation, flagged for human confirmation."
+    },
+    "assets.video.quality.dead_pixel_max_count": {
+      "state": "unsupported",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "REMOVED from profile. DPP-Quality-Control-Guidelines-v2.0.2.pdf 'Stuck Pixels' is a qualitative Technical warning ('should be repaired'), not a Mandatory zero-tolerance gate, and states no count threshold. Asserting max_count=0 as a hard gate misrepresents the source's own warning-level classification."
+    },
+    "assets.video.quality.decode_error_max_count": {
+      "state": "unsupported",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "REMOVED from profile. No decode-error/file-integrity check with a numeric count appears in any cited document — engine-internal default."
+    },
+    "assets.video.quality.dropout_max_count": {
+      "state": "unsupported",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "REMOVED from profile. DPP-Quality-Control-Guidelines-v2.0.2.pdf 'Video dropout' is a Technical warning with tolerance '≤2% of pixels across 1 or more frames', a per-event area threshold — not a count-of-events threshold, and not Mandatory. No basis for a 'max_count: 0' hard gate."
+    },
+    "assets.video.quality.dropped_frame_max_count": {
+      "state": "unsupported",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "REMOVED from profile. No cited document addresses decoder/transcode dropped frames as a distinct check — engine-internal default."
+    },
+    "assets.video.quality.blurriness_laplacian_min": {
+      "state": "unsupported",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "REMOVED from profile. DPP-Quality-Control-Guidelines-v2.0.2.pdf 'Video out of focus' is a qualitative Editorial warning ('should be in focus'), no Laplacian-variance or any numeric threshold stated. 100 is a SpectraQC internal algorithm calibration value."
+    },
+    "assets.video.quality.banding_max_score": {
+      "state": "unsupported",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "REMOVED from profile. DPP-Quality-Control-Guidelines-v2.0.2.pdf 'Contouring' is qualitative only ('should not have visible contours'), no numeric score stated."
+    },
+    "assets.video.quality.ghosting_max_correlation": {
+      "state": "unsupported",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "REMOVED from profile. DPP-Quality-Control-Guidelines-v2.0.2.pdf mentions 'echoes' only within a qualitative 'Ringing, hum & other artefacts' item, no correlation-coefficient threshold stated."
+    },
+    "assets.video.quality.ringing_max_score": {
+      "state": "unsupported",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "REMOVED from profile. DPP-Quality-Control-Guidelines-v2.0.2.pdf 'Ringing, hum & other artefacts' is qualitative only, no numeric score stated."
+    },
+    "assets.video.quality.mosquito_noise_max_score": {
+      "state": "unsupported",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "REMOVED from profile. No cited document names 'mosquito noise' as a distinct check (only a general qualitative 'Video noise'/grain item); no numeric score stated anywhere."
+    },
+    "assets.video.quality.aliasing_max_hf_ratio": {
+      "state": "unsupported",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "REMOVED from profile. DPP-Quality-Control-Guidelines-v2.0.2.pdf 'Aliasing' is qualitative only ('should not have visible jagged edges'), no high-frequency energy ratio stated."
+    },
+    "assets.video.quality.image_tilt_max_degrees": {
+      "state": "unsupported",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "REMOVED from profile. No cited document addresses camera/horizon tilt at all — engine-internal default."
+    },
+    "assets.video.quality.pulldown_judder_max": {
+      "state": "unsupported",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "REMOVED from profile. DPP-Quality-Control-Guidelines-v2.0.2.pdf 'Non-smooth motion' / 'Progressive rollers' are qualitative only ('juddery or jerky motion... should be avoided'), no numeric judder score stated."
+    },
+    "assets.audio.codec.disallowed[1]": {
+      "state": "stated",
+      "method": "model",
+      "source": "AMWA_AS_11_UK_DPP_HD.pdf",
+      "matched": "Uncompressed 24-bit PCM audio at 48 kHz",
+      "note": "the spec mandates uncompressed PCM only; 'mp3' is a well-known lossy compressed codec that is implicitly excluded by this, but the word 'mp3' does not itself appear in the source."
+    },
+    "assets.audio.track_count.min": {
+      "state": "stated",
+      "method": "literal",
+      "source": "DPP011-Technical-Delivery-Requirements-Programme-Delivery_v7.0_01.pdf",
+      "matched": "HD files must contain either 4 or 16 channels of audio."
+    },
+    "assets.audio.loudness.standards[0].name": {
+      "state": "stated",
+      "method": "literal",
+      "source": "DPP011-Technical-Delivery-Requirements-Programme-Delivery_v7.0_01.pdf",
+      "matched": "Loudness Standard ... EBU R128"
+    },
+    "assets.audio.loudness.standards[0].target": {
+      "state": "stated",
+      "method": "literal",
+      "source": "DPP-Quality-Control-Guidelines-v2.0.2.pdf",
+      "matched": "Programme loudness ... Integrated loudness must target –23LUFS ... Required value -23 LUFS"
+    },
+    "assets.audio.loudness.standards[0].tolerance": {
+      "state": "contradicted",
+      "method": "model",
+      "evidence": "Programme loudness ... Required value -23 LUFS, Tolerance ±1 LU (DPP-Quality-Control-Guidelines-v2.0.2.pdf)",
+      "note": "the source appears to state a DIFFERENT value (±1 LU, not ±0.5 LU) — needs a human ruling"
+    },
+    "assets.audio.loudness.true_peak_max": {
+      "state": "stated",
+      "method": "literal",
+      "source": "DPP-Quality-Control-Guidelines-v2.0.2.pdf",
+      "matched": "Maximum true peak (audio) level (dBTP) ... Required value -1 dBTP"
+    },
+    "assets.audio.quality.click_max_count": {
+      "state": "unsupported",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "REMOVED from profile. DPP-Quality-Control-Guidelines-v2.0.2.pdf 'Audio clicks' is a qualitative Technical warning ('should be repaired'), no count threshold stated — engine-internal default."
+    },
+    "assets.audio.quality.dual_mono_max_pct": {
+      "state": "unsupported",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "REMOVED from profile. DPP-Quality-Control-Guidelines-v2.0.2.pdf 'Mono (not stereo)' states dual mono is generally acceptable/expected but gives no percentage threshold. The profile's own governance notes describe 90% as a check-tuning decision ('so the check only flags content that's actually mono-in-stereo'), confirming it as an engine calibration value, not a spec-stated number."
+    },
+    "assets.audio.quality.min_phase_correlation": {
+      "state": "unsupported",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "REMOVED from profile. DPP-Quality-Control-Guidelines-v2.0.2.pdf 'Audio phase error' states a Required value of 0° with Tolerance ±90° — a phase-angle tolerance, not a normalized phase-correlation coefficient. Different metric/units; 0.3 does not map onto the source's ±90°."
+    },
+    "assets.audio.sync.max_drift_ms": {
+      "state": "contradicted",
+      "method": "model",
+      "evidence": "A/V sync (Lip Sync) ... AV sync should be within ±10ms. (DPP-Quality-Control-Guidelines-v2.0.2.pdf)",
+      "note": "the source appears to state a DIFFERENT value (±10ms, not ±40ms) — needs a human ruling"
+    },
+    "constraints.video.signal_limits.luminance.min": {
+      "state": "stated",
+      "method": "literal",
+      "source": "DPP011-Technical-Delivery-Requirements-Programme-Delivery_v7.0_01.pdf",
+      "matched": "10 bit (HD): Expected Video Range 64–940, Preferred Minimum/Maximum 20–984, Total Video Signal Range 4–1019"
+    },
+    "constraints.video.signal_limits.luminance.max": {
+      "state": "stated",
+      "method": "literal",
+      "source": "DPP011-Technical-Delivery-Requirements-Programme-Delivery_v7.0_01.pdf",
+      "matched": "10 bit (HD): Expected Video Range 64–940, Preferred Minimum/Maximum 20–984, Total Video Signal Range 4–1019"
+    },
+    "constraints.video.signal_limits.luminance.tolerance_percent": {
+      "state": "stated",
+      "method": "literal",
+      "source": "DPP011-Technical-Delivery-Requirements-Programme-Delivery_v7.0_01.pdf",
+      "matched": "Measuring equipment should indicate an “Out-of-Gamut” occurrence only after the error exceeds 1% of an integrated area of the active image."
+    },
+    "constraints.video.signal_limits.rgb.min": {
+      "state": "stated",
+      "method": "literal",
+      "source": "DPP011-Technical-Delivery-Requirements-Programme-Delivery_v7.0_01.pdf",
+      "matched": "The RGB components and the corresponding Luminance (Y) signal, should not normally exceed the “Preferred Minimum/Maximum” range ... 20–984"
+    },
+    "constraints.video.signal_limits.rgb.max": {
+      "state": "stated",
+      "method": "literal",
+      "source": "DPP011-Technical-Delivery-Requirements-Programme-Delivery_v7.0_01.pdf",
+      "matched": "The RGB components and the corresponding Luminance (Y) signal, should not normally exceed the “Preferred Minimum/Maximum” range ... 20–984"
+    },
+    "constraints.video.signal_limits.rgb.tolerance_percent": {
+      "state": "stated",
+      "method": "literal",
+      "source": "DPP011-Technical-Delivery-Requirements-Programme-Delivery_v7.0_01.pdf",
+      "matched": "Measuring equipment should indicate an “Out-of-Gamut” occurrence only after the error exceeds 1% of an integrated area of the active image."
+    },
+    "constraints.video.pse_standard": {
+      "state": "stated",
+      "method": "model",
+      "source": "DPP-Quality-Control-Guidelines-v2.0.2.pdf, EBU QC Item catalogue (qc-items-published.json, item 0021B)",
+      "matched": "PSE (Photosensitive Epilepsy) Testing ... Mandatory ... EBU Code 0021B; EBU catalogue item 0021B 'Flashing Video' References: 'UK OFCOM Section 2, Harm and Offence', 'ITU-R BT.1702'",
+      "note": "two-hop derivation: the DPP QC Guidelines name only the EBU QC item code (0021B) for PSE, not a standard number; the EBU's own published QC item catalogue resolves 0021B to reference 'ITU-R BT.1702' by name (no revision suffix given). Neither AMWA doc names any PSE standard at all. The profile's '-3' revision suffix is not confirmed by any cited source — flagged for human review."
+    },
+    "constraints.content.slate.window_s": {
+      "state": "unsupported",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "REMOVED from profile. DPP011 and DPP-Quality-Control-Guidelines-v2.0.2.pdf together give the pre-programme timecodes (line-up 09:59:30:00 / legacy 09:58:00:00, ident-clock 09:59:50:00 / legacy 09:59:30:00, programme start 10:00:00:00) but none of the resulting intervals (20s, 30s, 90s, 120s) equal 60s. The slate/clock content itself ('section 4.5.2 of the DPP delivery document') is in a DPP Delivery Document V4.3 (DPP010) that is membership-gated and not held locally, so 60s cannot be confirmed against it either."
+    },
+    "constraints.content.slate.required_fields[0]": {
+      "state": "unsupported",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "REMOVED from profile (along with required_fields[1..4]). The 'clock/slate information' content requirement is deferred by DPP-Quality-Control-Guidelines-v2.0.2.pdf to 'section 4.5.2 of the DPP delivery document' — a DPP Delivery Document V4.3 (DPP010) that is membership-gated on thedpp.com and not held locally. DPP011's own metadata table covers file-embedded descriptive metadata, not in-vision slate-card content, so it does not corroborate this specific list of 5 fields."
+    },
+    "constraints.content.slate.required_fields[1]": {
+      "state": "unsupported",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "see constraints.content.slate.required_fields[0] — removed as a group."
+    },
+    "constraints.content.slate.required_fields[2]": {
+      "state": "unsupported",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "see constraints.content.slate.required_fields[0] — removed as a group."
+    },
+    "constraints.content.slate.required_fields[3]": {
+      "state": "unsupported",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "see constraints.content.slate.required_fields[0] — removed as a group."
+    },
+    "constraints.content.slate.required_fields[4]": {
+      "state": "unsupported",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "see constraints.content.slate.required_fields[0] — removed as a group."
+    },
+    "constraints.timing.duration.must_match[0]": {
+      "state": "stated",
+      "method": "model",
+      "source": "AMWA_AS_11_UK_DPP_HD.pdf, AMWA_AS_11_UK_DPP_SD.pdf",
+      "matched": "One-to-one Track mapping; Material Package — 'An MXF data structure that describes an output timeline of the file'",
+      "note": "a single Material Package with one-to-one track mapping means every Track (Picture and Sound) shares one output timeline; video/audio duration equality follows from that file structure rather than being stated in so many words as 'video must match audio'."
+    },
+    "constraints.timing.duration.must_match[1]": {
+      "state": "stated",
+      "method": "model",
+      "source": "AMWA_AS_11_UK_DPP_HD.pdf, AMWA_AS_11_UK_DPP_SD.pdf",
+      "matched": "One-to-one Track mapping; Material Package — 'An MXF data structure that describes an output timeline of the file'",
+      "note": "same derivation as must_match[0]."
+    },
+    "constraints.timing.duration.tolerance_ms": {
+      "state": "stated",
+      "method": "model",
+      "source": "DPP011-Technical-Delivery-Requirements-Programme-Delivery_v7.0_01.pdf",
+      "matched": "25 frames per second",
+      "note": "40ms = one video frame at the document's own stated 25fps. Not a number the document states directly for duration matching — derived the same way as clearcast_commercials' identical field. Flag for human review before trusting as a hard tolerance."
+    },
+    "structure.type": {
+      "state": "stated",
+      "method": "model",
+      "source": "AMWA_AS_11_UK_DPP_HD.pdf, DPP011-Technical-Delivery-Requirements-Programme-Delivery_v7.0_01.pdf",
+      "matched": "Timeline Track — 'A specialized MXF Track that describes a timeline by specifying an origin and rate'; 'it is very important that timecode is continuous'",
+      "note": "UMDP's own structural token for a single continuous programme timeline (as opposed to segmented/IMF component delivery), not itself the literal word used in either source."
+    },
+    "structure.timeline.timecode_start": {
+      "state": "stated",
+      "method": "literal",
+      "source": "DPP011-Technical-Delivery-Requirements-Programme-Delivery_v7.0_01.pdf, DPP-Quality-Control-Guidelines-v2.0.2.pdf",
+      "matched": "Part SOM ... 10:00:00:00; QC Guidelines 'Programme Start Time' — 'The programme must start at 10:00:00:00'"
+    },
+    "packaging.type": {
+      "state": "stated",
+      "method": "model",
+      "source": "AMWA_AS_11_UK_DPP_HD.pdf, AMWA_AS_11_UK_DPP_SD.pdf",
+      "matched": "MXF File Format ... Internal Essence; 'a self-contained & play-out ready package'",
+      "note": "inferred: a single self-contained OP1a MXF file with internal essence, header metadata and DM tracks all in one wrapper. 'MXF_bundle' is UMDP's own schema-example token for that shape (as opposed to 'none', 'IMF' or 'DCP'), not itself literal source text — same reasoning style as clearcast_commercials' packaging.type record."
     }
   }
 }
