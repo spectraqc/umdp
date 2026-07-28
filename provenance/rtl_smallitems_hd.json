@@ -349,6 +349,187 @@
       "method": "model",
       "evidence": "the maximum level of the luminance signal must not exceed 100%.",
       "state": "stated"
+    },
+    "delivery_paradigm": {
+      "state": "stated",
+      "method": "model",
+      "source": "Technical_Specifications_SmallItems_November_2022.pdf",
+      "matched": "\"deliver spots as a media file\"; glossary: \"In this context, 'program' means a single commercial spot or trailer\"; \"duration of the commercial spot\"",
+      "note": "the literal token 'ad' is not stated; the document's exclusive subject is commercial spots and trailers ('Small Items'), which is the categorical basis for classifying this profile's delivery_paradigm as 'ad' (see schema's open-enum examples, which list 'ad' alongside 'file'/'cinema'/'live')."
+    },
+    "assets.video.gop.max_length": {
+      "state": "stated",
+      "method": "model",
+      "source": "Technical_Specifications_SmallItems_November_2022.pdf",
+      "matched": "section header 'XDCAM HD 422 (HD)'; \"Codec MPEG2 422P@HL\"; \"Data rate 50 Mbit/s\"",
+      "note": "GOP N=12 (M=3) is the industry-standard long-GOP structure for the XDCAM HD 422 50 Mbit/s codec profile the document names; the document itself does not state a GOP length. Flagged for human review — this is a codec-format fact, not a number in the source text."
+    },
+    "assets.audio.layout.tracks[0].language": {
+      "state": "stated",
+      "method": "literal",
+      "source": "Technical_Specifications_SmallItems_November_2022.pdf",
+      "matched": "Stereo Mix – L / Language 1",
+      "note": "checked against the suspicion that this is a flattened placeholder: the source's 'Audio track assignment' table genuinely repeats '/ Language 1' identically on all 8 rows (A1-A8), consistent with assets.audio.language.mode='single' — not a data error."
+    },
+    "assets.audio.layout.tracks[1].language": {
+      "state": "stated",
+      "method": "literal",
+      "source": "Technical_Specifications_SmallItems_November_2022.pdf",
+      "matched": "Stereo Mix – R / Language 1",
+      "note": "same 'Language 1' suffix repeated identically on this row of the source's audio track assignment table (see tracks[0].language note re: placeholder-vs-genuine check)."
+    },
+    "assets.audio.layout.tracks[2].language": {
+      "state": "stated",
+      "method": "literal",
+      "source": "Technical_Specifications_SmallItems_November_2022.pdf",
+      "matched": "5.1 Mix – FL / Language 1",
+      "note": "same 'Language 1' suffix repeated identically on this row of the source's audio track assignment table (see tracks[0].language note re: placeholder-vs-genuine check)."
+    },
+    "assets.audio.layout.tracks[3].language": {
+      "state": "stated",
+      "method": "literal",
+      "source": "Technical_Specifications_SmallItems_November_2022.pdf",
+      "matched": "5.1 Mix – FR / Language 1",
+      "note": "same 'Language 1' suffix repeated identically on this row of the source's audio track assignment table (see tracks[0].language note re: placeholder-vs-genuine check)."
+    },
+    "assets.audio.layout.tracks[4].language": {
+      "state": "stated",
+      "method": "literal",
+      "source": "Technical_Specifications_SmallItems_November_2022.pdf",
+      "matched": "5.1 Mix – C / Language 1",
+      "note": "same 'Language 1' suffix repeated identically on this row of the source's audio track assignment table (see tracks[0].language note re: placeholder-vs-genuine check)."
+    },
+    "assets.audio.layout.tracks[5].language": {
+      "state": "stated",
+      "method": "literal",
+      "source": "Technical_Specifications_SmallItems_November_2022.pdf",
+      "matched": "5.1 Mix – LFE / Language 1",
+      "note": "same 'Language 1' suffix repeated identically on this row of the source's audio track assignment table (see tracks[0].language note re: placeholder-vs-genuine check)."
+    },
+    "assets.audio.layout.tracks[6].language": {
+      "state": "stated",
+      "method": "literal",
+      "source": "Technical_Specifications_SmallItems_November_2022.pdf",
+      "matched": "5.1 Mix – SL / Language 1",
+      "note": "same 'Language 1' suffix repeated identically on this row of the source's audio track assignment table (see tracks[0].language note re: placeholder-vs-genuine check)."
+    },
+    "assets.audio.layout.tracks[7].language": {
+      "state": "stated",
+      "method": "literal",
+      "source": "Technical_Specifications_SmallItems_November_2022.pdf",
+      "matched": "5.1 Mix – SR / Language 1",
+      "note": "same 'Language 1' suffix repeated identically on this row of the source's audio track assignment table (see tracks[0].language note re: placeholder-vs-genuine check)."
+    },
+    "assets.audio.layout.tracks[1].track": {
+      "state": "stated",
+      "method": "literal",
+      "source": "Technical_Specifications_SmallItems_November_2022.pdf",
+      "matched": "A2",
+      "note": "audio track assignment table row label enumerating the physical track number."
+    },
+    "assets.audio.layout.tracks[2].track": {
+      "state": "stated",
+      "method": "literal",
+      "source": "Technical_Specifications_SmallItems_November_2022.pdf",
+      "matched": "A3",
+      "note": "audio track assignment table row label enumerating the physical track number."
+    },
+    "assets.audio.layout.tracks[3].track": {
+      "state": "stated",
+      "method": "literal",
+      "source": "Technical_Specifications_SmallItems_November_2022.pdf",
+      "matched": "A4",
+      "note": "audio track assignment table row label enumerating the physical track number."
+    },
+    "assets.audio.layout.tracks[4].track": {
+      "state": "stated",
+      "method": "literal",
+      "source": "Technical_Specifications_SmallItems_November_2022.pdf",
+      "matched": "A5",
+      "note": "audio track assignment table row label enumerating the physical track number."
+    },
+    "assets.audio.layout.tracks[5].track": {
+      "state": "stated",
+      "method": "literal",
+      "source": "Technical_Specifications_SmallItems_November_2022.pdf",
+      "matched": "A6",
+      "note": "audio track assignment table row label enumerating the physical track number."
+    },
+    "assets.audio.layout.tracks[6].track": {
+      "state": "stated",
+      "method": "literal",
+      "source": "Technical_Specifications_SmallItems_November_2022.pdf",
+      "matched": "A7",
+      "note": "audio track assignment table row label enumerating the physical track number."
+    },
+    "assets.audio.layout.tracks[7].track": {
+      "state": "stated",
+      "method": "literal",
+      "source": "Technical_Specifications_SmallItems_November_2022.pdf",
+      "matched": "A8",
+      "note": "audio track assignment table row label enumerating the physical track number."
+    },
+    "structure.type": {
+      "state": "stated",
+      "method": "model",
+      "source": "Technical_Specifications_SmallItems_November_2022.pdf",
+      "matched": "\"Start timecode (first frame) 00:00:00:00\"; \"Program start\" / \"Program end\" rows; \"has to continue ascending linearly for the whole duration of the spot\"",
+      "note": "the document describes a single continuous item (one start point, one end point, continuously ascending timecode) with no act/segment structure, which is what 'timeline' denotes; the literal word 'timeline' is not in the source."
+    },
+    "packaging.type": {
+      "state": "stated",
+      "method": "model",
+      "source": "Technical_Specifications_SmallItems_November_2022.pdf",
+      "matched": "\"Container MXF OP 1a SMPTE RDD9-2013, SMPTE 378M\" (no IMF or DCP packaging mentioned anywhere in the document)",
+      "note": "inferred: a flat MXF essence file has no enclosing package format, so packaging.type=none. Same reasoning as clearcast_commercials' packaging.type record. Not itself a literal string in the source."
+    },
+    "packaging.delivery": {
+      "state": "stated",
+      "method": "literal",
+      "source": "Technical_Specifications_SmallItems_November_2022.pdf",
+      "matched": "\"The delivery of small items should be realised via online file transfer\"; \"A secure web interface is available at: https://ingest.rtl-service.de/ingest-kleinmaterial/\"; \"deliver spots as a media file\"",
+      "note": "matched via description, not the canonical token."
+    },
+    "delivery.transport.providers[0]": {
+      "state": "stated",
+      "method": "model",
+      "source": "Technical_Specifications_SmallItems_November_2022.pdf",
+      "matched": "\"https://ingest.rtl-service.de/ingest-kleinmaterial/\"",
+      "note": "descriptive label for the URL-identified secure web ingest interface the document names; 'RTL ingest portal' is not itself a literal name in the source."
+    },
+    "compliance.contacts[0].region": {
+      "state": "stated",
+      "method": "model",
+      "source": "Technical_Specifications_SmallItems_November_2022.pdf",
+      "matched": "Contact section: \"RTL Technology GmbH ... 50679 Köln, Germany\"; document scope: \"The Media Group RTL Germany\"",
+      "note": "ISO alpha-2 country code for the contact's stated country (Germany); not itself a literal token in the source, same treatment as clearcast_commercials' loudness.standards[0].jurisdiction record."
+    },
+    "compliance.contacts[0].role": {
+      "state": "stated",
+      "method": "literal",
+      "source": "Technical_Specifications_SmallItems_November_2022.pdf",
+      "matched": "\"Support: specifications@rtl.de\"",
+      "note": "role paraphrased from the Contact section's 'Support' label, which is specifically tied to the specifications email address."
+    },
+    "compliance.contacts[0].email": {
+      "state": "stated",
+      "method": "literal",
+      "source": "Technical_Specifications_SmallItems_November_2022.pdf",
+      "matched": "specifications@rtl.de"
+    },
+    "id": {
+      "state": "stated",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "authoring identifier for this profile, not a value asserted by the cited source document. Same for `name`. Flagged in SQC-1947 as possibly a _leaf_assertions scope question — not resolved here."
+    },
+    "name": {
+      "state": "stated",
+      "method": "model",
+      "source": "n/a",
+      "matched": "n/a",
+      "note": "same as `id` — this profile's authored title, not a value the source document states. See SQC-1947 note."
     }
   }
 }

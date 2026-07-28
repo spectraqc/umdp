@@ -42,7 +42,6 @@
         "allowed": [
           "25"
         ],
-        "tolerance": 0.01,
         "notes": "1080i/25 native; 1080psF/25 accepted for original film material."
       },
       "scan_type": [
@@ -127,14 +126,46 @@
           "L-R-C-LFE-Ls-Rs"
         ],
         "tracks": [
-          { "track": 1, "role": "Stereo Mix L", "language": "Lang 1" },
-          { "track": 2, "role": "Stereo Mix R", "language": "Lang 1" },
-          { "track": 3, "role": "5.1 Mix FL",   "language": "Lang 1" },
-          { "track": 4, "role": "5.1 Mix FR",   "language": "Lang 1" },
-          { "track": 5, "role": "5.1 Mix C",    "language": "Lang 1" },
-          { "track": 6, "role": "5.1 Mix LFE",  "language": "Lang 1" },
-          { "track": 7, "role": "5.1 Mix SL",   "language": "Lang 1" },
-          { "track": 8, "role": "5.1 Mix SR",   "language": "Lang 1" }
+          {
+            "track": 1,
+            "role": "Stereo Mix L",
+            "language": "Lang 1"
+          },
+          {
+            "track": 2,
+            "role": "Stereo Mix R",
+            "language": "Lang 1"
+          },
+          {
+            "track": 3,
+            "role": "5.1 Mix FL",
+            "language": "Lang 1"
+          },
+          {
+            "track": 4,
+            "role": "5.1 Mix FR",
+            "language": "Lang 1"
+          },
+          {
+            "track": 5,
+            "role": "5.1 Mix C",
+            "language": "Lang 1"
+          },
+          {
+            "track": 6,
+            "role": "5.1 Mix LFE",
+            "language": "Lang 1"
+          },
+          {
+            "track": 7,
+            "role": "5.1 Mix SL",
+            "language": "Lang 1"
+          },
+          {
+            "track": 8,
+            "role": "5.1 Mix SR",
+            "language": "Lang 1"
+          }
         ],
         "notes": "At minimum tracks 1+2 must contain the complete programme sound (stereo or 2-track mono). Stereo must be mono-compatible (correlation ≥ 0). 5.1 multi-channel optional on tracks 3–8."
       },
@@ -156,9 +187,6 @@
     },
     "metadata": {
       "required": false,
-      "schemas": [
-        "EBU"
-      ],
       "notes": "EBU recommendations binding where this spec is silent."
     }
   },
@@ -235,7 +263,15 @@
     "source": "Technical_Specifications_SmallItems_November_2022.pdf",
     "sourceSpec": "https://www.rtl-service.de/richtlinien.html",
     "sourceAccess": "public",
-    "jurisdiction": ["DE"],
-    "notes": "Media Group RTL Germany delivery spec for small items (commercials/spots/trailers). HD only via web upload. XDCAM HD 422 50 Mbps in MXF OP1a; 1080i/25 (or 25psF for film source); 8 PCM mono audio tracks at 48 kHz/24-bit (Stereo L/R + 5.1 FL/FR/C/LFE/SL/SR); EBU R128 -23 LUFS ±0.2 LU, true peak ≤ -1 dBTP; ITU-R BT.709-6; EBU R95 action safe 3.5%; SOM timecode 00:00:00:00. Latest version always at https://www.rtl-service.de/richtlinien.html."
+    "jurisdiction": [
+      "DE"
+    ],
+    "notes": "Media Group RTL Germany delivery spec for small items (commercials/spots/trailers). HD only via web upload. XDCAM HD 422 50 Mbps in MXF OP1a; 1080i/25 (or 25psF for film source); 8 PCM mono audio tracks at 48 kHz/24-bit (Stereo L/R + 5.1 FL/FR/C/LFE/SL/SR); EBU R128 -23 LUFS ±0.2 LU, true peak ≤ -1 dBTP; ITU-R BT.709-6; EBU R95 action safe 3.5%; SOM timecode 00:00:00:00. Latest version always at https://www.rtl-service.de/richtlinien.html.",
+    "verification": {
+      "status": "unverified",
+      "assertions": 84,
+      "verified_fields": 0,
+      "unsourced_fields": 0
+    }
   }
 }
