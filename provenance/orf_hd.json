@@ -1,0 +1,236 @@
+{
+  "profile": "orf_hd",
+  "$comment": "Per-field provenance. Only method='human' counts toward governance.verification.status='verified'.",
+  "fields": {
+    "assets.audio.layout.allowed_layouts[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "stereo",
+      "note": "matched via enum description, not the canonical token"
+    },
+    "assets.audio.layout.allowed_layouts[1]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "5.1",
+      "note": "matched via enum description, not the canonical token"
+    },
+    "assets.video.codec.allowed[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "mpeg-2",
+      "note": "matched via enum description, not the canonical token"
+    },
+    "assets.video.color.matrix[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "colour",
+      "note": "matched via enum description, not the canonical token"
+    },
+    "assets.video.color.primaries[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "colour",
+      "note": "matched via enum description, not the canonical token"
+    },
+    "assets.video.color.transfer[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "colour",
+      "note": "matched via enum description, not the canonical token"
+    },
+    "assets.audio.bit_depth.allowed[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "24"
+    },
+    "assets.audio.codec.allowed[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "24 bit"
+    },
+    "assets.audio.language.mode": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "single"
+    },
+    "assets.audio.loudness.standards[0].name": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "EBU R128"
+    },
+    "assets.audio.loudness.standards[0].target": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "-23"
+    },
+    "assets.audio.loudness.true_peak_max": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "-1"
+    },
+    "assets.audio.sample_rate[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "48"
+    },
+    "assets.timed_text.subtitles.format": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "ebu stl"
+    },
+    "assets.video.aspect_ratio.allowed[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "16:9"
+    },
+    "assets.video.bitrate.max": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "50"
+    },
+    "assets.video.bitrate.min": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "50"
+    },
+    "assets.video.bitrate.target": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "50"
+    },
+    "assets.video.chroma_subsampling[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "4:2:2"
+    },
+    "assets.video.color.notes": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "ITU-R BT.709-6."
+    },
+    "assets.video.container.allowed[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "mxf"
+    },
+    "assets.video.frame_rate.allowed[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "25"
+    },
+    "assets.video.frame_rate.tolerance": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "0.01"
+    },
+    "assets.video.representation": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "file"
+    },
+    "assets.video.resolution.allowed[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "1920 x 1080"
+    },
+    "assets.video.scan_type[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "interlaced"
+    },
+    "assets.video.signal.broadcast_system": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "1080i/25"
+    },
+    "assets.video.signal.mains_frequency_hz": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "50"
+    },
+    "constraints.timing.duration.must_match[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "video"
+    },
+    "constraints.timing.duration.must_match[1]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "audio"
+    },
+    "constraints.video.signal_limits.luminance.max": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "235"
+    },
+    "constraints.video.signal_limits.luminance.min": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "16"
+    },
+    "structure.timeline.timecode_start": {
+      "state": "stated",
+      "method": "literal",
+      "source": "orf__tr_hdtv.pdf",
+      "matched": "00:00:00:00"
+    },
+    "assets.video.container.notes": {
+      "method": "model",
+      "evidence": "ein mxf-file, welches dem profil ard_zdf_hdf01a v1.1 entspricht",
+      "state": "stated"
+    },
+    "assets.video.signal.interlace_mode[0]": {
+      "method": "model",
+      "evidence": "als 1080i/25 signalisiert",
+      "state": "stated"
+    },
+    "assets.video.signal.field_order[0]": {
+      "method": "model",
+      "evidence": "die bevorzugte implementierung ist, das field mark flag auf null zu setzen, um das erste vollbild eines vollbildpaares zu markieren. entsprechend wird das field mark flag fur das zweite vollbild auf eins gesetzt.",
+      "state": "stated"
+    },
+    "assets.audio.track_count.max": {
+      "method": "model",
+      "evidence": "8 mono aes3 tracks",
+      "state": "stated"
+    },
+    "assets.metadata.schemas[0]": {
+      "method": "model",
+      "evidence": "grundlage fur die medienbegleitkarte ist ein xml schema (bmf-teilschema)",
+      "state": "contradicted",
+      "note": "the source appears to state a DIFFERENT value — needs a human ruling"
+    }
+  }
+}

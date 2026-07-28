@@ -1,10 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:umdp:schema:0.13.0",
+  "$id": "urn:umdp:schema:0.14.0",
   "title": "Universal Media Delivery Profile",
   "description": "Machine-readable schema for broadcast, OTT, cinema and ad-delivery technical specifications. UMDP is extension-friendly on its container objects (assets, constraints, packaging and the like accept additional properties so vendors and broadcasters can add fields and propose them upstream), while value objects that carry measurement thresholds (signal limits, loudness, sync, frame rate, …) are closed (additionalProperties: false) so a mistyped key cannot silently disable a constraint.",
   "type": "object",
-  "$comment": "UMDP 0.13.0 — schema version is independent of any individual profile's spec_version (governance.spec_version).",
+  "$comment": "UMDP 0.14.0 — schema version is independent of any individual profile's spec_version (governance.spec_version).",
   "required": ["id", "name", "delivery_paradigm"],
   "additionalProperties": true,
   "properties": {
@@ -189,7 +189,40 @@
           "items": { "type": "string" },
           "description": "ISO 3166-1 alpha-2 country code, an EU/region code, or 'global'."
         },
-        "notes": { "type": "string" }
+        "notes": { "type": "string" },
+        "verification": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Verification roll-up for this profile. COMPUTED by tools/validate.py from the per-field records in provenance/<id>.json — never hand-authored, and validation fails if it disagrees with them. Added in 0.14.0 after an audit found 601 of 936 value-bearing assertions across the profile set could not be traced to their cited source: governance.sourceSpec vouches for a whole profile, so one URL stood behind 63–88 leaf fields that the document may state a dozen of. A profile is a specification, not a recommendation — a value one digit out fails real deliveries — so consumers need to know which values were actually checked.",
+          "required": ["status", "assertions", "verified_fields", "unsourced_fields"],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": ["unverified", "partial", "verified"],
+              "description": "'verified' = every value-bearing assertion carries a HUMAN provenance record. 'partial' = some do. 'unverified' = none. Machine evidence (literal match or model check) never yields 'verified' on its own: it is a candidate for review, not a verification."
+            },
+            "assertions": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Count of value-bearing leaf assertions in this profile. Booleans, nulls and free-text notes are authoring judgements rather than values a spec states, and are excluded."
+            },
+            "verified_fields": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Assertions with a human provenance record confirming the cited source states this value."
+            },
+            "unsourced_fields": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Assertions with no provenance record at all — a value the profile asserts that nothing has been shown to support."
+            },
+            "verified_at": {
+              "type": ["string", "null"],
+              "format": "date",
+              "description": "Date of the most recent human verification."
+            }
+          }
+        }
       }
     },
 

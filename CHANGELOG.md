@@ -2,6 +2,26 @@
 
 All notable changes to the UMDP schema are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/) and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.14.0] — Per-field verification
+
+### Added
+
+- `governance.verification` — a **computed** roll-up of how much of this profile has actually been checked against its cited source: `status` (`unverified` / `partial` / `verified`), `assertions`, `verified_fields`, `unsourced_fields`, `verified_at`.
+- `provenance/<id>.json` — optional per-field provenance sidecar. One record per value-bearing leaf field: the source document, where in it the value was found, the method (`human` / `model` / `literal`), and who confirmed it.
+- `tools/validate.py`: recomputes `governance.verification` from the sidecar and **fails** if a profile's block disagrees with it. The roll-up cannot be hand-authored or inflated.
+
+### Why
+
+An audit of the profile set found **601 of 936 value-bearing assertions could not be traced to their cited source at all** — 427 of them in eight profiles whose source document is not held anywhere. `governance.sourceSpec` vouches per *profile*, so a single URL stood behind 63–88 leaf fields that the document may state a dozen of, and nothing distinguished an asserted value from a sourced one.
+
+A profile is a specification, not a recommendation. A value one digit out fails real deliveries: two timecode errors found this way were `bars_start` off by 90 seconds and `black_start` off by two frames. Consumers need to know which values were actually checked, and by what.
+
+### Notes
+
+- `verified` requires **human** records. Literal matching and model checking produce candidates for review, never verification — a machine agreeing with a value it was shown is not evidence the value is right.
+- Omitting a field remains legal and is often the correct fix: UMDP models absence, so deleting an unsupportable assertion is a correction, not a loss.
+- Downstream mirrors of the schema must be re-synced (SpectraQC `frontend/lib/umdp.schema.json`; its drift guard will fail CI otherwise).
+
 ## [0.13.0] — Canonical channel-layout & broadcast-system vocabulary
 
 ### Added

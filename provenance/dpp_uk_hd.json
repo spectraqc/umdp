@@ -1,0 +1,109 @@
+{
+  "profile": "dpp_uk_hd",
+  "$comment": "Per-field provenance. Only method='human' counts toward governance.verification.status='verified'.",
+  "fields": {
+    "assets.audio.codec.disallowed[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "AMWA_AS_11_UK_DPP_HD.pdf, AMWA_AS_11_UK_DPP_SD.pdf",
+      "matched": "coding",
+      "note": "matched via enum description, not the canonical token"
+    },
+    "assets.audio.codec.disallowed[2]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "AMWA_AS_11_UK_DPP_HD.pdf, AMWA_AS_11_UK_DPP_SD.pdf",
+      "matched": "digital",
+      "note": "matched via enum description, not the canonical token"
+    },
+    "assets.audio.layout.allowed_layouts[1]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "AMWA_AS_11_UK_DPP_HD.pdf, AMWA_AS_11_UK_DPP_SD.pdf",
+      "matched": "layout",
+      "note": "matched via enum description, not the canonical token"
+    },
+    "assets.audio.bit_depth.allowed[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "AMWA_AS_11_UK_DPP_HD.pdf, AMWA_AS_11_UK_DPP_SD.pdf",
+      "matched": "24"
+    },
+    "assets.audio.codec.allowed[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "AMWA_AS_11_UK_DPP_HD.pdf, AMWA_AS_11_UK_DPP_SD.pdf",
+      "matched": "24-bit"
+    },
+    "assets.audio.sample_rate[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "AMWA_AS_11_UK_DPP_HD.pdf, AMWA_AS_11_UK_DPP_SD.pdf",
+      "matched": "48"
+    },
+    "assets.audio.track_count.max": {
+      "state": "stated",
+      "method": "literal",
+      "source": "AMWA_AS_11_UK_DPP_HD.pdf, AMWA_AS_11_UK_DPP_SD.pdf",
+      "matched": "16"
+    },
+    "assets.metadata.schemas[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "AMWA_AS_11_UK_DPP_HD.pdf, AMWA_AS_11_UK_DPP_SD.pdf",
+      "matched": "AS-11 Core DM"
+    },
+    "assets.metadata.schemas[1]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "AMWA_AS_11_UK_DPP_HD.pdf, AMWA_AS_11_UK_DPP_SD.pdf",
+      "matched": "AS-11 UKDPP DM"
+    },
+    "assets.video.bit_depth.allowed[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "AMWA_AS_11_UK_DPP_HD.pdf, AMWA_AS_11_UK_DPP_SD.pdf",
+      "matched": "10"
+    },
+    "assets.video.bit_depth.min": {
+      "state": "stated",
+      "method": "literal",
+      "source": "AMWA_AS_11_UK_DPP_HD.pdf, AMWA_AS_11_UK_DPP_SD.pdf",
+      "matched": "10"
+    },
+    "assets.video.container.allowed[0]": {
+      "state": "stated",
+      "method": "literal",
+      "source": "AMWA_AS_11_UK_DPP_HD.pdf, AMWA_AS_11_UK_DPP_SD.pdf",
+      "matched": "mxf"
+    },
+    "content_type": {
+      "state": "stated",
+      "method": "literal",
+      "source": "AMWA_AS_11_UK_DPP_HD.pdf, AMWA_AS_11_UK_DPP_SD.pdf",
+      "matched": "program"
+    },
+    "delivery_paradigm": {
+      "state": "stated",
+      "method": "literal",
+      "source": "AMWA_AS_11_UK_DPP_HD.pdf, AMWA_AS_11_UK_DPP_SD.pdf",
+      "matched": "file"
+    },
+    "assets.video.codec.allowed[0]": {
+      "method": "model",
+      "evidence": "rp 2027 class 100 picture essence at 1080i25 with 10 bit samples",
+      "state": "stated"
+    },
+    "assets.video.bitrate.target": {
+      "method": "model",
+      "evidence": "50 mbit/s",
+      "state": "contradicted",
+      "note": "the source appears to state a DIFFERENT value — needs a human ruling"
+    },
+    "assets.audio.layout.allowed_layouts[0]": {
+      "method": "model",
+      "evidence": "layout_ebu_r_48_2a",
+      "state": "stated"
+    }
+  }
+}

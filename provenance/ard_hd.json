@@ -1,0 +1,5 @@
+{
+  "profile": "ard_hd",
+  "$comment": "Per-field provenance. Only method='human' counts toward governance.verification.status='verified'.",
+  "fields": {}
+}
