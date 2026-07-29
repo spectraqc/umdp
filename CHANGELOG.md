@@ -2,6 +2,21 @@
 
 All notable changes to the UMDP schema are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/) and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.15.0] — authority_authored + internal-consistency sense-check
+
+### Added
+
+- `governance.verification.status` gains a fourth value, `authority_authored`: a distinct claim, not a weaker point on the unverified/partial/verified scale. It's for profiles where the authoring party IS the authority for the requirements (e.g. an org's own delivery spec for its own deliveries) — there is no third-party document to check against, so source-confirmation doesn't apply and never will. When declared, `assertions`/`verified_fields`/`unsourced_fields` are not required (the schema's `if`/`then` reflects this) and `tools/validate.py` skips the provenance-derived checks (SQC-1935/1947) entirely for that profile.
+- `tools/validate.py`: a new internal-consistency ("sense") check, split by severity:
+  - **Hard-fail**, runs on every profile: contradictions no real delivery could ever satisfy — a `min` above its own `max`, a bit-depth floor no allowed value can meet, `field_order` set on exclusively-progressive content, an incompatible codec/container pairing (e.g. `avc_intra_100` in `mp4`).
+  - **Warn** (advisory, never fails CI): a profile names a standard (EBU R128, ATSC A/85) but sets a value the standard doesn't define — e.g. claims R128 but a target other than -23.0 LUFS. Deliberate deviation is legitimate (staging exists to carry it); the point is that it must be *noticed*, not silently drift.
+
+### Why
+
+A profile authored by the org itself (a delivery spec for the org's own content) has no third-party source to trace values to — `governance.verification`'s source-confirmation framework is a category error there, not a weaker case of it. Defaulting such a profile to `verified` would launder the badge (a consumer couldn't tell "checked against a published spec" from "someone typed it into a form"); defaulting to `unverified` implies a deficiency the org can never remedy. Neither was right, so this adds a distinct status instead of stretching the existing scale.
+
+What IS checkable about a first-party spec is internal consistency: a spec naming EBU R128 while setting a target of -20 LUFS is wrong regardless of who's authoring it.
+
 ## [0.14.0] — Per-field verification
 
 ### Added
