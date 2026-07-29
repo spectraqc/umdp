@@ -7,7 +7,7 @@ Usage:
     tools/validate.py path/to/profile.json     # validate a specific file
     tools/validate.py profiles/*.json
 
-Four classes of check run:
+Five classes of check run:
 
   * JSON Schema   — every target validates against schema/umdp.schema.json.
   * Convention    — every profile's top-level `id` equals its filename stem,
@@ -27,8 +27,19 @@ Four classes of check run:
                     profiles; SQC-1946 is paying down the rest. That's the
                     intended state, not a bug in this gate — it exists so
                     the debt can't grow while it's paid down, per SQC-1947.
+                    Skipped entirely for status=authority_authored (SQC-1949)
+                    — an org-authored spec has no third-party source to trace
+                    values to at all, so this framework doesn't apply.
+  * Sense         — internal contradictions that make a profile impossible to
+    (hard-fail)     satisfy regardless of who authored it or why: a min above
+                    its own max, a bit-depth floor no allowed value can meet,
+                    field order on exclusively-progressive content, an
+                    incompatible codec/container pairing (SQC-1949). Runs on
+                    every profile, not just authority_authored ones — an
+                    internal contradiction is a bug in a reference profile
+                    too.
 
-Two advisory (non-failing) reports also run:
+Three advisory (non-failing) reports also run:
 
   * Undocumented  — profile keys not declared in the schema's `properties`.
     keys           On *value* objects (signal_limits, loudness, sync, …) these
@@ -46,6 +57,13 @@ Two advisory (non-failing) reports also run:
                     vs 'avc_intra_100', '5.1' vs 'L-R-C-LFE-Ls-Rs') so profiles
                     diff cleanly across vendors (SQC-1490, extended SQC-1532).
                     Never fails CI on its own.
+
+  * Sense         — a profile names a standard (EBU R128, ATSC A/85, …) but
+    (warn)          sets a value the standard doesn't define — e.g. claims R128
+                    but a target other than -23.0 LUFS (SQC-1949). The org may
+                    deviate deliberately (staging exists to carry exactly
+                    that), but must NOTICE a silent deviation from a standard
+                    the profile itself names. Never fails CI on its own.
 
 Any failure prints a FAIL line and the script exits non-zero, so CI blocks
 the merge. Advisory `note` lines do not affect the exit code.
@@ -324,8 +342,13 @@ def compute_verification(data: dict, records: dict) -> dict:
 
 def check_verification(data: dict, profile_id: str) -> list[str]:
     """A profile may not overstate how much of it has been checked."""
-    computed = compute_verification(data, load_provenance(profile_id))
     declared = (data.get("governance") or {}).get("verification")
+    if declared is not None and declared.get("status") == "authority_authored":
+        # SQC-1949 — a different claim, not a weaker point on the same scale: the
+        # authoring party IS the authority, so there is nothing to compute against
+        # provenance/. The schema's if/then already requires nothing else be declared.
+        return []
+    computed = compute_verification(data, load_provenance(profile_id))
     if declared is None:
         if computed["status"] != "unverified":
             return ["governance.verification missing but provenance records exist "
@@ -355,7 +378,13 @@ def check_provenance(data: dict, profile_id: str) -> list[str]:
     only targets an assertion that exists with no record at all; it does not
     require the record to be method="human" — that bar is verified_fields /
     governance.verification.status, a stronger, separate claim.
+
+    SQC-1949 — skipped entirely for status=authority_authored: there is no cited
+    source document to trace a value to, so "no provenance record" isn't a gap
+    here the way it is for a reference profile.
     """
+    if (data.get("governance") or {}).get("verification", {}).get("status") == "authority_authored":
+        return []
     records = load_provenance(profile_id)
     unsourced = [p for p, _v in _leaf_assertions(data) if p not in records]
     if not unsourced:
@@ -366,6 +395,134 @@ def check_provenance(data: dict, profile_id: str) -> list[str]:
         f"{len(unsourced)} value-bearing assertion(s) have no provenance record in "
         f"provenance/{profile_id}.json: {shown}{more}"
     ]
+
+
+def _at(obj, *path):
+    """Navigate a dotted path through nested dicts; None if any hop is missing/wrong-typed."""
+    for key in path:
+        if not isinstance(obj, dict) or key not in obj:
+            return None
+        obj = obj[key]
+    return obj
+
+
+# SQC-1949 — a profile whose values contradict EACH OTHER can never be satisfied by any
+# real delivery, regardless of who authored it or why (an org-authored spec is authoritative
+# about WHAT it wants, never about whether its own numbers are self-consistent). Deliberately
+# narrow and literal-minded — same spirit as the husk/version-conflict detectors elsewhere in
+# this file: catch a real contradiction, never infer or guess at one.
+_INCOMPATIBLE_CODEC_CONTAINER = {
+    ("avc_intra_100", "mp4"), ("avc_intra_50", "mp4"), ("avc_intra_200", "mp4"),
+    ("xdcam_hd_422_50", "mp4"), ("d10", "mp4"), ("d10", "mov"),
+}
+
+
+def check_sense_hard(data: dict) -> list[str]:
+    errors = []
+
+    tc = _at(data, "assets", "audio", "track_count")
+    if isinstance(tc, dict) and isinstance(tc.get("min"), (int, float)) and isinstance(tc.get("max"), (int, float)):
+        if tc["min"] > tc["max"]:
+            errors.append(f"assets.audio.track_count: min ({tc['min']}) > max ({tc['max']})")
+
+    for label in ("luminance", "rgb"):
+        limits = _at(data, "constraints", "video", "signal_limits", label)
+        if isinstance(limits, dict) and isinstance(limits.get("min"), (int, float)) and isinstance(limits.get("max"), (int, float)):
+            if limits["min"] >= limits["max"]:
+                errors.append(
+                    f"constraints.video.signal_limits.{label}: min ({limits['min']}) >= "
+                    f"max ({limits['max']}) — not a valid range"
+                )
+
+    bit_depth = _at(data, "assets", "video", "bit_depth")
+    if isinstance(bit_depth, dict) and isinstance(bit_depth.get("min"), (int, float)) and isinstance(bit_depth.get("allowed"), list):
+        allowed_nums = [v for v in bit_depth["allowed"] if isinstance(v, (int, float))]
+        if allowed_nums and bit_depth["min"] > min(allowed_nums):
+            errors.append(
+                f"assets.video.bit_depth: min ({bit_depth['min']}) exceeds every value in "
+                f"allowed ({allowed_nums}) — no allowed bit depth can satisfy the minimum"
+            )
+
+    scan_type = _at(data, "assets", "video", "scan_type")
+    field_order = _at(data, "assets", "video", "signal", "field_order")
+    if isinstance(scan_type, list) and scan_type == ["progressive"] and field_order:
+        errors.append(
+            "assets.video: scan_type is exclusively 'progressive' but signal.field_order "
+            f"is set ({field_order}) — field order only applies to interlaced content"
+        )
+
+    codec = _at(data, "assets", "video", "codec", "allowed") or []
+    container = _at(data, "assets", "video", "container", "allowed") or []
+    if isinstance(codec, list) and isinstance(container, list):
+        for c in codec:
+            for w in container:
+                if (c, w) in _INCOMPATIBLE_CODEC_CONTAINER:
+                    errors.append(f"assets.video: codec {c!r} is not deliverable in container {w!r}")
+
+    return errors
+
+
+def check_sense_warn(data: dict) -> list[str]:
+    """SQC-1949 — a profile that NAMES a standard but sets a value the standard doesn't
+    define is a silent-deviation risk: the org may have a legitimate, deliberate reason
+    (staging exists to carry exactly that), but must NOTICE, not drift unknowingly.
+    Advisory only, never fails validation — deliberately narrow (a handful of the most
+    common named standards), same spirit as the controlled-vocabulary notes above."""
+    notes = []
+    standards = _at(data, "assets", "audio", "loudness", "standards") or []
+    for std in standards:
+        if not isinstance(std, dict):
+            continue
+        name = str(std.get("name", ""))
+        target, tol = std.get("target"), std.get("tolerance")
+        if "128" in name:
+            if isinstance(target, (int, float)) and target != -23.0:
+                notes.append(f"loudness.standards names {name!r} but target={target} (R128 defines -23.0 LUFS)")
+            if isinstance(tol, (int, float)) and tol > 1.0:
+                notes.append(
+                    f"loudness.standards names {name!r} but tolerance={tol} "
+                    "(R128's live/impractical-target exception caps at ±1.0 LU)"
+                )
+        if "85" in name and "atsc" in name.lower():
+            if isinstance(target, (int, float)) and target != -24.0:
+                notes.append(f"loudness.standards names {name!r} but target={target} (ATSC A/85 defines -24.0 LKFS)")
+
+    true_peak = _at(data, "assets", "audio", "loudness", "true_peak_max")
+    if any("128" in str(s.get("name", "")) for s in standards if isinstance(s, dict)):
+        if isinstance(true_peak, (int, float)) and true_peak > -1.0:
+            notes.append(f"loudness names EBU R128 but true_peak_max={true_peak} dBTP (R128 caps at -1 dBTP)")
+
+    bit_depth_allowed = _at(data, "assets", "video", "bit_depth", "allowed") or []
+    color_range = _at(data, "assets", "video", "color", "range") or []
+    # Only checkable when bit depth is unambiguous: a profile accepting both 8- and
+    # 10-bit codecs (e.g. clearcast_commercials) has no single "implied" legal range,
+    # and declaring the stricter one is a legitimate choice, not a deviation to notice.
+    if "limited" in color_range and len(bit_depth_allowed) == 1:
+        expect = (64, 940) if bit_depth_allowed[0] == 10 else (16, 235) if bit_depth_allowed[0] == 8 else None
+        if expect:
+            for label in ("luminance", "rgb"):
+                limits = _at(data, "constraints", "video", "signal_limits", label)
+                if not isinstance(limits, dict):
+                    continue
+                mn, mx = limits.get("min"), limits.get("max")
+                if isinstance(mn, (int, float)) and isinstance(mx, (int, float)) and (mn, mx) != expect:
+                    notes.append(
+                        f"signal_limits.{label} is ({mn}, {mx}) but {bit_depth_allowed[0]}-bit limited range "
+                        f"implies {expect} (could be the base range with EBU R103 tolerance already folded "
+                        "in, e.g. 64-940 ±5%/-1%/+3% ≈ 20-984 — worth confirming that's intentional)"
+                    )
+
+    broadcast_system = _at(data, "assets", "video", "signal", "broadcast_system")
+    frame_rate_allowed = _at(data, "assets", "video", "frame_rate", "allowed") or []
+    if isinstance(broadcast_system, str):
+        m = re.search(r"/(\d+(?:\.\d+)?)", broadcast_system)
+        if m and frame_rate_allowed and m.group(1) not in [str(v) for v in frame_rate_allowed]:
+            notes.append(
+                f"signal.broadcast_system={broadcast_system!r} implies frame rate {m.group(1)}, "
+                f"but frame_rate.allowed={frame_rate_allowed} doesn't include it"
+            )
+
+    return notes
 
 
 def validate_file(validator: Draft202012Validator, path: Path) -> list[str]:
@@ -430,6 +587,7 @@ def main() -> int:
             if isinstance(profile_id, str):
                 errs.extend(check_verification(data, profile_id))
                 errs.extend(check_provenance(data, profile_id))
+                errs.extend(check_sense_hard(data))
                 if profile_id in ids:
                     errs.append(
                         f"convention: duplicate id {profile_id!r} "
@@ -455,6 +613,9 @@ def main() -> int:
                       "(allowed by additionalProperties; not in schema)")
             # SQC-1490 — advisory only: off-vocabulary codec/container tokens.
             for msg in non_canonical_tokens(data, vocab):
+                print(f"note {rel}: {msg}")
+            # SQC-1949 — advisory only: deviates from a standard the profile itself names.
+            for msg in check_sense_warn(data):
                 print(f"note {rel}: {msg}")
 
     if failed:
