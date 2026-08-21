@@ -2,6 +2,39 @@
 
 All notable changes to the UMDP schema are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/) and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.16.0] — Standards as machine-readable constraint sets
+
+### Added
+
+- `schema/standards/<id>.json` — each standard as data: what it **defines**, per UMDP field, with the clause it comes from and a verbatim quote. Four to start: `ebu-r128` (EBU R 128-2023 v5), `ebu-r128-s1` (short-form supplement, 2020), `atsc-a85` (A/85:2013 with Corrigendum No. 1) and `itu-r-bs1770` (BS.1770-5).
+- `schema/standards/standard.schema.json` — meta-schema for those files, versioned with the main schema. A constraint set that doesn't validate against it fails `tools/validate.py` outright: a malformed definition stops constraining silently, which is exactly the failure this mechanism exists to remove.
+- `tools/validate.py`: the standard-conformance advisory. A profile that names a standard but sets a value that standard doesn't define now gets a note carrying the citation — driven entirely from `schema/standards/`.
+- `tools/test_standards.py` — 20 cases pinning the directional rules, the content-class split, and the legal ways to state nothing. Run in CI.
+
+### Changed
+
+- `tools/validate.py`: the loudness half of the SQC-1949 sense warn is gone, replaced by the data-driven check. It hard-coded `-23.0` and `-24.0` as literals only this validator knew about; the same numbers were separately hard-coded in SpectraQC's spec editor and again in its QC engine. Output over the 17 shipped profiles is byte-identical before and after, so the replacement is behaviour-preserving on the real set — the difference is where the definition lives.
+
+### The rule is directional, per field
+
+A flat lock would be wrong, and would have looked like a correct implementation. All sixteen broadcaster profiles name EBU R 128 and all sixteen sit at −23.0 LUFS, but their tolerances run 0.2 / 0.5 / 1.0 / absent and their true-peak ceilings −1.0 / −2.0 / −3.0 / absent. Those are stricter house limits inside the standard, not violations. So each field carries one of four rules — `locked` (the constant the standard *is*), `bounded` (may be made stricter, never looser), `optional`, `not_applicable` — and tightening is silent by design.
+
+`R 128` recommends (m) sanctions the tightening itself for true peak: *"Permitted Maximum True Peak Levels may be lower for different distribution systems and data reduction rates."*
+
+### Content class is part of the envelope
+
+R 128 recommends (q) delegates short-form content to R 128 s1, whose envelope genuinely differs: ±0.2 LU rather than the ±1.0 LU R 128 permits for live programmes, and a Loudness Range that *"shall not be specified for programmes of this length/genre"*. A constraint set may therefore declare `applies_to.content_type`, and a supplement declares `supplements`; a `commercial` profile naming "EBU R128" is measured against s1, which is what R 128 says applies to it.
+
+This is what makes `rtl_smallitems_hd`'s ±0.2 LU legible: it is s1's stated tolerance for short-form, not a house tightening of programme R 128.
+
+### Notes
+
+- ITU-R BS.1770 is defined with `role: measurement` and constrains nothing. Its Scope is *"audio measurement algorithms"* and none of its recommends clauses states a target, a tolerance or a peak ceiling — so a spec naming BS.1770 alongside its own numbers is making its own claim, correctly, and nothing here second-guesses it.
+- The advisory never fails CI. Deliberate deviation is legitimate; the point is that it must be *noticed*.
+- `assets.audio.loudness.standards[].name` stays a free string in the schema. Selecting it from the defined set is enforced where specs are authored (SpectraQC's spec editor), not by narrowing the schema under profiles already published.
+- R 128 s1's Maximum Short-term Loudness (−18.0 LUFS) has no UMDP field yet; it is recorded in that file's `not_yet_modelled` with its citation rather than dropped.
+- Downstream mirrors of the schema must be re-synced (SpectraQC `frontend/lib/umdp.schema.json`; its drift guard will fail CI otherwise).
+
 ## [0.15.0] — authority_authored + internal-consistency sense-check
 
 ### Added

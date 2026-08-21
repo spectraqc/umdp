@@ -4,7 +4,7 @@ UMDP is an open, machine-readable schema for broadcast, OTT, cinema, and ad-deli
 
 It lets a broadcaster, studio, post house, or QC vendor encode "what does this delivery need to look like" — codecs, containers, color, loudness, timecode, packaging, compliance — as a single JSON document that any tool can read.
 
-**Schema version:** `0.15.0`
+**Schema version:** `0.16.0`
 **Spec licence:** [CC BY 4.0](LICENSE) · **Tooling licence:** [MIT](LICENSE-MIT)
 
 **Canonical repository:** [github.com/spectraqc/umdp](https://github.com/spectraqc/umdp) — please open issues and pull requests here.
@@ -54,11 +54,15 @@ UMDP is intentionally vendor-neutral. It is governed in the open and welcomes co
 ```
 schema/umdp.schema.json   JSON Schema (Draft 2020-12) — the contract
 schema/enums/             Recommended controlled vocabularies (codecs, containers, colour)
+schema/standards/         Named standards as constraint sets — what EBU R 128 actually defines
 profiles/                 Real-world delivery specs encoded as UMDP documents
 examples/                 Minimal annotated examples
 docs/                     Field reference and contribution guidance
 tools/validate.py         CLI validator — runs in CI on every PR
+tools/test_standards.py   Tests for the standard constraint sets
 ```
+
+A profile records what one broadcaster requires. `schema/standards/` records what a *named standard* requires, so "this profile says EBU R 128 and sets a target of −20 LUFS" is a statement something can check. Each field says whether the standard locks a constant, bounds a limit a spec may tighten but not loosen, leaves the value open, or says no value should be stated at all — see [schema/standards/README.md](schema/standards/README.md).
 
 ---
 
@@ -112,7 +116,7 @@ CI runs `tools/validate.py` on every PR. Profiles must validate against the publ
 
 ## Versioning
 
-UMDP follows semantic versioning of the schema document. The current version is **0.15.0**.
+UMDP follows semantic versioning of the schema document. The current version is **0.16.0**.
 
 The **single source of truth** for the schema version is the `$id` of [`schema/umdp.schema.json`](schema/umdp.schema.json). The schema `$comment`, the version strings in this README, and the top entry in [CHANGELOG.md](CHANGELOG.md) must all match it — `tools/validate.py` enforces this in CI, so the spots can't drift apart.
 
@@ -126,7 +130,7 @@ A profile's own `governance.spec_version` is the version of the **delivery spec 
 
 ## Status
 
-UMDP 0.15.0 covers the fields needed by every public-broadcaster, OTT-mezzanine, and ad-clearance spec we have profiled so far. Container objects (`assets`, `constraints`, `packaging`, …) are `additionalProperties: true` — vendors can add their own extension fields and propose them upstream as the ecosystem stabilises — while value objects that carry measurement thresholds (signal limits, loudness, sync, frame rate, …) are closed (`additionalProperties: false`), so a mistyped key can't silently disable a check.
+UMDP 0.16.0 covers the fields needed by every public-broadcaster, OTT-mezzanine, and ad-clearance spec we have profiled so far. Container objects (`assets`, `constraints`, `packaging`, …) are `additionalProperties: true` — vendors can add their own extension fields and propose them upstream as the ecosystem stabilises — while value objects that carry measurement thresholds (signal limits, loudness, sync, frame rate, …) are closed (`additionalProperties: false`), so a mistyped key can't silently disable a check.
 
 See [docs/gaps.md](docs/gaps.md) for known limitations and the proposal queue.
 

@@ -1,0 +1,15 @@
+{
+  "$comment": "BS.1770 is the measurement algorithm every loudness standard here is measured with, and it is NOT a delivery standard: its Scope is 'audio measurement algorithms for the purpose of determining subjective programme loudness, and true-peak signal level', and none of its five recommends clauses states a target, a tolerance or a peak ceiling. It is defined here so that naming it is recognised rather than unknown — and so a spec naming BS.1770 alongside its own numbers is read correctly: the numbers are the spec's, and BS.1770 is how they are measured.",
+  "id": "itu-r-bs1770",
+  "name": "ITU-R BS.1770",
+  "aliases": ["ITU-R BS.1770-5", "ITU-R BS.1770-4", "ITU-R BS.1770-3", "ITU-R BS.1770-2", "ITU-R BS.1770-1", "BS.1770", "BS1770", "ITU BS.1770"],
+  "publisher": "ITU-R",
+  "edition": "BS.1770-5 (11/2023)",
+  "document": {
+    "title": "Recommendation ITU-R BS.1770-5 — Algorithms to measure audio programme loudness and true-peak audio level",
+    "url": "https://www.itu.int/rec/R-REC-BS.1770-5-202311-I/en",
+    "read_on": "2026-08-21"
+  },
+  "role": "measurement",
+  "fields": {}
+}

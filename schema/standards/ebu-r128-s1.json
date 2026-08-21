@@ -1,0 +1,59 @@
+{
+  "$comment": "EBU R 128 s1 is the short-form envelope: R 128 recommends (q) delegates adverts, promos and similar items here, and s1 states a tolerance and a Maximum Short-term Loudness that plain R 128 does not. Keeping the two apart is the point — a ±0.2 LU tolerance read off a commercials spec is s1's QC allowance, not a house tightening of programme R 128, and must not leak into a programme profile.",
+  "id": "ebu-r128-s1",
+  "name": "EBU R 128 s1",
+  "aliases": ["EBU R128 s1", "R 128 s1", "R128 s1", "EBU R 128 supplement 1"],
+  "publisher": "EBU",
+  "edition": "R 128 s1-2020 (August 2020)",
+  "document": {
+    "title": "EBU R 128 s1 — Loudness Parameters for Short-form Content (Adverts; Promos etc.)",
+    "url": "https://tech.ebu.ch/publications/r128s1",
+    "read_on": "2026-08-21"
+  },
+  "role": "delivery",
+  "measured_with": ["ITU-R BS.1770", "EBU Tech 3341"],
+  "applies_to": { "content_type": ["commercial", "promo", "trailer", "interstitial"] },
+  "supplements": "ebu-r128",
+  "fields": {
+    "assets.audio.loudness.standards[].target": {
+      "rule": "locked",
+      "value": -23.0,
+      "unit": "LUFS",
+      "cite": "recommends (b)",
+      "quote": "that the Programme Loudness Level shall be normalised to a Target Level of −23.0 LUFS. For the implementation of Loudness workflows (for example, in Quality Control environments) a tolerance of ±0.2 LU is allowed in order to take account of measurement errors;",
+      "note": "Same constant as programme R 128 — short-form content is normalised to the same target; only the tolerance and the short-term ceiling differ."
+    },
+    "assets.audio.loudness.standards[].tolerance": {
+      "rule": "bounded",
+      "max": 0.2,
+      "unit": "LU",
+      "cite": "recommends (b)",
+      "quote": "For the implementation of Loudness workflows (for example, in Quality Control environments) a tolerance of ±0.2 LU is allowed in order to take account of measurement errors;",
+      "note": "s1 carries no equivalent of R 128 (h)'s ±1.0 LU live exception — short-form content is not live, so the QC measurement allowance is the whole of the tolerance. A short-form spec at ±1.0 LU is looser than the standard it names."
+    },
+    "assets.audio.loudness.true_peak_max": {
+      "rule": "bounded",
+      "max": -1.0,
+      "unit": "dBTP",
+      "cite": "recommends (g)",
+      "quote": "and that the True Peak Level of the programme shall not exceed −1 dBTP (dB True Peak) for linear audio, measured with a meter compliant with ITU-R BS.1770 and EBU Tech 3341. The measurement tolerance is ±0.3 dB (for signals with a bandwidth limited to 20 kHz).",
+      "note": "Footnote 1 refers the reader to EBU Tech 3344 for Maximum Permitted True Peak Levels on different distribution systems, i.e. a lower ceiling is expected for coded delivery."
+    },
+    "assets.audio.loudness.standards[].lra_max": {
+      "rule": "not_applicable",
+      "cite": "clause 'The measure Loudness Range is not useful for short-form content'",
+      "quote": "The measure 'Loudness Range' is not useful for short-form content. It is based on a statistical analysis of the Short-term (3 s) Loudness values. For commercials, promos etc. this leaves too few data points for a meaningful result. Therefore, a maximum and/or minimum value for Loudness Range shall not be specified for programmes of this length/genre.",
+      "note": "Not merely unset — s1 says a value shall not be specified at all, so an LRA ceiling on a short-form profile contradicts the standard it names."
+    }
+  },
+  "not_yet_modelled": [
+    {
+      "parameter": "Maximum Short-term Loudness",
+      "value": -18.0,
+      "unit": "LUFS",
+      "cite": "recommends (d)",
+      "quote": "that the Short-term Loudness Level (measured in compliance with EBU Tech 3341) shall not exceed −18.0 LUFS (+5.0 LU on the relative scale). For the implementation of loudness workflows (for example, in Quality Control environments) a tolerance of +0.2 LU is allowed in order to take account of measurement errors;",
+      "tracked_by": "SQC-2029"
+    }
+  ]
+}

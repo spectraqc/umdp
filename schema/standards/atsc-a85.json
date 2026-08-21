@@ -1,0 +1,41 @@
+{
+  "$comment": "ATSC A/85 is a Recommended Practice, not a standard in the shall-sense: section 6 says 'should' throughout, and its target applies specifically to content delivered or exchanged WITHOUT metadata and with no prior arrangement between the parties. The constraints below carry that qualification; a spec that departs from them has departed from the recommended practice it names.",
+  "id": "atsc-a85",
+  "name": "ATSC A/85",
+  "aliases": ["ATSC A/85:2013", "A/85", "A85", "ATSC A85", "CALM Act (ATSC A/85)"],
+  "publisher": "ATSC",
+  "edition": "A/85:2013 with Corrigendum No. 1 (11 February 2021)",
+  "document": {
+    "title": "ATSC A/85 — Techniques for Establishing and Maintaining Audio Loudness for Digital Television",
+    "url": "https://www.atsc.org/wp-content/uploads/2025/06/A85-2013-with-Corrigendum-No-1.pdf",
+    "read_on": "2026-08-21"
+  },
+  "role": "delivery",
+  "measured_with": ["ITU-R BS.1770"],
+  "fields": {
+    "assets.audio.loudness.standards[].target": {
+      "rule": "locked",
+      "value": -24.0,
+      "unit": "LKFS",
+      "cite": "§6 Target loudness and true peak levels for content delivery or exchange",
+      "quote": "For delivery or exchange of content without metadata (and where there is no prior arrangement by the parties regarding loudness), the Target Loudness value should be –24 LKFS.",
+      "note": "LKFS and LUFS are the same unit under different names (EBU R 128 footnote 1); UMDP records the number, and the standard's name says which convention it is stated in."
+    },
+    "assets.audio.loudness.standards[].tolerance": {
+      "rule": "bounded",
+      "max": 2.0,
+      "unit": "LKFS",
+      "cite": "§6",
+      "quote": "Minor measurement variations of up to approximately ±2 dB about this value are anticipated, due to measurement uncertainty, and are acceptable (due to the comfort zone - see Annex E). Content loudness should not be targeted to the high or low side of this range.",
+      "note": "±2 dB is a measurement-uncertainty band, not licence to aim off target — A/85 says so in the same breath. A stricter house tolerance is inside the practice; a looser one is not."
+    },
+    "assets.audio.loudness.true_peak_max": {
+      "rule": "bounded",
+      "max": -2.0,
+      "unit": "dBTP",
+      "cite": "§6",
+      "quote": "The true-peak level should be kept below -2 dB TP in order to provide headroom to avoid potential clipping due to downstream processing (such as audio coding used in delivery).",
+      "note": "The ceiling exists to leave coding headroom, so a lower one is squarely in the spirit of the practice."
+    }
+  }
+}
