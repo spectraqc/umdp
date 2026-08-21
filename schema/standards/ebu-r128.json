@@ -1,0 +1,48 @@
+{
+  "$comment": "EBU R 128 as a constraint set for the PROGRAMME content class. Short-form content (adverts, promos, trailers, interstitials) is governed by R 128 s1 instead — see ebu-r128-s1.json — because R 128 recommends (q) delegates it there and s1 states a different envelope. Every constraint below is quoted from R 128-2023 (v5).",
+  "id": "ebu-r128",
+  "name": "EBU R 128",
+  "aliases": ["EBU R128", "R 128", "R128", "EBU R 128-2023", "EBU R128 (2023)"],
+  "publisher": "EBU",
+  "edition": "R 128-2023 (v5, November 2023)",
+  "document": {
+    "title": "EBU R 128 — Loudness normalisation and permitted maximum level of audio signals",
+    "url": "https://tech.ebu.ch/publications/r128",
+    "read_on": "2026-08-21"
+  },
+  "role": "delivery",
+  "measured_with": ["ITU-R BS.1770", "EBU Tech 3341"],
+  "applies_to": { "content_type": ["program", "music_video"] },
+  "fields": {
+    "assets.audio.loudness.standards[].target": {
+      "rule": "locked",
+      "value": -23.0,
+      "unit": "LUFS",
+      "cite": "recommends (h)",
+      "quote": "that the Programme Loudness Level shall be normalised to a Target Level of −23.0 LUFS. Where attaining the Target Level is not achievable practically (for example, live programmes), a tolerance of ±1.0 LU is permitted. A broadcaster should ensure that a deviation from the Target Level towards the limits of the tolerance does not become standard practice;",
+      "note": "−23.0 LUFS is the constant the recommendation is built on: a spec that sets a different target is not doing R 128. Recommends (j) does permit normalising LOWER than −23.0 on purpose, but requires that 'this exception shall be clearly indicated' — in UMDP terms that is a named variant of R 128, not R 128, so the editor locks the field rather than offering the exception as a value."
+    },
+    "assets.audio.loudness.standards[].tolerance": {
+      "rule": "bounded",
+      "max": 1.0,
+      "unit": "LU",
+      "cite": "recommends (h), (i)",
+      "quote": "Where attaining the Target Level is not achievable practically (for example, live programmes), a tolerance of ±1.0 LU is permitted. [...] that for the implementation of Loudness workflows (for example, in Quality Control environments) a tolerance of ±0.2 LU is allowed in order to take account of measurement errors;",
+      "note": "±1.0 LU is the loosest R 128 permits, and only for programmes where the target is not practically achievable; ±0.2 LU is the allowance for QC measurement error. A stricter house tolerance is inside the standard. A looser one is not R 128."
+    },
+    "assets.audio.loudness.true_peak_max": {
+      "rule": "bounded",
+      "max": -1.0,
+      "unit": "dBTP",
+      "cite": "recommends (m)",
+      "quote": "and that the True Peak Level of a programme shall not exceed −1 dBTP (dB True Peak) during production (linear audio), measured with a meter compliant with ITU-R BS.1770 and EBU Tech 3341. The measurement tolerance is ±0.3 dB (for signals with a bandwidth limited to 20 kHz). Permitted Maximum True Peak Levels may be lower for different distribution systems and data reduction rates.",
+      "note": "The recommendation itself sanctions a lower ceiling for a given distribution path (and refers the reader to EBU Tech 3344 for the figures), so a spec below −1 dBTP is R 128-conformant. Above it is not."
+    },
+    "assets.audio.loudness.standards[].lra_max": {
+      "rule": "optional",
+      "cite": "further recommends (n)",
+      "quote": "that the measure Loudness Range (measured in compliance with EBU Tech 3342) may be used to evaluate the loudness variation of a programme, its potential subsequent dynamic treatment and the dynamic integrity of a distribution path;",
+      "note": "R 128 recommends measuring Loudness Range but sets no ceiling, so any value here is the spec's own requirement, not the standard's. Footnote 2 discourages the measure for programmes shorter than one minute."
+    }
+  }
+}

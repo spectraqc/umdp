@@ -7,7 +7,7 @@ Usage:
     tools/validate.py path/to/profile.json     # validate a specific file
     tools/validate.py profiles/*.json
 
-Five classes of check run:
+Six classes of check run:
 
   * JSON Schema   — every target validates against schema/umdp.schema.json.
   * Convention    — every profile's top-level `id` equals its filename stem,
@@ -30,6 +30,10 @@ Five classes of check run:
                     Skipped entirely for status=authority_authored (SQC-1949)
                     — an org-authored spec has no third-party source to trace
                     values to at all, so this framework doesn't apply.
+  * Standards     — every constraint set in schema/standards/ validates against
+                    schema/standards/standard.schema.json, its id matches its
+                    filename, and no two claim the same name or alias (SQC-1953).
+
   * Sense         — internal contradictions that make a profile impossible to
     (hard-fail)     satisfy regardless of who authored it or why: a min above
                     its own max, a bit-depth floor no allowed value can meet,
@@ -39,7 +43,7 @@ Five classes of check run:
                     internal contradiction is a bug in a reference profile
                     too.
 
-Three advisory (non-failing) reports also run:
+Four advisory (non-failing) reports also run:
 
   * Undocumented  — profile keys not declared in the schema's `properties`.
     keys           On *value* objects (signal_limits, loudness, sync, …) these
@@ -58,12 +62,22 @@ Three advisory (non-failing) reports also run:
                     diff cleanly across vendors (SQC-1490, extended SQC-1532).
                     Never fails CI on its own.
 
-  * Sense         — a profile names a standard (EBU R128, ATSC A/85, …) but
-    (warn)          sets a value the standard doesn't define — e.g. claims R128
-                    but a target other than -23.0 LUFS (SQC-1949). The org may
-                    deviate deliberately (staging exists to carry exactly
-                    that), but must NOTICE a silent deviation from a standard
-                    the profile itself names. Never fails CI on its own.
+  * Sense         — a profile's own fields don't sit together: signal limits
+    (warn)          that don't match its bit depth, a broadcast_system implying a
+                    frame rate the profile doesn't allow (SQC-1949). Never fails
+                    CI on its own.
+
+  * Standard      — a profile names a standard but sets a value that standard
+    conformance     doesn't define: a target other than R 128's -23.0 LUFS, a
+    (warn)          tolerance looser than the standard permits, an LRA ceiling on
+                    short-form content where R 128 s1 says none should be stated
+                    (SQC-1953). Driven by schema/standards/*.json, so the
+                    definition of "EBU R128" lives in one file this validator,
+                    the spec editor and the QC engine all read. TIGHTENING is
+                    silent by design — a house limit stricter than the standard
+                    is inside the standard, and warning on it would make a
+                    broadcaster unable to state its real requirement. Never fails
+                    CI on its own.
 
 Any failure prints a FAIL line and the script exits non-zero, so CI blocks
 the merge. Advisory `note` lines do not affect the exit code.
@@ -88,6 +102,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 SCHEMA_PATH = REPO_ROOT / "schema" / "umdp.schema.json"
 PROFILES_DIR = REPO_ROOT / "profiles"
 ENUMS_DIR = REPO_ROOT / "schema" / "enums"
+STANDARDS_DIR = REPO_ROOT / "schema" / "standards"
+STANDARD_META_SCHEMA_PATH = STANDARDS_DIR / "standard.schema.json"
 README_PATH = REPO_ROOT / "README.md"
 CHANGELOG_PATH = REPO_ROOT / "CHANGELOG.md"
 
@@ -137,6 +153,15 @@ def check_version_consistency(schema: dict) -> list[str]:
 
     changelog = CHANGELOG_PATH.read_text()
     expect("CHANGELOG top entry", changelog, rf"(?m)^##\s*\[({SEMVER})\]")
+
+    # SQC-1953 — the standards meta-schema ships alongside the main one and is
+    # versioned with it, so a release can't leave one behind.
+    try:
+        standard_meta = STANDARD_META_SCHEMA_PATH.read_text()
+    except OSError:
+        errors.append("schema/standards/standard.schema.json: missing")
+    else:
+        expect("standards meta-schema $id", standard_meta, rf"urn:umdp:standard:({SEMVER})")
 
     return errors
 
@@ -462,35 +487,273 @@ def check_sense_hard(data: dict) -> list[str]:
     return errors
 
 
-def check_sense_warn(data: dict) -> list[str]:
-    """SQC-1949 — a profile that NAMES a standard but sets a value the standard doesn't
-    define is a silent-deviation risk: the org may have a legitimate, deliberate reason
-    (staging exists to carry exactly that), but must NOTICE, not drift unknowingly.
-    Advisory only, never fails validation — deliberately narrow (a handful of the most
-    common named standards), same spirit as the controlled-vocabulary notes above."""
-    notes = []
-    standards = _at(data, "assets", "audio", "loudness", "standards") or []
-    for std in standards:
-        if not isinstance(std, dict):
-            continue
-        name = str(std.get("name", ""))
-        target, tol = std.get("target"), std.get("tolerance")
-        if "128" in name:
-            if isinstance(target, (int, float)) and target != -23.0:
-                notes.append(f"loudness.standards names {name!r} but target={target} (R128 defines -23.0 LUFS)")
-            if isinstance(tol, (int, float)) and tol > 1.0:
-                notes.append(
-                    f"loudness.standards names {name!r} but tolerance={tol} "
-                    "(R128's live/impractical-target exception caps at ±1.0 LU)"
-                )
-        if "85" in name and "atsc" in name.lower():
-            if isinstance(target, (int, float)) and target != -24.0:
-                notes.append(f"loudness.standards names {name!r} but target={target} (ATSC A/85 defines -24.0 LKFS)")
+# ── standards as data (SQC-1953) ─────────────────────────────────────────────
+# Until now every consumer carried its own idea of what "EBU R128" means: this
+# validator hard-coded -23.0/-24.0 literals, SpectraQC's spec editor hard-coded a
+# preset table, and its QC engine hard-coded a third. schema/standards/<id>.json
+# is the single definition they all read. The rule a standard imposes is
+# DIRECTIONAL, per field — a flat lock would be wrong:
+#   locked         the constant that DEFINES the standard (R 128's -23.0 LUFS
+#                  target). Set something else and the profile is a variant of the
+#                  standard, not the standard.
+#   bounded        a limit the spec may make STRICTER but never looser. R 128
+#                  itself sanctions this for true peak ("Permitted Maximum True
+#                  Peak Levels may be lower for different distribution systems").
+#   optional       the standard names the field and sets no value.
+#   not_applicable the standard says a value must not be stated (R 128 s1 on LRA).
+# Absence stays legal throughout: nrk_hd states no tolerance, rte_hd no true peak,
+# and "not stated in the source" is a valid profile outcome, never a default to fill.
+STANDARDS_ARRAY_PATH = "assets.audio.loudness.standards"
 
-    true_peak = _at(data, "assets", "audio", "loudness", "true_peak_max")
-    if any("128" in str(s.get("name", "")) for s in standards if isinstance(s, dict)):
-        if isinstance(true_peak, (int, float)) and true_peak > -1.0:
-            notes.append(f"loudness names EBU R128 but true_peak_max={true_peak} dBTP (R128 caps at -1 dBTP)")
+
+def load_standards() -> list[dict]:
+    """The constraint sets in schema/standards/*.json, excluding the meta-schema.
+    Unreadable files yield nothing here — check_standards_definitions is what
+    fails on them, so a broken definition surfaces once, as a repo error, rather
+    than as a wave of per-profile noise."""
+    out: list[dict] = []
+    for path in sorted(STANDARDS_DIR.glob("*.json")):
+        if path.name == STANDARD_META_SCHEMA_PATH.name:
+            continue
+        try:
+            doc = json.loads(path.read_text())
+        except (OSError, json.JSONDecodeError):
+            continue
+        if isinstance(doc, dict):
+            doc["_file"] = path.name
+            out.append(doc)
+    return out
+
+
+def check_standards_definitions(standards: list[dict]) -> list[str]:
+    """Repo invariant, hard-fail: every constraint set validates against
+    schema/standards/standard.schema.json, its id matches its filename, ids and
+    aliases are unambiguous, and `supplements` points at a standard that exists.
+    A malformed definition would silently disable the constraints it declares —
+    the failure mode this whole mechanism exists to remove — so it fails loudly."""
+    errors: list[str] = []
+    try:
+        meta = json.loads(STANDARD_META_SCHEMA_PATH.read_text())
+    except (OSError, json.JSONDecodeError) as exc:
+        return [f"schema/standards/standard.schema.json unreadable: {exc}"]
+    try:
+        Draft202012Validator.check_schema(meta)
+    except Exception as exc:  # noqa: BLE001 - jsonschema raises several types here
+        return [f"schema/standards/standard.schema.json is not a valid schema: {exc}"]
+
+    on_disk = {p.name for p in STANDARDS_DIR.glob("*.json")} - {STANDARD_META_SCHEMA_PATH.name}
+    loaded = {s.get("_file") for s in standards}
+    for missing in sorted(on_disk - loaded):
+        errors.append(f"schema/standards/{missing}: not valid JSON")
+
+    validator = Draft202012Validator(meta)
+    seen_ids: dict[str, str] = {}
+    seen_names: dict[str, str] = {}
+    for std in standards:
+        rel = f"schema/standards/{std.get('_file')}"
+        payload = {k: v for k, v in std.items() if k != "_file"}
+        for err in sorted(validator.iter_errors(payload), key=lambda e: list(e.absolute_path)):
+            where = "/".join(str(p) for p in err.absolute_path) or "<root>"
+            errors.append(f"{rel}: {where}: {err.message}")
+        std_id = std.get("id")
+        stem = str(std.get("_file", "")).removesuffix(".json")
+        if isinstance(std_id, str) and std_id != stem:
+            errors.append(f"{rel}: id {std_id!r} != filename stem {stem!r}")
+        if isinstance(std_id, str):
+            if std_id in seen_ids:
+                errors.append(f"{rel}: duplicate id {std_id!r} (also in {seen_ids[std_id]})")
+            else:
+                seen_ids[std_id] = rel
+        # Names and aliases are how a profile's free-text standard name is matched;
+        # two standards claiming one spelling would make the match arbitrary.
+        for spelling in [std.get("name"), *(std.get("aliases") or [])]:
+            if not isinstance(spelling, str):
+                continue
+            key = _normalise_standard_name(spelling)
+            if key in seen_names and seen_names[key] != rel:
+                errors.append(
+                    f"{rel}: name/alias {spelling!r} is also claimed by {seen_names[key]} — "
+                    "a profile naming it could not be matched to one standard"
+                )
+            else:
+                seen_names[key] = rel
+
+    for std in standards:
+        parent = std.get("supplements")
+        if isinstance(parent, str) and parent not in seen_ids:
+            errors.append(
+                f"schema/standards/{std.get('_file')}: supplements {parent!r}, "
+                "which is not a defined standard"
+            )
+    return errors
+
+
+def _normalise_standard_name(name: str) -> str:
+    """Fold a free-text standard name to a match key: 'EBU R 128' and 'EBU R128'
+    are the same standard written two ways. Deliberately aggressive — this exists
+    to recognise names already published in the wild, not to license loose
+    authoring (the spec editor picks from the defined set)."""
+    return re.sub(r"[^a-z0-9]", "", name.lower())
+
+
+def resolve_standard(name: str, standards: list[dict], content_type: str | None = None) -> dict | None:
+    """The constraint set governing a profile's named standard, or None if the
+    name isn't one we define.
+
+    Content class matters. EBU R 128 recommends (q) delegates short-form content
+    ("that production and normalisation of short-form content (adverts; promos
+    etc.) should be made in compliance with EBU R 128 s1"), and s1's envelope is
+    genuinely different — ±0.2 LU rather than ±1.0, and LRA that shall not be
+    stated at all. So a commercial profile naming "EBU R128" is measured against
+    s1, which is what the document says applies to it."""
+    key = _normalise_standard_name(name)
+    match = None
+    for std in standards:
+        spellings = {_normalise_standard_name(s) for s in
+                     [std.get("name", ""), *(std.get("aliases") or [])] if isinstance(s, str)}
+        if key in spellings:
+            match = std
+            break
+    if match is None or content_type is None:
+        return match
+
+    governs = (match.get("applies_to") or {}).get("content_type")
+    if governs is None or content_type in governs:
+        return match
+    for std in standards:
+        if std.get("supplements") != match.get("id"):
+            continue
+        narrower = (std.get("applies_to") or {}).get("content_type") or []
+        if content_type in narrower:
+            return std
+    return match
+
+
+_UNSET = object()
+
+
+def _value_at(profile: dict, standard_element: dict, path: str) -> object:
+    """The profile value a constraint path selects, or ``_UNSET`` if absent.
+
+    A path containing ``[]`` is anchored on the standards-array element under
+    test, not on the array: a profile may name several jurisdictional standards
+    (paramount_mez lists ITU-R BS.1770 for the US alongside EBU R128 for the EU)
+    and each constrains only its own element. Every other path resolves from the
+    profile root."""
+    if "[]" in path:
+        head, _, tail = path.partition("[]")
+        if head.rstrip(".") != STANDARDS_ARRAY_PATH:
+            return _UNSET  # no other array is anchorable yet
+        node: object = standard_element
+        parts = [p for p in tail.split(".") if p]
+    else:
+        node = profile
+        parts = path.split(".")
+    for part in parts:
+        if not isinstance(node, dict) or part not in node:
+            return _UNSET
+        node = node[part]
+    return node
+
+
+def check_standard_conformance(data: dict, standards: list[dict]) -> list[str]:
+    """SQC-1953 — advisory: a profile names a standard but sets a value that
+    standard does not define. Driven entirely by schema/standards/*.json, so the
+    rule and its citation live in one place and this validator, the spec editor
+    and the QC engine cannot drift apart on what R 128 means.
+
+    Never fails CI. Deviation can be deliberate and legitimate — the point is
+    that it must be NOTICED. Tightening is silent by design: a house limit
+    stricter than the standard is inside the standard, and warning on it would
+    make RAI unable to state its real requirement."""
+    if not standards:
+        return []
+    notes: list[str] = []
+    content_type = data.get("content_type")
+    elements = _at(data, "assets", "audio", "loudness", "standards") or []
+    for element in elements:
+        if not isinstance(element, dict):
+            continue
+        name = element.get("name")
+        if not isinstance(name, str) or not name.strip():
+            continue
+        std = resolve_standard(name, standards, content_type if isinstance(content_type, str) else None)
+        if std is None:
+            notes.append(
+                f"loudness.standards names {name!r}, which is not a defined standard "
+                "(schema/standards/*.json) — nothing can check the values against it"
+            )
+            continue
+        via = ""
+        if _normalise_standard_name(name) not in {
+            _normalise_standard_name(s) for s in [std.get("name", ""), *(std.get("aliases") or [])]
+            if isinstance(s, str)
+        }:
+            via = (f" (via {std.get('name')}, which {std.get('supplements')} delegates "
+                   f"content_type={content_type!r} to)")
+        for path, rule in (std.get("fields") or {}).items():
+            if not isinstance(rule, dict):
+                continue
+            value = _value_at(data, element, path)
+            note = _conformance_note(std, path, rule, value, via)
+            if note:
+                notes.append(note)
+    return notes
+
+
+def _conformance_note(std: dict, path: str, rule: dict, value: object, via: str) -> str | None:
+    """One field of one named standard. Returns a note, or None when the profile
+    conforms — including the two legal ways to not state a value: omitting the
+    field entirely, and setting it to null (nrk_hd's tolerance, rte_hd's true
+    peak). UMDP models absence; 'not stated in the source' is a valid outcome and
+    is never filled in with a default."""
+    if value is _UNSET or value is None:
+        if rule.get("rule") == "not_applicable":
+            return None
+        return None
+    kind = rule.get("rule")
+    label = std.get("name")
+    unit = f" {rule['unit']}" if rule.get("unit") else ""
+    cite = f"{label} {rule.get('cite')}"
+
+    if kind == "locked":
+        if isinstance(value, (int, float)) and float(value) != float(rule["value"]):
+            return (f"{path} is {value}{unit} but {label} defines {rule['value']}{unit} "
+                    f"[{cite}]{via} — that constant is what the standard IS, so this is a "
+                    f"variant of {label}, not {label}")
+        return None
+
+    if kind == "bounded":
+        # The bound present names the loosest the standard permits; stricter is
+        # silent, because a stricter house limit sits inside the standard.
+        if not isinstance(value, (int, float)):
+            return None
+        if "max" in rule and float(value) > float(rule["max"]):
+            return (f"{path} is {value}{unit}, looser than the {rule['max']}{unit} "
+                    f"{label} permits [{cite}]{via}")
+        if "min" in rule and float(value) < float(rule["min"]):
+            return (f"{path} is {value}{unit}, looser than the {rule['min']}{unit} "
+                    f"{label} permits [{cite}]{via}")
+        return None
+
+    if kind == "not_applicable":
+        return (f"{path} is set to {value}{unit}, but {label} states no value should be "
+                f"given for this content class [{cite}]{via}")
+
+    return None
+
+
+def check_sense_warn(data: dict) -> list[str]:
+    """SQC-1949 — a profile whose own fields do not sit together sensibly. Advisory
+    only, never fails validation.
+
+    The loudness half of this check moved out in SQC-1953: "names EBU R128 but sets
+    a target R128 doesn't define" is now answered from schema/standards/*.json by
+    check_standard_conformance, so the definition of R128 lives in one file that
+    the spec editor and the QC engine read too, instead of in a literal here that
+    only this validator knew about. What is left is the checks with no standard
+    behind them — implications between a profile's own fields."""
+    notes = []
 
     bit_depth_allowed = _at(data, "assets", "video", "bit_depth", "allowed") or []
     color_range = _at(data, "assets", "video", "color", "range") or []
@@ -560,6 +823,19 @@ def main() -> int:
 
     vocab = load_controlled_vocab()
 
+    # SQC-1953 — the standard constraint sets are a repo invariant, not per-profile
+    # data: a malformed one silently stops constraining, which is the failure this
+    # mechanism exists to remove.
+    standards = load_standards()
+    standards_errors = check_standards_definitions(standards)
+    if standards_errors:
+        failed += 1
+        print("FAIL standard definitions")
+        for err in standards_errors:
+            print(f"  - {err}")
+    else:
+        print(f"ok   standard definitions ({len(standards)} in schema/standards)")
+
     targets = gather_targets(sys.argv[1:])
     if not targets:
         print("no profiles to validate")
@@ -614,8 +890,12 @@ def main() -> int:
             # SQC-1490 — advisory only: off-vocabulary codec/container tokens.
             for msg in non_canonical_tokens(data, vocab):
                 print(f"note {rel}: {msg}")
-            # SQC-1949 — advisory only: deviates from a standard the profile itself names.
+            # SQC-1949 — advisory only: a profile's own fields don't sit together.
             for msg in check_sense_warn(data):
+                print(f"note {rel}: {msg}")
+            # SQC-1953 — advisory only: deviates from a standard the profile itself
+            # names, measured against schema/standards/*.json.
+            for msg in check_standard_conformance(data, standards):
                 print(f"note {rel}: {msg}")
 
     if failed:

@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:umdp:standard:0.16.0",
+  "title": "UMDP standard constraint set",
+  "description": "Meta-schema for the machine-readable standard definitions in schema/standards/*.json. A constraint set says, per UMDP field, what the named standard actually DEFINES: a constant it is not the standard without (locked), a bound a spec may make stricter but never looser (bounded), a field the standard leaves to the spec (optional), or one it says must not be stated at all (not_applicable). Every entry carries the clause it comes from and a verbatim quote, so a consumer can check the constraint against the document rather than trusting this file.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "publisher", "edition", "role", "document", "fields"],
+  "properties": {
+    "$comment": { "type": "string" },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Stable kebab-case identifier; must equal the filename stem."
+    },
+    "name": {
+      "type": "string",
+      "description": "Canonical display name, written into assets.audio.loudness.standards[].name when a profile adopts this standard."
+    },
+    "aliases": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Other spellings that resolve to this standard when matching an existing profile's free-text name (e.g. 'EBU R128' for 'EBU R 128'). Matching is case-insensitive and ignores whitespace; aliases exist so an already-published profile can be recognised, not so new ones can be authored loosely."
+    },
+    "publisher": { "type": "string" },
+    "edition": {
+      "type": "string",
+      "description": "The exact edition these constraints were read from, e.g. 'R 128-2023 (v5, November 2023)'. A later edition may change a locked constant; the edition is part of the claim."
+    },
+    "document": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "url"],
+      "properties": {
+        "title": { "type": "string" },
+        "url": { "type": "string", "format": "uri" },
+        "read_on": { "type": "string", "format": "date" }
+      }
+    },
+    "role": {
+      "type": "string",
+      "enum": ["delivery", "measurement"],
+      "description": "'delivery' — the standard sets values a deliverable must meet. 'measurement' — the standard specifies how to measure and sets no delivery values at all (ITU-R BS.1770). A measurement standard constrains nothing, and naming one does not license a spec to claim its numbers are the standard's."
+    },
+    "measured_with": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Standards this one requires the measurement to be made with."
+    },
+    "applies_to": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Content classes this constraint set governs. Omitted means it governs any content type. R 128 programme and R 128 s1 short-form are different envelopes over the same field set; conflating them is how a commercials tolerance leaks into a programme spec.",
+      "properties": {
+        "content_type": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": ["program", "commercial", "promo", "trailer", "interstitial", "music_video"]
+          }
+        }
+      }
+    },
+    "supplements": {
+      "type": "string",
+      "description": "id of the standard this one refines for a narrower content class."
+    },
+    "fields": {
+      "type": "object",
+      "description": "UMDP field path -> constraint. Path grammar: dot-separated keys from the profile root, with '[]' marking an array whose every element is governed (e.g. assets.audio.loudness.standards[].target).",
+      "propertyNames": { "pattern": "^[a-z_]+(\\[\\])?(\\.[a-z_]+(\\[\\])?)*$" },
+      "additionalProperties": { "$ref": "#/$defs/constraint" }
+    },
+    "not_yet_modelled": {
+      "type": "array",
+      "description": "Parameters the standard defines that UMDP has no field for. Recorded so the omission is visible and traceable rather than silently lost; each entry should name the ticket that would add the field.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["parameter", "cite", "quote"],
+        "properties": {
+          "parameter": { "type": "string" },
+          "value": { "type": ["number", "string"] },
+          "unit": { "type": "string" },
+          "cite": { "type": "string" },
+          "quote": { "type": "string" },
+          "tracked_by": { "type": "string" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "constraint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rule", "cite", "quote"],
+      "properties": {
+        "rule": {
+          "type": "string",
+          "enum": ["locked", "bounded", "optional", "not_applicable"],
+          "description": "'locked' — the constant that DEFINES the standard; change it and the spec is no longer doing this standard, so an editor must not offer it. 'bounded' — a limit the spec may make stricter but never looser; the bound present (max or min) is the loosest the standard permits. 'optional' — the standard names the field but sets no value; the spec decides. 'not_applicable' — the standard says a value must not be stated for this content class."
+        },
+        "value": {
+          "type": "number",
+          "description": "Required when rule is 'locked': the defining constant."
+        },
+        "max": {
+          "type": "number",
+          "description": "Loosest permitted value where looser means greater (tolerance, a true-peak ceiling). A spec may go lower."
+        },
+        "min": {
+          "type": "number",
+          "description": "Loosest permitted value where looser means smaller. A spec may go higher."
+        },
+        "unit": { "type": "string" },
+        "cite": {
+          "type": "string",
+          "description": "Where in the document the constraint is stated, precise enough to find: clause letter, section number, table."
+        },
+        "quote": {
+          "type": "string",
+          "description": "Verbatim text of the cited passage. The constraint is checkable against the document without re-reading the whole of it."
+        },
+        "note": {
+          "type": "string",
+          "description": "Anything the numbers alone would misrepresent — an exception, a conditional, a 'should' rather than a 'shall'."
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "rule": { "const": "locked" } }, "required": ["rule"] },
+          "then": { "required": ["value"] }
+        },
+        {
+          "if": { "properties": { "rule": { "const": "bounded" } }, "required": ["rule"] },
+          "then": { "anyOf": [{ "required": ["max"] }, { "required": ["min"] }] }
+        },
+        {
+          "if": {
+            "anyOf": [
+              { "properties": { "rule": { "const": "optional" } }, "required": ["rule"] },
+              { "properties": { "rule": { "const": "not_applicable" } }, "required": ["rule"] }
+            ]
+          },
+          "then": {
+            "not": { "anyOf": [{ "required": ["value"] }, { "required": ["max"] }, { "required": ["min"] }] }
+          }
+        }
+      ]
+    }
+  }
+}

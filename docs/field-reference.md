@@ -56,6 +56,8 @@ Codec, sample rate, bit depth, track count, language mode, channel layout, loudn
 
 `loudness.standards` is an array because some specs (rare) require both an integrated and a short-term measurement, or list a regional override.
 
+`loudness.standards[].name` is free text in the schema, but the standards it names are defined in [`schema/standards/`](../schema/standards/README.md): what EBU R 128 or ATSC A/85 actually locks, what it merely bounds, and what it leaves to the spec. `tools/validate.py` notes a profile that names a standard and then sets a value the standard doesn't define. Tightening a bound is silent — a stricter house limit sits inside the standard — and absence stays legal throughout.
+
 `sync` carries two *different* audio-to-video measurements. **Drift** — `max_drift_ms` (with optional `max_drift_ms_per_min` and `max_drift_ms_hard_fail_above`) — is progressive desync that accumulates over the timeline, and is what the A/V-sync-drift check enforces (typically 40 ms). **Offset** — `max_offset_ms` — is a single fixed lip-sync error; it is a distinct measurement (see [gaps.md](gaps.md) for its enforcement status). `must_match_video_duration` asserts the audio runs the full programme duration.
 
 ### `constraints.video.signal_limits`

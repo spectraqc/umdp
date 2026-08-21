@@ -24,5 +24,7 @@ jobs:
           Draft202012Validator.check_schema(schema)
           print("schema is a valid Draft 2020-12 JSON Schema")
           PY
+      - name: Test the standard constraint sets
+        run: python tools/test_standards.py
       - name: Validate all profiles
         run: python tools/validate.py
