@@ -541,7 +541,7 @@
         "sync": {
           "type": "object",
           "additionalProperties": false,
-          "$comment": "Audio-to-video sync, as TWO distinct measurements. 'offset' (max_offset_ms) is a single fixed lip-sync error, constant across the programme \u2014 the median of per-event (t_audio \u2212 t_video) deltas, and what a spec means by \"AV sync should be within \u00b1N ms\" or \"sound must not lead or lag the vision by more than N ms\". 'drift' (max_drift_ms_per_min) is PROGRESSIVE desync that accumulates over the timeline \u2014 the slope of that offset against programme time, the signature of a resample or a 25\u2194 23.976 speed change. 0.17.0 retired max_drift_ms, which named itself after drift but was bound to the offset measurement in every engine and every source spec that set it (SQC-1397); profiles that carried it now carry max_offset_ms with the same value.",
+          "$comment": "Audio-to-video sync, as TWO distinct measurements. 'offset' (max_offset_ms) is a single fixed lip-sync error, constant across the programme \u2014 the median of per-event (t_audio \u2212 t_video) deltas, and what a spec means by \"AV sync should be within \u00b1N ms\" or \"sound must not lead or lag the vision by more than N ms\". 'drift' (max_drift_ms_per_min) is PROGRESSIVE desync that accumulates over the timeline \u2014 the slope of that offset against programme time, the signature of a resample or a 25 \u2194 23.976 speed change. 0.17.0 retired max_drift_ms, which named itself after drift but was bound to the offset measurement in every engine and every source spec that set it (SQC-1397); profiles that carried it now carry max_offset_ms with the same value.",
           "properties": {
             "max_offset_ms": {
               "type": "number",
