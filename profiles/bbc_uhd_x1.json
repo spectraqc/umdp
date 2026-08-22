@@ -132,7 +132,7 @@
       },
       "sync": {
         "must_match_video_duration": true,
-        "max_drift_ms": 40
+        "max_offset_ms": 40
       }
     },
     "metadata": {

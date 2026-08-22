@@ -189,7 +189,7 @@ def undocumented_keys(schema: dict, data: object, root: dict, path: str = "") ->
     not declared in the matching schema node's ``properties``. Container
     objects are ``additionalProperties: true``, so jsonschema accepts extension
     keys on them silently; surfacing them catches near-miss key names (e.g.
-    ``max_drift_ms`` vs ``max_offset_ms``) in review. Value objects are closed
+    ``av_sync_max_ms`` vs ``max_offset_ms``) in review. Value objects are closed
     (``additionalProperties: false``, 0.11.0) so jsonschema already hard-fails
     their unknown keys; a note there is just a louder echo. Only reports where
     the schema documents a property set — free-form objects are left alone."""

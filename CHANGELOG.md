@@ -24,6 +24,24 @@ The sidecar is not itself schema-validated, so this adds vocabulary rather than 
 
 ---
 
+## [0.17.0] — A/V sync vocabulary: offset and drift named for what they measure
+
+### Changed
+
+- **`assets.audio.sync.max_drift_ms` → `max_offset_ms`; `max_drift_ms_hard_fail_above` → `max_offset_ms_hard_fail_above`.** The retired name described a measurement nothing performed. Engines bind that threshold to the **median of the per-event (t_audio − t_video) deltas** — a single fixed lip-sync offset, constant across the programme — while genuinely progressive desync is a separate quantity bound to `max_drift_ms_per_min`. Every source spec that set the field was quoting a lip-sync figure, not a drift rate: the DPP QC Guidelines say *"A/V sync (Lip Sync) … AV sync should be within ±10ms"*, NRK §6.7.4 says *"AV sync timing … should be ±5ms"*, RTÉ says *"sound must not lead or lag the vision by more than 5 ms"*. So the field was named after the one thing it was never measuring. Renamed, same value, same measurement (SQC-1397).
+- `max_drift_ms_per_min` is unchanged and is now the only field in the object whose name says "drift" — correctly, as the slope of the offset over programme time.
+- `profiles/bbc_uhd_x1.json`, `profiles/dpp_uk_hd.json`: `max_drift_ms: 40` → `max_offset_ms: 40`. Provenance keys renamed to match; the `dpp_uk_hd` **contradicted** flag on that value (source states ±10 ms, profile states 40 ms) is carried over untouched and still needs a human ruling.
+- `profiles/francetv_hd.json` (40), `profiles/nrk_hd.json` (5), `profiles/rte_hd.json` (5) already carried `max_offset_ms` and are unchanged — but they were **silently unenforced** until now, which is what SQC-1397 was opened about. Binding the field means those three ceilings start being applied.
+
+### Removed
+
+- `assets.audio.sync.max_drift_ms` and `assets.audio.sync.max_drift_ms_hard_fail_above`. The `sync` object is `additionalProperties: false` (0.11.0), so a profile still carrying either **fails validation** rather than losing its constraint quietly — the SQC-1395 failure mode this schema is built to prevent.
+
+### Notes
+
+- `docs/gaps.md` loses its "Audio sync offset is documented but unenforced" entry: the gap is closed by binding the field rather than by retiring it. The offset measurement already existed in the engine; only its name was wrong.
+- Downstream consumers must migrate together — a renamed field is silent to a reader that doesn't know it. The mirror in the SpectraQC monorepo (`frontend/lib/umdp.schema.json`), the spec-editor audio form, and the engine's threshold resolution are all part of the same change; the engine additionally keeps a logged fallback to the retired name so live spec-DB profiles that have not been migrated do not lose enforcement mid-flight.
+
 ## [0.16.0] — Standards as machine-readable constraint sets
 
 ### Added
