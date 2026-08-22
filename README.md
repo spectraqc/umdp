@@ -60,6 +60,8 @@ examples/                 Minimal annotated examples
 docs/                     Field reference and contribution guidance
 tools/validate.py         CLI validator — runs in CI on every PR
 tools/test_standards.py   Tests for the standard constraint sets
+tools/bulk_set.py         Apply one field across many profiles, with provenance
+tools/test_bulk_set.py    Tests for the bulk field-setter
 ```
 
 A profile records what one broadcaster requires. `schema/standards/` records what a *named standard* requires, so "this profile says EBU R 128 and sets a target of −20 LUFS" is a statement something can check. Each field says whether the standard locks a constant, bounds a limit a spec may tighten but not loosen, leaves the value open, or says no value should be stated at all — see [schema/standards/README.md](schema/standards/README.md).
@@ -77,7 +79,18 @@ python tools/validate.py
 
 # Validate a single profile
 python tools/validate.py profiles/svt_hd.json
+
+# Apply one field across a set of profiles (always preview first)
+python tools/bulk_set.py --jurisdiction SE,NO \
+    --set assets.video.signal.field_order='["tff"]' --dry-run
 ```
+
+`bulk_set.py` writes the provenance record and recomputes `governance.verification`
+alongside the edit, because both are things `validate.py` will otherwise fail on.
+Its default records are deliberately *not* `method="human"`: applying a value across
+many profiles in one command is a maintainer's assertion, not a per-profile
+confirmation of each cited source, so a bulk edit can never move a profile toward
+`verified`.
 
 To use UMDP in your own pipeline, fetch `schema/umdp.schema.json` and validate against it with any Draft 2020-12 JSON Schema library — Python (`jsonschema`), Node (`ajv`), Go (`gojsonschema`), Java (`networknt/json-schema-validator`), etc.
 
