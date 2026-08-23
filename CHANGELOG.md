@@ -2,6 +2,28 @@
 
 All notable changes to the UMDP schema are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/) and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## Unreleased
+
+### Added
+
+- `tools/bulk_set.py` (SQC-1975) — apply one field across a selected set of profiles (`--jurisdiction SE,NO`, `--profile a,b`, or `--all`) in a single command. The manual alternative is hand-editing the same key into N files, which is where a typo becomes a wrong delivery spec.
+- `tools/test_bulk_set.py` — 21 cases, run in CI.
+
+### Two new provenance values
+
+A bulk edit needs a record for every value-bearing leaf it adds, or SQC-1947 fails the profile outright. But it must not be recorded as `method="human"`: that means *a person confirmed the cited source document states this value*, and it is the only method counting toward `governance.verification.status="verified"`. Applying one value across N profiles in a single command is, by construction, not a per-profile source confirmation.
+
+So the sidecar gains two values, used only by this tool's defaults:
+
+- `state: "unsourced"` — the cited source was not consulted for this value.
+- `method: "asserted"` — a maintainer asserted it; not `human` / `model` / `literal`.
+
+Neither counts toward `verified` (that needs `state="stated"` **and** `method="human"`), so a bulk edit cannot inflate a profile's verification — which is the entire point. `--state` / `--method` can override for a genuinely source-confirmed bulk add, but the one combination that *would* count toward `verified` is refused without a real `--source`.
+
+The sidecar is not itself schema-validated, so this adds vocabulary rather than changing the contract — hence no schema version bump.
+
+---
+
 ## [0.16.0] — Standards as machine-readable constraint sets
 
 ### Added

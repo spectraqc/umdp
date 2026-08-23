@@ -26,5 +26,7 @@ jobs:
           PY
       - name: Test the standard constraint sets
         run: python tools/test_standards.py
+      - name: Test the bulk field-setter
+        run: python tools/test_bulk_set.py
       - name: Validate all profiles
         run: python tools/validate.py
