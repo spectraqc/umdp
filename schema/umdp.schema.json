@@ -1,10 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:umdp:schema:0.16.0",
+  "$id": "urn:umdp:schema:0.17.0",
   "title": "Universal Media Delivery Profile",
   "description": "Machine-readable schema for broadcast, OTT, cinema and ad-delivery technical specifications. UMDP is extension-friendly on its container objects (assets, constraints, packaging and the like accept additional properties so vendors and broadcasters can add fields and propose them upstream), while value objects that carry measurement thresholds (signal limits, loudness, sync, frame rate, …) are closed (additionalProperties: false) so a mistyped key cannot silently disable a constraint.",
   "type": "object",
-  "$comment": "UMDP 0.16.0 — schema version is independent of any individual profile's spec_version (governance.spec_version).",
+  "$comment": "UMDP 0.17.0 — schema version is independent of any individual profile's spec_version (governance.spec_version).",
   "required": ["id", "name", "delivery_paradigm"],
   "additionalProperties": true,
   "properties": {
@@ -525,7 +525,7 @@
                   "tolerance": { "type": ["number", "null"] },
                   "lra_max": {
                     "type": ["number", "null"],
-                    "description": "Loudness-range ceiling in LU for this standard (e.g. EBU R128 recommends 20). Added in 0.12.0 so the spec editor can carry the LRA constraint; documented but not yet bound to a QC check — enforcement tracked separately, like max_offset_ms."
+                    "description": "Loudness-range ceiling in LU for this standard (e.g. EBU R128 recommends 20). Added in 0.12.0 so the spec editor can carry the LRA constraint; documented but not yet bound to a QC check — enforcement tracked separately."
                   },
                   "jurisdiction": { "type": "string" }
                 }
@@ -541,23 +541,19 @@
         "sync": {
           "type": "object",
           "additionalProperties": false,
-          "$comment": "Audio-to-video sync. 'drift' (max_drift_ms*) is progressive desync that accumulates over the timeline — the measurement broadcast QC engines enforce via the A/V-sync-drift check. 'offset' (max_offset_ms) is a single fixed lip-sync error: a distinct measurement; see docs/gaps.md for its enforcement status.",
+          "$comment": "Audio-to-video sync, as TWO distinct measurements. 'offset' (max_offset_ms) is a single fixed lip-sync error, constant across the programme \u2014 the median of per-event (t_audio \u2212 t_video) deltas, and what a spec means by \"AV sync should be within \u00b1N ms\" or \"sound must not lead or lag the vision by more than N ms\". 'drift' (max_drift_ms_per_min) is PROGRESSIVE desync that accumulates over the timeline \u2014 the slope of that offset against programme time, the signature of a resample or a 25 \u2194 23.976 speed change. 0.17.0 retired max_drift_ms, which named itself after drift but was bound to the offset measurement in every engine and every source spec that set it (SQC-1397); profiles that carried it now carry max_offset_ms with the same value.",
           "properties": {
-            "max_drift_ms": {
+            "max_offset_ms": {
               "type": "number",
-              "description": "Maximum tolerated A/V sync drift, in milliseconds, before the A/V-sync-drift check fails (typically 40 ms). The primary, engine-bound sync threshold."
+              "description": "Maximum tolerated fixed lip-sync offset, in milliseconds (typically 40 ms broadcast, 5 ms where a spec states a lip-sync figure directly). Measured as the median per-event audio-vs-video delta; positive means audio lags video. The primary, engine-bound sync threshold. Renamed from max_drift_ms in 0.17.0 \u2014 same measurement, honest name."
+            },
+            "max_offset_ms_hard_fail_above": {
+              "type": "number",
+              "description": "Optional hard-fail boundary: an offset between max_offset_ms and this value is a warning; above it is an error. Defaults to max_offset_ms * 2 when unset. Renamed from max_drift_ms_hard_fail_above in 0.17.0."
             },
             "max_drift_ms_per_min": {
               "type": "number",
-              "description": "Optional bound on the rate of progressive drift, in milliseconds per minute. Catches slowly-accumulating desync a single end-to-end drift figure can mask."
-            },
-            "max_drift_ms_hard_fail_above": {
-              "type": "number",
-              "description": "Optional hard-fail boundary: drift between max_drift_ms and this value is a warning; drift above it is an error. Defaults to max_drift_ms * 2 when unset."
-            },
-            "max_offset_ms": {
-              "type": "number",
-              "description": "Maximum tolerated fixed lip-sync offset, in milliseconds. Distinct from drift (see $comment); enforcement is tracked in docs/gaps.md."
+              "description": "Optional bound on the rate of PROGRESSIVE drift, in milliseconds per minute \u2014 the slope of the per-event offset over programme time. This is the field that genuinely measures drift: it catches slowly-accumulating desync that a single median offset cannot see."
             },
             "must_match_video_duration": { "type": "boolean" }
           }

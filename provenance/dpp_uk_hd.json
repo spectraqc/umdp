@@ -361,7 +361,7 @@
       "matched": "n/a",
       "note": "REMOVED from profile. DPP-Quality-Control-Guidelines-v2.0.2.pdf 'Audio phase error' states a Required value of 0° with Tolerance ±90° — a phase-angle tolerance, not a normalized phase-correlation coefficient. Different metric/units; 0.3 does not map onto the source's ±90°."
     },
-    "assets.audio.sync.max_drift_ms": {
+    "assets.audio.sync.max_offset_ms": {
       "state": "contradicted",
       "method": "model",
       "evidence": "A/V sync (Lip Sync) ... AV sync should be within ±10ms. (DPP-Quality-Control-Guidelines-v2.0.2.pdf)",

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:umdp:standard:0.16.0",
+  "$id": "urn:umdp:standard:0.17.0",
   "title": "UMDP standard constraint set",
   "description": "Meta-schema for the machine-readable standard definitions in schema/standards/*.json. A constraint set says, per UMDP field, what the named standard actually DEFINES: a constant it is not the standard without (locked), a bound a spec may make stricter but never looser (bounded), a field the standard leaves to the spec (optional), or one it says must not be stated at all (not_applicable). Every entry carries the clause it comes from and a verbatim quote, so a consumer can check the constraint against the document rather than trusting this file.",
   "type": "object",

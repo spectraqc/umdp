@@ -72,7 +72,7 @@
       "source": "TechnicalDeliveryStandardsBBCFile.pdf, TechnicalDeliveryStandardsBBC.pdf, AMWA_AS_11_X1.pdf",
       "matched": "48"
     },
-    "assets.audio.sync.max_drift_ms": {
+    "assets.audio.sync.max_offset_ms": {
       "state": "stated",
       "method": "literal",
       "source": "TechnicalDeliveryStandardsBBCFile.pdf, TechnicalDeliveryStandardsBBC.pdf, AMWA_AS_11_X1.pdf",
