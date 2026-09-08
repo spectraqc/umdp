@@ -24,6 +24,24 @@ The sidecar is not itself schema-validated, so this adds vocabulary rather than 
 
 ---
 
+## [0.18.0] — Maximum Short-term Loudness becomes stateable
+
+### Added
+
+- **`assets.audio.loudness.short_term_max`** (LUFS) — a ceiling on the 3 s sliding-window Short-term Loudness (EBU Tech 3341), measured over the whole deliverable. It sits beside `true_peak_max` rather than under `standards[]` for the same reason true peak does: it is one ceiling over the file, not a per-standard target. `null` and absence both mean no ceiling, as everywhere else in the loudness block.
+- `schema/standards/ebu-r128-s1.json`: **`assets.audio.loudness.short_term_max` moves out of `not_yet_modelled` into `fields`**, as `bounded` with `max: -18.0` — recommends (d), quoted verbatim. `not_yet_modelled` is now empty and the key is gone: s1 has no parameter left that UMDP cannot state.
+- `profiles/rtl_smallitems_hd.json`: `short_term_max: -18.0`, with a provenance record. The value was never absent from the profile — it sat in `assets.audio.loudness.notes` as prose ("Maximum short-term loudness must not exceed -18 LUFS (+5 LU)"), where no consumer could read it. The record is `method="model"` on purpose: the cited November 2022 PDF is no longer published at `governance.sourceSpec` (RTL moved its specs to mediaspecs.rtl.de), so nobody re-read the document for this value and it must not count toward `verified`.
+
+### Why it is `bounded` and not `locked`
+
+−18.0 LUFS is the loosest ceiling s1 permits; a spec may sit lower and still be doing s1, exactly as with true peak. And plain R 128 sets no short-term ceiling at all — so a *programme* profile carrying one is stating a house limit rather than the standard. Two profiles do state one in prose and are deliberately **not** backfilled here: `rai_hd` (`max short-term -18.0 LUFS +/-0.2`, `content_type: commercial`) and `npo_hd` (`max short-term ~ +5 LU`, a programme, and approximate). Both need their own source read before a value is written into a field, which is the whole of SQC-1929; adding the field is what makes that possible.
+
+### Notes
+
+- The QC allowance s1 states for this parameter is **one-sided** (+0.2 LU on a ceiling), unlike the ±0.2 LU two-sided tolerance on the target. The field carries the ceiling; a consumer that wants the measurement allowance reads it from the constraint set.
+- Additive and optional: no existing profile changes meaning, and `loudness` stays `additionalProperties: false` so a misspelling still fails rather than silently disabling the ceiling.
+- Downstream (SQC-2029, same ticket): the SpectraQC mirrors, the spec editor's loudness section, and the QC engine's short-term check. The engine needed no new measurement — `audioqc` has emitted `short_term_loudness_max` since the C++ loudness core landed; it simply had nothing to compare it against.
+
 ## [0.17.0] — A/V sync vocabulary: offset and drift named for what they measure
 
 ### Changed

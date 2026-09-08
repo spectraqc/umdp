@@ -31,13 +31,16 @@ from validate import (  # noqa: E402
 STANDARDS = load_standards()
 
 
-def profile(*, content_type=None, standards=None, true_peak=None) -> dict:
+def profile(*, content_type=None, standards=None, true_peak=None,
+            short_term=None) -> dict:
     """A profile stub carrying only the loudness block under test."""
     loudness: dict = {}
     if standards is not None:
         loudness["standards"] = standards
     if true_peak is not None:
         loudness["true_peak_max"] = true_peak
+    if short_term is not None:
+        loudness["short_term_max"] = short_term
     data: dict = {"assets": {"audio": {"loudness": loudness}}}
     if content_type is not None:
         data["content_type"] = content_type
@@ -127,6 +130,39 @@ class BoundedFieldsAreDirectional(unittest.TestCase):
         )
         self.assertEqual(len(notes), 1, notes)
         self.assertIn("looser", notes[0])
+
+    def test_a_short_term_ceiling_above_the_supplements_is_reported(self):
+        # SQC-2029 — s1 recommends (d) caps Short-term Loudness at -18.0 LUFS.
+        notes = check_standard_conformance(
+            profile(content_type="commercial", standards=[{"name": "EBU R128"}],
+                    short_term=-16.0),
+            STANDARDS,
+        )
+        self.assertEqual(len(notes), 1, notes)
+        self.assertIn("looser", notes[0])
+
+    def test_a_stricter_short_term_ceiling_is_silent(self):
+        self.assertEqual(
+            check_standard_conformance(
+                profile(content_type="commercial", standards=[{"name": "EBU R128"}],
+                        short_term=-20.0),
+                STANDARDS,
+            ),
+            [],
+        )
+
+    def test_plain_r128_sets_no_short_term_ceiling_to_measure_against(self):
+        # A programme profile may state one; it is that broadcaster's house
+        # limit, and R 128 has nothing to say about it either way. Silence here
+        # is the correct answer, not a missing check.
+        self.assertEqual(
+            check_standard_conformance(
+                profile(content_type="program", standards=[{"name": "EBU R128"}],
+                        short_term=-16.0),
+                STANDARDS,
+            ),
+            [],
+        )
 
     def test_the_short_form_tolerance_is_tighter_than_the_programme_one(self):
         # ±1.0 LU is R 128's live-programme exception; R 128 s1 carries no

@@ -113,6 +113,13 @@
       "source": "Technical_Specifications_SmallItems_November_2022.pdf",
       "matched": "-1"
     },
+    "assets.audio.loudness.short_term_max": {
+      "state": "stated",
+      "method": "model",
+      "source": "Technical_Specifications_SmallItems_November_2022.pdf",
+      "matched": "Maximum short-term loudness must not exceed -18 LUFS (+5 LU)",
+      "note": "SQC-2029 — the value was already carried in this profile's own assets.audio.loudness.notes, written when the November 2022 PDF was extracted; UMDP had no field to state it in until 0.18.0, so this record promotes the prose to the field rather than reading the document afresh. Recorded as method='model' deliberately: the cited PDF is no longer published at governance.sourceSpec (RTL moved its specs to mediaspecs.rtl.de), so nobody re-read it for this value and it must not count toward verified. Corroborating but NOT the source: EBU R 128 s1 recommends (d) independently sets -18.0 LUFS for this content class, so the value sits inside the standard the profile names. Needs a human re-read against the current RTL document to reach method='human'."
+    },
     "assets.audio.sample_rate[0]": {
       "state": "stated",
       "method": "literal",

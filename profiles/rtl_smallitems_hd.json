@@ -179,6 +179,7 @@
           }
         ],
         "true_peak_max": -1.0,
+        "short_term_max": -18.0,
         "notes": "Per EBU Tech 3343 §10.1 (Commercials and Trailers). Maximum short-term loudness must not exceed -18 LUFS (+5 LU). EBU-mode loudness meter required (ITU-R BS.1770 K-weighting, 4× oversampled true-peak). PPM/QPPM meters are not suitable."
       },
       "sync": {
@@ -269,7 +270,7 @@
     "notes": "Media Group RTL Germany delivery spec for small items (commercials/spots/trailers). HD only via web upload. XDCAM HD 422 50 Mbps in MXF OP1a; 1080i/25 (or 25psF for film source); 8 PCM mono audio tracks at 48 kHz/24-bit (Stereo L/R + 5.1 FL/FR/C/LFE/SL/SR); EBU R128 -23 LUFS ±0.2 LU, true peak ≤ -1 dBTP; ITU-R BT.709-6; EBU R95 action safe 3.5%; SOM timecode 00:00:00:00. Latest version always at https://www.rtl-service.de/richtlinien.html.",
     "verification": {
       "status": "unverified",
-      "assertions": 81,
+      "assertions": 82,
       "verified_fields": 0,
       "unsourced_fields": 0
     }

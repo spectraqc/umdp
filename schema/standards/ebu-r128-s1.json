@@ -39,21 +39,19 @@
       "quote": "and that the True Peak Level of the programme shall not exceed −1 dBTP (dB True Peak) for linear audio, measured with a meter compliant with ITU-R BS.1770 and EBU Tech 3341. The measurement tolerance is ±0.3 dB (for signals with a bandwidth limited to 20 kHz).",
       "note": "Footnote 1 refers the reader to EBU Tech 3344 for Maximum Permitted True Peak Levels on different distribution systems, i.e. a lower ceiling is expected for coded delivery."
     },
+    "assets.audio.loudness.short_term_max": {
+      "rule": "bounded",
+      "max": -18.0,
+      "unit": "LUFS",
+      "cite": "recommends (d)",
+      "quote": "that the Short-term Loudness Level (measured in compliance with EBU Tech 3341) shall not exceed −18.0 LUFS (+5.0 LU on the relative scale). For the implementation of loudness workflows (for example, in Quality Control environments) a tolerance of +0.2 LU is allowed in order to take account of measurement errors;",
+      "note": "Bounded, not locked: −18.0 LUFS is the loosest ceiling s1 permits and a spec may sit lower — the same directional rule as true_peak_max. Plain R 128 states no short-term ceiling at all, so this constraint belongs to the short-form content class alone; a programme profile carrying one is stating a house limit, not R 128. Note also that the QC allowance here is one-sided (+0.2 LU on a ceiling), unlike the ±0.2 LU two-sided tolerance on the target."
+    },
     "assets.audio.loudness.standards[].lra_max": {
       "rule": "not_applicable",
       "cite": "clause 'The measure Loudness Range is not useful for short-form content'",
       "quote": "The measure 'Loudness Range' is not useful for short-form content. It is based on a statistical analysis of the Short-term (3 s) Loudness values. For commercials, promos etc. this leaves too few data points for a meaningful result. Therefore, a maximum and/or minimum value for Loudness Range shall not be specified for programmes of this length/genre.",
       "note": "Not merely unset — s1 says a value shall not be specified at all, so an LRA ceiling on a short-form profile contradicts the standard it names."
     }
-  },
-  "not_yet_modelled": [
-    {
-      "parameter": "Maximum Short-term Loudness",
-      "value": -18.0,
-      "unit": "LUFS",
-      "cite": "recommends (d)",
-      "quote": "that the Short-term Loudness Level (measured in compliance with EBU Tech 3341) shall not exceed −18.0 LUFS (+5.0 LU on the relative scale). For the implementation of loudness workflows (for example, in Quality Control environments) a tolerance of +0.2 LU is allowed in order to take account of measurement errors;",
-      "tracked_by": "SQC-2029"
-    }
-  ]
+  }
 }
