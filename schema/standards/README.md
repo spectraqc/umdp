@@ -38,6 +38,7 @@ Keys under `fields` are dot-separated UMDP paths from the profile root. A `[]` m
 ```
 assets.audio.loudness.standards[].target   → the element that names this standard
 assets.audio.loudness.true_peak_max        → the profile's single peak ceiling
+assets.audio.loudness.short_term_max       → likewise, one ceiling over the file
 ```
 
 Anchoring on the element matters: a profile may name several jurisdictional standards, and −23.0 LUFS is R 128's constant, not A/85's.
@@ -47,5 +48,5 @@ Anchoring on the element matters: a profile may name several jurisdictional stan
 1. Read the document. Every constraint needs a `cite` precise enough to find and a `quote` verbatim from it — a value you believe but cannot quote does not go in the file. That rule is the whole of SQC-1929: the profile audit found 601 assertions that could not be traced to their cited source, and this directory is not going to start a second set.
 2. Record the `edition` you read. A later edition may change a locked constant, so the edition is part of the claim.
 3. Name it in `aliases` however it appears in the wild, so already-published profiles resolve. Aliases exist to recognise names, not to license loose authoring — the spec editor picks from the defined set.
-4. If the standard defines a parameter UMDP has no field for, put it in `not_yet_modelled` with its citation rather than dropping it, and open a ticket for the field.
+4. If the standard defines a parameter UMDP has no field for, put it in `not_yet_modelled` with its citation rather than dropping it, and open a ticket for the field. That is not a parking space: `ebu-r128-s1.json` held Maximum Short-term Loudness there until 0.18.0 added `assets.audio.loudness.short_term_max`, at which point the entry became a real `bounded` constraint and `not_yet_modelled` went away (SQC-2029).
 5. `python tools/test_standards.py` and `python tools/validate.py`. A malformed constraint set fails validation outright — it would otherwise silently stop constraining, which is the failure this whole mechanism exists to remove.

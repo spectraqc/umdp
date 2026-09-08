@@ -1,10 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:umdp:schema:0.17.0",
+  "$id": "urn:umdp:schema:0.18.0",
   "title": "Universal Media Delivery Profile",
   "description": "Machine-readable schema for broadcast, OTT, cinema and ad-delivery technical specifications. UMDP is extension-friendly on its container objects (assets, constraints, packaging and the like accept additional properties so vendors and broadcasters can add fields and propose them upstream), while value objects that carry measurement thresholds (signal limits, loudness, sync, frame rate, …) are closed (additionalProperties: false) so a mistyped key cannot silently disable a constraint.",
   "type": "object",
-  "$comment": "UMDP 0.17.0 — schema version is independent of any individual profile's spec_version (governance.spec_version).",
+  "$comment": "UMDP 0.18.0 — schema version is independent of any individual profile's spec_version (governance.spec_version).",
   "required": ["id", "name", "delivery_paradigm"],
   "additionalProperties": true,
   "properties": {
@@ -534,6 +534,10 @@
             "true_peak_max": {
               "type": ["number", "null"],
               "description": "True-peak ceiling in dBTP. null means no ceiling enforced."
+            },
+            "short_term_max": {
+              "type": ["number", "null"],
+              "description": "Maximum Short-term Loudness in LUFS — the ceiling on the 3 s sliding-window loudness (EBU Tech 3341), measured over the whole deliverable. EBU R 128 s1 recommends (d) sets -18.0 LUFS for short-form content; plain R 128 sets none, so a programme profile carrying one is stating a house limit. Sits beside true_peak_max rather than under standards[] because, like the true-peak ceiling, it is one ceiling over the file, not a per-standard target. null means no ceiling enforced. Added in 0.18.0 (SQC-2029)."
             },
             "notes": { "type": "string" }
           }
