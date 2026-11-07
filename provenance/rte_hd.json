@@ -301,6 +301,13 @@
       "method": "literal",
       "source": "RTE_IPU-Content-Delivery.pdf",
       "matched": "All content should be compliant with (PSE) ITU-R BT.1702"
+    },
+    "assets.audio.loudness.true_peak_max": {
+      "state": "stated",
+      "method": "model",
+      "source": "RTE_IPU-Content-Delivery.pdf",
+      "matched": "Follow EBU Recommendation R 128 Guidelines, “Loudness normalisation & permitted maximum level of audio signals”",
+      "note": "RTE's document cites EBU R128 by name rather than restating a numeric ceiling. EBU R128 itself (recommends (m)) sets the maximum permitted true peak at -1 dBTP. Maintainer ruling on WBG-871: a spec that quotes R128 states R128's figures. The same document's PPM limit (8 dB above reference) is a separate meter and isn't this field."
     }
   }
 }
