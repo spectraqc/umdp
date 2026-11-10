@@ -4,6 +4,10 @@ All notable changes to the UMDP schema are recorded here. The format follows [Ke
 
 ## Unreleased
 
+### Changed
+
+- `schema/standards/atsc-a85.json` now cites ATSC A/85:2026-07 (8 July 2026), which replaces A/85:2013 with Corrigendum No. 1. Only citations change: the edition, document title, URL and read-on date; the three §6 quotes, taken word for word from the new edition; and the true-peak note. `ATSC A/85:2026-07` is added to the aliases, and `ATSC A/85:2013` stays so older profiles still resolve. The constraint values are unchanged (−24 LKFS, ±2 dB, true peak below −2 dBTP). 2026-07 adds a ±0.5 dBTP meter tolerance around the true-peak ceiling, quoted in the constraint, but the ceiling itself doesn't move. The file stays byte-identical to the copy winberg.ie/tools uses (WBG-1335).
+
 ### Added
 
 - `tools/bulk_set.py` (SQC-1975) — apply one field across a selected set of profiles (`--jurisdiction SE,NO`, `--profile a,b`, or `--all`) in a single command. The manual alternative is hand-editing the same key into N files, which is where a typo becomes a wrong delivery spec.
