@@ -8,7 +8,7 @@ Each file here is that meaning, once, as data: what the named standard **defines
 |------|----------|---------|
 | `ebu-r128.json` | EBU R 128 (2023, v5) | `program`, `music_video` |
 | `ebu-r128-s1.json` | EBU R 128 s1 (2020) | `commercial`, `promo`, `trailer`, `interstitial` |
-| `atsc-a85.json` | ATSC A/85:2013 + Cor.1 | any content type |
+| `atsc-a85.json` | ATSC A/85:2026-07 | any content type |
 | `itu-r-bs1770.json` | ITU-R BS.1770-5 | measurement only — constrains nothing |
 | `standard.schema.json` | — | meta-schema every file above validates against |
 
